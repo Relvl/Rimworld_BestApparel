@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <BestApparel.Apparel>Apparel</BestApparel.Apparel>
+    <BestApparel.Ranged>Ranged weapon</BestApparel.Ranged>
+    <BestApparel.Melee>Melee weapon</BestApparel.Melee>
+    
+    <BestApparel.Profiles>Profiles...</BestApparel.Profiles>
+    
+    <BestApparel.Btn.Where>Where...</BestApparel.Btn.Where>
+    <BestApparel.Btn.Layers>Layers...</BestApparel.Btn.Layers>
+    <BestApparel.Btn.Slots>Slots...</BestApparel.Btn.Slots>
+    <BestApparel.Btn.Sorting>Sorting</BestApparel.Btn.Sorting>
+    <BestApparel.Btn.Ignored>Ignored...</BestApparel.Btn.Ignored>
+    <BestApparel.Btn.Columns>Columns...</BestApparel.Btn.Columns>
+</LanguageData>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <MainButtonDef>
+        <defName>BestApparel</defName>
+        <label>BestApparel</label>
+        <description>Open...</description>
+        <tabWindowClass>BestApparel.ui.MainTabWindowBestApparel</tabWindowClass>
+        <order>60</order>
+        <defaultHotKey></defaultHotKey>
+    </MainButtonDef>
+</Defs>
