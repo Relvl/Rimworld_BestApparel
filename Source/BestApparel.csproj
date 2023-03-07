@@ -295,6 +295,12 @@
         <Compile Include="data\WeaponThing.cs" />
         <Compile Include="ModEntrance.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="stat_selector\StatSelectorCommon.cs" />
+        <Compile Include="stat_selector\StatSelectorEquippedOffset.cs" />
+        <Compile Include="stat_selector\IStatSelector.cs" />
+        <Compile Include="stat_selector\StatSelectorStatBases.cs" />
+        <Compile Include="ui\AUtilityWindow.cs" />
+        <Compile Include="ui\ColumnsWindow.cs" />
         <Compile Include="ui\FilterWindow.cs" />
         <Compile Include="ui\TabId.cs" />
         <Compile Include="ui\MainTabWindow.ApparelTab.cs" />
@@ -302,7 +308,7 @@
         <Compile Include="ui\MainTabWindow.cs" />
         <Compile Include="ui\MainTabWindow.MeleeTab.cs" />
         <Compile Include="ui\MainTabWindow.RangedTab.cs" />
-        <Compile Include="ui\Utils.cs" />
+        <Compile Include="ui\UIUtils.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="..\.gitignore">

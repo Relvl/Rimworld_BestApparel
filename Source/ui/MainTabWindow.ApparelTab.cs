@@ -10,12 +10,6 @@ namespace BestApparel.ui
     // ReSharper disable once UnusedType.Global, ClassNeverInstantiated.Global -> /Defs/MainWindow.xml
     public partial class MainTabWindow
     {
-        public readonly List<ApparelThing> AllApparels = new List<ApparelThing>();
-
-        public readonly List<ApparelLayerDef> ApparelLayers = new List<ApparelLayerDef>();
-        public readonly List<StuffCategoryDef> ApparelStuffs = new List<StuffCategoryDef>();
-        public readonly List<BodyPartGroupDef> ApparelBodyParts = new List<BodyPartGroupDef>();
-
         private ApparelThing[] _cachedApparels = { };
 
         private void RenderApparelTab(Rect inRect)
@@ -42,7 +36,7 @@ namespace BestApparel.ui
 
             inRect.yMin += 34;
 
-            Utils.DrawLineFull(ModEntrance.COLOR_WHITE_A20, inRect.y, inRect.width - /*scrollbar width*/16);
+            UIUtils.DrawLineFull(ModEntrance.COLOR_WHITE_A20, inRect.y, inRect.width - /*scrollbar width*/16);
 
             inRect.yMin += 10;
 
@@ -82,11 +76,7 @@ namespace BestApparel.ui
 
                 if (i < _cachedApparels.Length - 1)
                 {
-                    Utils.DrawLineFull(
-                        ModEntrance.COLOR_WHITE_A20,
-                        LIST_ELEMENT_HEIGHT * i + LIST_ELEMENT_HEIGHT,
-                        inRect.width
-                    );
+                    UIUtils.DrawLineFull(ModEntrance.COLOR_WHITE_A20, LIST_ELEMENT_HEIGHT * i + LIST_ELEMENT_HEIGHT, inRect.width);
                 }
             }
 
@@ -96,93 +86,59 @@ namespace BestApparel.ui
             // endregion
         }
 
-        private void TryToAddApparelDef(ThingDef thingDef)
-        {
-            if (thingDef.IsApparel)
-            {
-                AllApparels.Add(new ApparelThing(thingDef));
-            }
-        }
-
-        private void TryFinalyzeApparelDefs()
-        {
-            ApparelLayers.Clear();
-            ApparelLayers.AddRange(
-                AllApparels
-                    .SelectMany(it => it.Def.apparel.layers)
-                    .Where(it => it != null)
-                    .Distinct()
-            );
-            ApparelStuffs.Clear();
-            ApparelStuffs.AddRange(
-                AllApparels
-                    .Where(it => it.Def.stuffProps?.categories != null)
-                    .SelectMany(it => it.Def.stuffProps?.categories)
-                    .Distinct()
-            );
-            ApparelBodyParts.Clear();
-            ApparelBodyParts.AddRange(
-                AllApparels
-                    .SelectMany(it => it.Def.apparel.bodyPartGroups)
-                    .Where(it => it != null)
-                    .Distinct()
-            );
-        }
-
         /** Filters and sorts the apparel for renderer */
         private void ProcessApparels()
         {
-            _cachedApparels = AllApparels
-                    // Filter: Layer, BodyPart, Material
-                    .Where(
-                        it =>
+            _cachedApparels = ApparelThing.AllApparels
+                // Filter: Layer, BodyPart, Material
+                .Where(
+                    it =>
+                    {
+                        // if have any 'ON' state - the thing should contain ALL of it
+                        if (Config.EnabledLayers.Count > 0)
                         {
-                            // if have any 'ON' state - the thing should contain ALL of it
-                            if (Config.EnabledLayers.Count > 0)
+                            if (!it.Def.apparel.layers.All(l => Config.EnabledLayers.Contains(l.defName)))
                             {
-                                if (!it.Def.apparel.layers.All(l => Config.EnabledLayers.Contains(l.defName)))
-                                {
-                                    return false;
-                                }
+                                return false;
                             }
-
-                            // if have any 'OFF' state - the thing should not contain it
-                            if (Config.DisabledLayers.Count > 0)
-                            {
-                                if (it.Def.apparel.layers.Any(l => Config.DisabledLayers.Contains(l.defName)))
-                                {
-                                    return false;
-                                }
-                            }
-
-                            // if have any 'ON' state - the thing should contain ANY of it
-                            if (Config.EnabledBodyParts.Count > 0)
-                            {
-                                if (!it.Def.apparel.bodyPartGroups.Any(l => Config.EnabledBodyParts.Contains(l.defName)))
-                                {
-                                    return false;
-                                }
-                            }
-
-                            // if have any 'OFF' state - the thing should not contain it
-                            if (Config.DisabledBodyParts.Count > 0)
-                            {
-                                if (it.Def.apparel.bodyPartGroups.Any(l => Config.DisabledBodyParts.Contains(l.defName)))
-                                {
-                                    return false;
-                                }
-                            }
-                            // endregion ================= FILTER
-
-                            return true;
                         }
-                    )
-                    // Sort: Default
-                    .OrderBy(it => it.DefaultThing.HitPoints)
-                    .ThenBy(it => it.DefaultThing.Label)
-                    // Finish
-                    .ToArray()
-                ;
+
+                        // if have any 'OFF' state - the thing should not contain it
+                        if (Config.DisabledLayers.Count > 0)
+                        {
+                            if (it.Def.apparel.layers.Any(l => Config.DisabledLayers.Contains(l.defName)))
+                            {
+                                return false;
+                            }
+                        }
+
+                        // if have any 'ON' state - the thing should contain ANY of it
+                        if (Config.EnabledBodyParts.Count > 0)
+                        {
+                            if (!it.Def.apparel.bodyPartGroups.Any(l => Config.EnabledBodyParts.Contains(l.defName)))
+                            {
+                                return false;
+                            }
+                        }
+
+                        // if have any 'OFF' state - the thing should not contain it
+                        if (Config.DisabledBodyParts.Count > 0)
+                        {
+                            if (it.Def.apparel.bodyPartGroups.Any(l => Config.DisabledBodyParts.Contains(l.defName)))
+                            {
+                                return false;
+                            }
+                        }
+                        // endregion ================= FILTER
+
+                        return true;
+                    }
+                )
+                // Sort: Default
+                .OrderBy(it => it.DefaultThing.HitPoints)
+                .ThenBy(it => it.DefaultThing.Label)
+                // Finish
+                .ToArray();
         }
     }
 }

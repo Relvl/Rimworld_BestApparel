@@ -15,7 +15,6 @@ namespace BestApparel.ui
         public readonly ConfigElement Config = new ConfigElement(); // todo loading from file
 
         private Vector2 _scrollPosition = Vector2.zero;
-        private bool _isDirty;
 
         public MainTabWindow()
         {
@@ -25,14 +24,16 @@ namespace BestApparel.ui
             closeOnClickedOutside = true;
             // this
             Config.Load();
-            // finally
-            _isDirty = true;
+        }
+
+        public override void PreOpen()
+        {
+            base.PreOpen();
+            DoUpdate();
         }
 
         public override void DoWindowContents(Rect inRect)
         {
-            if (_isDirty) DoUpdate();
-
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
             GUI.color = Color.white;
@@ -43,21 +44,9 @@ namespace BestApparel.ui
                 inRect,
                 new List<TabRecord>
                 {
-                    new TabRecord(
-                        "BestApparel.Apparel".Translate(),
-                        () => Config.SelectedTab = TabId.APPAREL,
-                        Config.SelectedTab == TabId.APPAREL
-                    ),
-                    new TabRecord(
-                        "BestApparel.Ranged".Translate(),
-                        () => Config.SelectedTab = TabId.RANGED,
-                        Config.SelectedTab == TabId.RANGED
-                    ),
-                    new TabRecord(
-                        "BestApparel.Melee".Translate(),
-                        () => Config.SelectedTab = TabId.MELEE,
-                        Config.SelectedTab == TabId.MELEE
-                    ),
+                    new TabRecord("BestApparel.Apparel".Translate(), () => Config.SelectedTab = TabId.APPAREL, Config.SelectedTab == TabId.APPAREL),
+                    new TabRecord("BestApparel.Ranged".Translate(), () => Config.SelectedTab = TabId.RANGED, Config.SelectedTab == TabId.RANGED),
+                    new TabRecord("BestApparel.Melee".Translate(), () => Config.SelectedTab = TabId.MELEE, Config.SelectedTab == TabId.MELEE),
                 }
             );
 
@@ -88,12 +77,9 @@ namespace BestApparel.ui
 
         private void DoUpdate()
         {
-            AllApparels.Clear();
+            ApparelThing.ClearThingDefs();
 
-            Find.CurrentMap
-                .listerBuildings
-                .allBuildingsColonist
-                .OfType<Building_WorkTable>()
+            Find.CurrentMap.listerBuildings.allBuildingsColonist.OfType<Building_WorkTable>()
                 .SelectMany(it => it.def.AllRecipes)
                 .Where(it => it.AvailableNow && it.ProducedThingDef != null)
                 .Select(it => it.ProducedThingDef)
@@ -102,19 +88,19 @@ namespace BestApparel.ui
                 .ForEach(
                     thingDef =>
                     {
-                        TryToAddApparelDef(thingDef);
                         TryToAddRangedDef(thingDef);
                         TryToAddMeleeDef(thingDef);
+
+                        ApparelThing.TryToAddThingDef(thingDef);
                     }
                 );
 
-            TryFinalyzeApparelDefs();
             TryToFinalyzeRangedDefs();
             TryFinalyzeMeleeDefs();
 
+            ApparelThing.FinalyzeThingDefs();
+
             Resort();
-            
-            _isDirty = false;
         }
 
         public void Resort()
@@ -138,6 +124,8 @@ namespace BestApparel.ui
 
         private void OnColumnsClick()
         {
+            Find.WindowStack.TryRemove(typeof(ColumnsWindow));
+            Find.WindowStack.Add(new ColumnsWindow(this));
         }
     }
 }
