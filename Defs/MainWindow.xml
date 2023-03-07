@@ -5,7 +5,7 @@
         <defName>BestApparel</defName>
         <label>BestApparel</label>
         <description>Open...</description>
-        <tabWindowClass>BestApparel.ui.MainTabWindowBestApparel</tabWindowClass>
+        <tabWindowClass>BestApparel.ui.MainTabWindow</tabWindowClass>
         <order>60</order>
         <defaultHotKey></defaultHotKey>
     </MainButtonDef>

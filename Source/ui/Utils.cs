@@ -3,7 +3,7 @@ using Verse;
 
 namespace BestApparel.ui
 {
-    public class Utils
+    public static class Utils
     {
         public static void DrawLineFull(Color color, float y, float width)
         {

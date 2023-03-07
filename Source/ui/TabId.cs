@@ -1,6 +1,6 @@
 namespace BestApparel.ui
 {
-    public enum BestApparelTab
+    public enum TabId
     {
         APPAREL,
         RANGED,

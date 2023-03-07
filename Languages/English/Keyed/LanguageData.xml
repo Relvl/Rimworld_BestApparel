@@ -3,13 +3,28 @@
     <BestApparel.Apparel>Apparel</BestApparel.Apparel>
     <BestApparel.Ranged>Ranged weapon</BestApparel.Ranged>
     <BestApparel.Melee>Melee weapon</BestApparel.Melee>
-    
+
     <BestApparel.Profiles>Profiles...</BestApparel.Profiles>
-    
+
+    <BestApparel.Btn.Filter>Filter...</BestApparel.Btn.Filter>
     <BestApparel.Btn.Where>Where...</BestApparel.Btn.Where>
     <BestApparel.Btn.Layers>Layers...</BestApparel.Btn.Layers>
     <BestApparel.Btn.Slots>Slots...</BestApparel.Btn.Slots>
-    <BestApparel.Btn.Sorting>Sorting</BestApparel.Btn.Sorting>
+    <BestApparel.Btn.Sorting>Sorting...</BestApparel.Btn.Sorting>
     <BestApparel.Btn.Ignored>Ignored...</BestApparel.Btn.Ignored>
     <BestApparel.Btn.Columns>Columns...</BestApparel.Btn.Columns>
+
+    <BestApparel.Btn.Apply>Apply</BestApparel.Btn.Apply>
+
+    <BestApparel.Label.LayerList>Apparel layers:</BestApparel.Label.LayerList>
+    <BestApparel.Label.LayerList.Tooltip>Apparel body layer filter:
+        If have any 'ON' state - the thing should contain ALL of it.
+        If have any 'OFF' state - the thing should NOT contain it.
+    </BestApparel.Label.LayerList.Tooltip>
+    <BestApparel.Label.BodyPartList>Body parts:</BestApparel.Label.BodyPartList>
+    <BestApparel.Label.BodyPartList.Tooltip>Apparel body layer filter:
+        If have any 'ON' state - the thing should contain ANY of it.
+        If have any 'OFF' state - the thing should NOT contain it.
+    </BestApparel.Label.BodyPartList.Tooltip>
+
 </LanguageData>

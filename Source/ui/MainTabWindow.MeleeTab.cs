@@ -1,11 +1,11 @@
-
 using UnityEngine;
+using Verse;
 
 namespace BestApparel.ui
 {
-    public partial class MainTabWindowBestApparel
+    // ReSharper disable once UnusedType.Global, ClassNeverInstantiated.Global -> /Defs/MainWindow.xml
+    public partial class MainTabWindow
     {
-
         private void RenderMeleeTab(Rect inRect)
         {
             /*  [Where...] [Type...] [Sorting...] [Ignored...] [Colons...]
@@ -13,7 +13,14 @@ namespace BestApparel.ui
              *  LIST
              *  }}}}}}}}}}}}}}}}}}}}}
              */
-            
+        }
+
+        private void TryToAddMeleeDef(ThingDef thingDef)
+        {
+        }
+
+        private void TryFinalyzeMeleeDefs()
+        {
         }
     }
 }

@@ -15,7 +15,7 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
+        <DebugType>portable</DebugType>
         <Optimize>false</Optimize>
         <OutputPath>../Assemblies</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -289,20 +289,25 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="BestApparelConfigElement.cs" />
+        <Compile Include="ConfigElement.cs" />
         <Compile Include="data\ApparelThing.cs" />
         <Compile Include="data\ComparableThing.cs" />
         <Compile Include="data\WeaponThing.cs" />
-        <Compile Include="logic\BestApparelEvents.cs" />
-        <Compile Include="ModBestApparel.cs" />
+        <Compile Include="ModEntrance.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="ui\BestApparelTab.cs" />
-        <Compile Include="ui\MainTabWindowBestApparel.ApparelTab.cs" />
-        <Compile Include="ui\MainTabWindowBestApparel.Const.cs" />
-        <Compile Include="ui\MainTabWindowBestApparel.cs" />
-        <Compile Include="ui\MainTabWindowBestApparel.MeleeTab.cs" />
-        <Compile Include="ui\MainTabWindowBestApparel.RangedTab.cs" />
+        <Compile Include="ui\FilterWindow.cs" />
+        <Compile Include="ui\TabId.cs" />
+        <Compile Include="ui\MainTabWindow.ApparelTab.cs" />
+        <Compile Include="ui\MainTabWindow.Const.cs" />
+        <Compile Include="ui\MainTabWindow.cs" />
+        <Compile Include="ui\MainTabWindow.MeleeTab.cs" />
+        <Compile Include="ui\MainTabWindow.RangedTab.cs" />
         <Compile Include="ui\Utils.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\.gitignore">
+        <Link>.gitignore</Link>
+      </Content>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,9 +4,9 @@ namespace BestApparel.data
 {
     public class WeaponThing : ComparableThing
     {
-        public WeaponThing(Thing thing)
+        public WeaponThing(Thing defaultThing)
         {
-            this.thing = thing;
+            this.DefaultThing = defaultThing;
         }
     }
 }

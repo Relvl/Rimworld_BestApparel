@@ -4,6 +4,7 @@ namespace BestApparel.data
 {
     public abstract class ComparableThing
     {
-        public Thing thing;
+        public ThingDef Def;
+        public Thing DefaultThing;
     }
 }
