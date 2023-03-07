@@ -39,15 +39,27 @@ namespace BestApparel.ui
 
             inRect.yMin += 35f;
 
-            TabDrawer.DrawTabs(inRect, new List<TabRecord>
-            {
-                new TabRecord("BestApparel.Apparel".Translate(), () => Config.SelectedTab = TabId.APPAREL,
-                    Config.SelectedTab == TabId.APPAREL),
-                new TabRecord("BestApparel.Ranged".Translate(), () => Config.SelectedTab = TabId.RANGED,
-                    Config.SelectedTab == TabId.RANGED),
-                new TabRecord("BestApparel.Melee".Translate(), () => Config.SelectedTab = TabId.MELEE,
-                    Config.SelectedTab == TabId.MELEE),
-            });
+            TabDrawer.DrawTabs(
+                inRect,
+                new List<TabRecord>
+                {
+                    new TabRecord(
+                        "BestApparel.Apparel".Translate(),
+                        () => Config.SelectedTab = TabId.APPAREL,
+                        Config.SelectedTab == TabId.APPAREL
+                    ),
+                    new TabRecord(
+                        "BestApparel.Ranged".Translate(),
+                        () => Config.SelectedTab = TabId.RANGED,
+                        Config.SelectedTab == TabId.RANGED
+                    ),
+                    new TabRecord(
+                        "BestApparel.Melee".Translate(),
+                        () => Config.SelectedTab = TabId.MELEE,
+                        Config.SelectedTab == TabId.MELEE
+                    ),
+                }
+            );
 
             inRect.yMin += 10f;
 
@@ -74,9 +86,9 @@ namespace BestApparel.ui
             }
         }
 
-        public void DoUpdate()
+        private void DoUpdate()
         {
-            Apparels.Clear();
+            AllApparels.Clear();
 
             Find.CurrentMap
                 .listerBuildings
@@ -87,24 +99,45 @@ namespace BestApparel.ui
                 .Select(it => it.ProducedThingDef)
                 .Distinct()
                 .ToList()
-                .ForEach(thingDef =>
-                {
-                    TryToAddApparelDef(thingDef);
-                    TryToAddRangedDef(thingDef);
-                    TryToAddMeleeDef(thingDef);
-                });
+                .ForEach(
+                    thingDef =>
+                    {
+                        TryToAddApparelDef(thingDef);
+                        TryToAddRangedDef(thingDef);
+                        TryToAddMeleeDef(thingDef);
+                    }
+                );
 
             TryFinalyzeApparelDefs();
             TryToFinalyzeRangedDefs();
             TryFinalyzeMeleeDefs();
 
+            Resort();
+            
             _isDirty = false;
+        }
+
+        public void Resort()
+        {
+            ProcessApparels();
         }
 
         private void OnFilterClick()
         {
             Find.WindowStack.TryRemove(typeof(FilterWindow));
             Find.WindowStack.Add(new FilterWindow(this));
+        }
+
+        private void OnSortingClick()
+        {
+        }
+
+        private void OnIgnoredClick()
+        {
+        }
+
+        private void OnColumnsClick()
+        {
         }
     }
 }

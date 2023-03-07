@@ -14,7 +14,9 @@
     <BestApparel.Btn.Ignored>Ignored...</BestApparel.Btn.Ignored>
     <BestApparel.Btn.Columns>Columns...</BestApparel.Btn.Columns>
 
-    <BestApparel.Btn.Apply>Apply</BestApparel.Btn.Apply>
+    <BestApparel.Btn.Resort>Resort</BestApparel.Btn.Resort>
+    <BestApparel.Btn.Resort.Additional>Closing this window also resorts the results.</BestApparel.Btn.Resort.Additional>
+    <BestApparel.Btn.Defaults>Defaults</BestApparel.Btn.Defaults>
 
     <BestApparel.Label.LayerList>Apparel layers:</BestApparel.Label.LayerList>
     <BestApparel.Label.LayerList.Tooltip>Apparel body layer filter:

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -24,28 +23,35 @@ namespace BestApparel.ui
 
         public override void DoWindowContents(Rect inRect)
         {
-            RenderCheckboxes(
-                ref inRect,
-                "BestApparel.Label.LayerList",
-                _parent.ApparelLayers,
-                _parent.Config.EnabledLayers,
-                _parent.Config.DisabledLayers
-            );
-            RenderCheckboxes(
-                ref inRect,
-                "BestApparel.Label.BodyPartList",
-                _parent.ApparelBodyParts,
-                _parent.Config.EnabledBodyParts,
-                _parent.Config.DisabledBodyParts
-            );
+            RenderCheckboxes(ref inRect, "BestApparel.Label.LayerList", _parent.ApparelLayers, _parent.Config.EnabledLayers, _parent.Config.DisabledLayers);
+            RenderCheckboxes(ref inRect, "BestApparel.Label.BodyPartList", _parent.ApparelBodyParts, _parent.Config.EnabledBodyParts, _parent.Config.DisabledBodyParts);
+            // todo! kid/adult
+
+            const int btnHeight = 24;
+            const int btnWidth = 120;
+            var btnRect = new Rect(0, windowRect.height - Margin * 2 - btnHeight, btnWidth, btnHeight);
+            if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Resort".Translate()))
+            {
+                _parent.Resort();
+            }
+
+            btnRect.x += btnWidth + 10;
+            btnRect.width = inRect.width - btnRect.x;
+            Text.Anchor = TextAnchor.MiddleLeft;
+            GUI.color = ModEntrance.COLOR_WHITE_A20;
+            Widgets.Label(btnRect, "BestApparel.Btn.Resort.Additional".Translate());
+            Text.Anchor = TextAnchor.UpperLeft;
+            GUI.color = Color.white;
+
+            btnRect = new Rect(windowRect.width - Margin * 2 - btnWidth, windowRect.height - Margin * 2 - btnHeight, btnWidth, btnHeight);
+            if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Defaults".Translate()))
+            {
+                _parent.Config.Defaults();
+                _parent.Resort();
+            }
         }
 
-        private static void RenderCheckboxes(
-            ref Rect inRect,
-            string label,
-            IReadOnlyList<Def> defs,
-            ICollection<string> enabled,
-            ICollection<string> disabled)
+        private static void RenderCheckboxes(ref Rect inRect, string label, IReadOnlyList<Def> defs, ICollection<string> enabled, ICollection<string> disabled)
         {
             Text.Anchor = TextAnchor.UpperLeft;
             Text.Font = GameFont.Small;
@@ -128,6 +134,11 @@ namespace BestApparel.ui
 
             Text.Anchor = TextAnchor.UpperLeft;
             inRect.yMin += defs.Count / cols * (rowHeight + 2) + 20;
+        }
+
+        public override void PreClose()
+        {
+            _parent.Resort();
         }
     }
 }
