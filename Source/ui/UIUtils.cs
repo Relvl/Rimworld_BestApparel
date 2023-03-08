@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -13,6 +14,21 @@ namespace BestApparel.ui
             GUI.color = color;
             Widgets.DrawLineHorizontal(0, y, width);
             GUI.color = Color.white;
+        }
+
+        public static void RenderCheckboxLeft(ref Rect inRect, string label, bool state, Action<bool> onStateChanged, float maxWidth = 0)
+        {
+            var r = new Rect(inRect.x, inRect.y, maxWidth == 0 ? inRect.width : maxWidth, 24);
+            if (Widgets.ButtonInvisible(r))
+            {
+                onStateChanged(!state);
+            }
+
+            Widgets.CheckboxDraw(inRect.x, inRect.y, state, false);
+            r.x += r.height + 2;
+            Text.Anchor = TextAnchor.MiddleLeft;
+            Widgets.Label(r, label);
+            Text.Anchor = TextAnchor.UpperLeft;
         }
 
         /** Returns total used height */

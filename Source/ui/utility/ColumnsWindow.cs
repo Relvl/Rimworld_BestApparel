@@ -13,13 +13,9 @@ namespace BestApparel.ui.utility
         protected override float DoWindowContentsInner(ref Rect inRect)
         {
             float heightCounter = 0;
-            switch (Parent.Config.SelectedTab)
+            switch (Config.Instance.SelectedTab)
             {
                 case TabId.APPAREL:
-                    heightCounter += RenderApparelColumns(ref inRect);
-                    heightCounter += RenderApparelColumns(ref inRect);
-                    heightCounter += RenderApparelColumns(ref inRect);
-                    heightCounter += RenderApparelColumns(ref inRect);
                     heightCounter += RenderApparelColumns(ref inRect);
                     break;
             }
@@ -27,15 +23,15 @@ namespace BestApparel.ui.utility
             return heightCounter;
         }
 
-        protected override void OnResetClick() => Parent.Config.RestoreDefaultColumns();
+        protected override void OnResetClick() => Config.Instance.RestoreDefaultColumns();
 
         private float RenderApparelColumns(ref Rect inRect)
         {
             return UIUtils.RenderCheckboxes(
                 ref inRect,
                 "BestApparel.Label.Columns",
-                ApparelThing.StatProcessors.Select(it => it.GetStatDef()).ToList(),
-                Parent.Config.SelectedColumns[TabId.APPAREL],
+                ThingContainerApparel.StatProcessors.Select(it => it.GetStatDef()).ToList(),
+                Config.Instance.SelectedColumns[TabId.APPAREL],
                 null,
                 2
             );

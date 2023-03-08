@@ -7,10 +7,18 @@ using Verse;
 
 namespace BestApparel
 {
-    public class ConfigElement
+    public class Config
     {
+        public static readonly Config Instance = new Config();
+
+        // ========================== NON storable
+
         public TabId SelectedTab = TabId.APPAREL;
 
+        // ========================== Storable
+
+        /* Do show all the things? Otherwise - only available on the workbenches. */
+        public bool UseAllThings = false;
         public readonly HashSet<string> DisabledLayers = new HashSet<string>();
         public readonly HashSet<string> EnabledLayers = new HashSet<string>();
         public readonly HashSet<string> DisabledBodyParts = new HashSet<string>();

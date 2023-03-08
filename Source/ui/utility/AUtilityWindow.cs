@@ -1,4 +1,5 @@
 using System;
+using BestApparel.data;
 using UnityEngine;
 using Verse;
 
@@ -41,7 +42,7 @@ namespace BestApparel.ui.utility
 
         public override void PreClose()
         {
-            Parent.Resort();
+            DataProcessor.CollectData();
         }
 
         private float RenderBottom(ref Rect inRect, Action onResetClick)
@@ -51,7 +52,7 @@ namespace BestApparel.ui.utility
             var btnRect = new Rect(0, windowRect.height - Margin * 2 - btnHeight, btnWidth, btnHeight);
             if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Resort".Translate()))
             {
-                Parent.Resort();
+                DataProcessor.CollectData();
             }
 
             btnRect.x += btnWidth + 10;
@@ -66,7 +67,7 @@ namespace BestApparel.ui.utility
             if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Defaults".Translate()))
             {
                 onResetClick();
-                Parent.Resort();
+                DataProcessor.CollectData();
             }
 
             return btnHeight;

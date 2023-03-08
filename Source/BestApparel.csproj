@@ -289,10 +289,10 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ConfigElement.cs" />
-        <Compile Include="data\ApparelThing.cs" />
-        <Compile Include="data\ComparableThing.cs" />
-        <Compile Include="data\WeaponThing.cs" />
+        <Compile Include="Config.cs" />
+        <Compile Include="data\ThingContainerApparel.cs" />
+        <Compile Include="data\AThingContainer.cs" />
+        <Compile Include="data\DataProcessor.cs" />
         <Compile Include="ModEntrance.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="stat_processor\AStatProcessor.cs" />

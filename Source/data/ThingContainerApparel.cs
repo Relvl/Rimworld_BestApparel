@@ -6,20 +6,18 @@ using Verse;
 
 namespace BestApparel.data
 {
-    public class ApparelThing : ComparableThing
+    public class ThingContainerApparel : AThingContainer
     {
         private static readonly string[] IgnoredStatDefNames = { };
 
-        public static readonly List<ApparelThing> AllApparels = new List<ApparelThing>();
+        public static readonly List<ThingContainerApparel> AllApparels = new List<ThingContainerApparel>();
         public static readonly List<ApparelLayerDef> Layers = new List<ApparelLayerDef>();
         public static readonly List<StuffCategoryDef> Stuffs = new List<StuffCategoryDef>();
         public static readonly List<BodyPartGroupDef> BodyParts = new List<BodyPartGroupDef>();
 
         public static readonly HashSet<AStatProcessor> StatProcessors = new HashSet<AStatProcessor>();
 
-        private ApparelThing[] _cachedApparels = { };
-
-        private ApparelThing(ThingDef thingDef)
+        private ThingContainerApparel(ThingDef thingDef)
         {
             Def = thingDef;
 
@@ -44,7 +42,7 @@ namespace BestApparel.data
         {
             if (thingDef.IsApparel)
             {
-                AllApparels.Add(new ApparelThing(thingDef));
+                AllApparels.Add(new ThingContainerApparel(thingDef));
             }
         }
 
@@ -100,6 +98,52 @@ namespace BestApparel.data
                     .Select(it => it.First())
                     .OrderBy(it => it.GetStatDef().label)
             );
+        }
+
+        public static bool CheckThingForFilters(ThingContainerApparel it)
+        {
+            // if have any 'ON' state - the thing should contain ALL of it
+            if (Config.Instance.EnabledLayers.Count > 0)
+            {
+                if (!it.Def.apparel.layers.All(l => Config.Instance.EnabledLayers.Contains(l.defName)))
+                {
+                    return false;
+                }
+            }
+
+            // if have any 'OFF' state - the thing should not contain it
+            if (Config.Instance.DisabledLayers.Count > 0)
+            {
+                if (it.Def.apparel.layers.Any(l => Config.Instance.DisabledLayers.Contains(l.defName)))
+                {
+                    return false;
+                }
+            }
+
+            // if have any 'ON' state - the thing should contain ANY of it
+            if (Config.Instance.EnabledBodyParts.Count > 0)
+            {
+                if (!it.Def.apparel.bodyPartGroups.Any(l => Config.Instance.EnabledBodyParts.Contains(l.defName)))
+                {
+                    return false;
+                }
+            }
+
+            // if have any 'OFF' state - the thing should not contain it
+            if (Config.Instance.DisabledBodyParts.Count > 0)
+            {
+                if (it.Def.apparel.bodyPartGroups.Any(l => Config.Instance.DisabledBodyParts.Contains(l.defName)))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public override void MakeCache()
+        {
+            
         }
     }
 }

@@ -14,13 +14,5 @@ namespace BestApparel.ui
              *  }}}}}}}}}}}}}}}}}}}}}
              */
         }
-
-        private void TryToAddMeleeDef(ThingDef thingDef)
-        {
-        }
-
-        private void TryFinalyzeMeleeDefs()
-        {
-        }
     }
 }

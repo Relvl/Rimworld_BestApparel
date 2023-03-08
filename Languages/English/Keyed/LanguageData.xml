@@ -4,6 +4,13 @@
     <BestApparel.Ranged>Ranged weapon</BestApparel.Ranged>
     <BestApparel.Melee>Melee weapon</BestApparel.Melee>
 
+    <BestApparel.Control.UseAllThings>All things</BestApparel.Control.UseAllThings>
+    <BestApparel.Control.UseAllThings.Tooltip>Do search things in the whole game
+    </BestApparel.Control.UseAllThings.Tooltip>
+    <BestApparel.Control.UseCraftableThings>Craftable things</BestApparel.Control.UseCraftableThings>
+    <BestApparel.Control.UseCraftableThings.Tooltip>Do search things only in available workbenches bills
+    </BestApparel.Control.UseCraftableThings.Tooltip>
+
     <BestApparel.Profiles>Profiles...</BestApparel.Profiles>
 
     <BestApparel.Btn.Filter>Filter...</BestApparel.Btn.Filter>

@@ -13,22 +13,19 @@ namespace BestApparel.ui
     {
         private static bool _isCeLoaded = ModsConfig.ActiveModsInLoadOrder.Any(m => "Combat Extended".Equals(m.Name));
 
-        public readonly ConfigElement Config = new ConfigElement(); // todo loading from file
-
         private Vector2 _scrollPosition = Vector2.zero;
 
         public MainTabWindow()
         {
             // super
             doCloseX = true;
-            // this
-            Config.Load();
         }
 
         public override void PreOpen()
         {
             base.PreOpen();
-            DoUpdate();
+            Config.Instance.Load();
+            DataProcessor.CollectData();
         }
 
         public override void PreClose()
@@ -50,15 +47,15 @@ namespace BestApparel.ui
                 inRect,
                 new List<TabRecord>
                 {
-                    new TabRecord("BestApparel.Apparel".Translate(), () => Config.SelectedTab = TabId.APPAREL, Config.SelectedTab == TabId.APPAREL),
-                    new TabRecord("BestApparel.Ranged".Translate(), () => Config.SelectedTab = TabId.RANGED, Config.SelectedTab == TabId.RANGED),
-                    new TabRecord("BestApparel.Melee".Translate(), () => Config.SelectedTab = TabId.MELEE, Config.SelectedTab == TabId.MELEE),
+                    new TabRecord("BestApparel.Apparel".Translate(), () => Config.Instance.SelectedTab = TabId.APPAREL, Config.Instance.SelectedTab == TabId.APPAREL),
+                    new TabRecord("BestApparel.Ranged".Translate(), () => Config.Instance.SelectedTab = TabId.RANGED, Config.Instance.SelectedTab == TabId.RANGED),
+                    new TabRecord("BestApparel.Melee".Translate(), () => Config.Instance.SelectedTab = TabId.MELEE, Config.Instance.SelectedTab == TabId.MELEE),
                 }
             );
 
             inRect.yMin += 10f;
 
-            switch (Config.SelectedTab)
+            switch (Config.Instance.SelectedTab)
             {
                 case TabId.APPAREL:
                     RenderApparelTab(inRect);
@@ -72,46 +69,31 @@ namespace BestApparel.ui
             }
 
             // Absolute positions here
+            const int searchTypeWidth = 150;
             const int btnWidth = 100;
-            Rect btnRect = new Rect(windowRect.width - btnWidth - WINDOW_BORDER - 10, 4, btnWidth, 32);
-            if (Widgets.ButtonText(btnRect, "BestApparel.Profiles".Translate()))
+
+            var searchTypeRect = new Rect(windowRect.width - WINDOW_BORDER - 10 - searchTypeWidth - btnWidth - 10, 8, searchTypeWidth, 24);
+            UIUtils.RenderCheckboxLeft(
+                ref searchTypeRect,
+                (Config.Instance.UseAllThings ? "BestApparel.Control.UseAllThings" : "BestApparel.Control.UseCraftableThings").Translate(),
+                Config.Instance.UseAllThings,
+                state =>
+                {
+                    Config.Instance.UseAllThings = state;
+                    DataProcessor.CollectData();
+                }
+            );
+            TooltipHandler.TipRegion(
+                searchTypeRect,
+                (Config.Instance.UseAllThings ? "BestApparel.Control.UseAllThings.Tooltip" : "BestApparel.Control.UseCraftableThings.Tooltip").Translate()
+            );
+
+            var addControlRect = new Rect(windowRect.width - btnWidth - WINDOW_BORDER - 10, 4, btnWidth, 32);
+            if (Widgets.ButtonText(addControlRect, "BestApparel.Profiles".Translate()))
             {
                 Log.Message($"windowRect: ({windowRect.x}, {windowRect.y}, {windowRect.width}, {windowRect.height}) ");
                 Log.Message($"inRect: ({inRect.x}, {inRect.y}, {inRect.width}, {inRect.height}) ");
             }
-        }
-
-        private void DoUpdate()
-        {
-            ApparelThing.ClearThingDefs();
-
-            Find.CurrentMap.listerBuildings.allBuildingsColonist.OfType<Building_WorkTable>()
-                .SelectMany(it => it.def.AllRecipes)
-                .Where(it => it.AvailableNow && it.ProducedThingDef != null)
-                .Select(it => it.ProducedThingDef)
-                .Distinct()
-                .ToList()
-                .ForEach(
-                    thingDef =>
-                    {
-                        TryToAddRangedDef(thingDef);
-                        TryToAddMeleeDef(thingDef);
-
-                        ApparelThing.TryToAddThingDef(thingDef);
-                    }
-                );
-
-            TryToFinalyzeRangedDefs();
-            TryFinalyzeMeleeDefs();
-
-            ApparelThing.FinalyzeThingDefs();
-
-            Resort();
-        }
-
-        public void Resort()
-        {
-            ProcessApparels();
         }
 
         private void OnFilterClick()
