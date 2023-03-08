@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.stat_processor;
+using BestApparel.ui;
 using RimWorld;
 using Verse;
 
@@ -16,6 +18,8 @@ namespace BestApparel.data
         public static readonly List<BodyPartGroupDef> BodyParts = new List<BodyPartGroupDef>();
 
         public static readonly HashSet<AStatProcessor> StatProcessors = new HashSet<AStatProcessor>();
+
+        public CellData[] CachedCells { get; private set; } = { };
 
         private ThingContainerApparel(ThingDef thingDef)
         {
@@ -36,19 +40,29 @@ namespace BestApparel.data
         public static void ClearThingDefs()
         {
             AllApparels.Clear();
+            Layers.Clear();
+            Stuffs.Clear();
+            BodyParts.Clear();
+            StatProcessors.Clear();
         }
 
         public static void TryToAddThingDef(ThingDef thingDef)
         {
             if (thingDef.IsApparel)
             {
-                AllApparels.Add(new ThingContainerApparel(thingDef));
+                try
+                {
+                    AllApparels.Add(new ThingContainerApparel(thingDef));
+                }
+                catch (NullReferenceException e)
+                {
+                    Log.Warning($"Can not make apparel cache for ThingDef '{thingDef.defName}' -> NRE {e.Message}");
+                }
             }
         }
 
         public static void FinalyzeThingDefs()
         {
-            Layers.Clear();
             Layers.AddRange(
                 AllApparels //
                     .SelectMany(it => it.Def.apparel.layers)
@@ -56,7 +70,6 @@ namespace BestApparel.data
                     .Distinct()
             );
 
-            Stuffs.Clear();
             Stuffs.AddRange(
                 AllApparels //
                     .Where(it => it.Def.stuffProps?.categories != null)
@@ -64,7 +77,6 @@ namespace BestApparel.data
                     .Distinct()
             );
 
-            BodyParts.Clear();
             BodyParts.AddRange(AllApparels.SelectMany(it => it.Def.apparel.bodyPartGroups).Where(it => it != null).Distinct());
 
             var temStatProcessors = new List<AStatProcessor>();
@@ -91,7 +103,6 @@ namespace BestApparel.data
                 }
             }
 
-            StatProcessors.Clear();
             StatProcessors.AddRange(
                 temStatProcessors //
                     .GroupBy(it => it.GetStatDef().defName)
@@ -143,7 +154,27 @@ namespace BestApparel.data
 
         public override void MakeCache()
         {
-            
+            CachedCells = Config.Instance.SelectedColumns[TabId.APPAREL]
+                .Select(
+                    colId =>
+                    {
+                        var proc = StatProcessors.FirstOrDefault(it => it.GetStatDef().defName == colId);
+                        if (proc == null) return null;
+                        var value = proc.GetStatValue(DefaultThing);
+                        if (Math.Abs(value - proc.GetStatDef().defaultBaseValue) > 0.00001)
+                        {
+                            var formattedValue = AStatProcessor.GetStatValueFormatted(proc.GetStatDef(), value, true);
+                            return new CellData(colId, formattedValue, new[] { $"{proc.GetStatDef().label}: {formattedValue}" }, false);
+                        }
+                        else
+                        {
+                            const string formattedValue = "---";
+                            return new CellData(colId, formattedValue, new string[] { }, false);
+                        }
+                    }
+                )
+                .Where(it => it != null)
+                .ToArray();
         }
     }
 }

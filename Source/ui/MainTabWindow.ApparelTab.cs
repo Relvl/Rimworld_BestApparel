@@ -77,34 +77,33 @@ namespace BestApparel.ui
                 // todo! order like in sorting weight
                 cellRect.x += cellRect.width + 2;
                 cellRect.width = 70;
-                Config.Instance.SelectedColumns[TabId.APPAREL]
-                    .ForEach(
-                        colId =>
-                        {
-                            var proc = ThingContainerApparel.StatProcessors.FirstOrDefault(it => it.GetStatDef().defName == colId);
-                            if (proc == null) return;
-                            var value = proc.GetStatValue(rThing.DefaultThing);
-                            if (value != 0)
-                            {
-                                var formattedValue = AStatProcessor.GetStatValueFormatted(proc.GetStatDef(), value, true);
-                                Widgets.Label(cellRect, formattedValue);
-                                TooltipHandler.TipRegion(cellRect, $"{proc.GetStatDef().label}: {formattedValue}");
-                                if (Prefs.DevMode)
-                                {
-                                    TooltipHandler.TipRegion(cellRect, $"Stat defName: {colId}");
-                                }
-                            }
-                            else
-                            {
-                                GUI.color = ModEntrance.COLOR_WHITE_A20;
-                                Widgets.Label(cellRect, "---");
-                                GUI.color = Color.white;
-                            }
 
-                            // offset to the right
-                            cellRect.x += /*todo config? auto-calc?*/ cellRect.width + 2;
+
+                foreach (var cell in rThing.CachedCells)
+                {
+                    if (cell.None)
+                    {
+                        GUI.color = ModEntrance.COLOR_WHITE_A20;
+                        Widgets.Label(cellRect, cell.Value);
+                        GUI.color = Color.white;
+                    }
+                    else
+                    {
+                        Widgets.Label(cellRect, cell.Value);
+                        foreach (var tooltip in cell.Tooltips)
+                        {
+                            TooltipHandler.TipRegion(cellRect, tooltip);
                         }
-                    );
+
+                        if (Prefs.DevMode)
+                        {
+                            TooltipHandler.TipRegion(cellRect, $"Stat defName: {cell.DefName}");
+                        }
+                    }
+
+                    // offset to the right
+                    cellRect.x += /*todo config? auto-calc?*/ cellRect.width + 2;
+                }
 
                 // bg and mouseover
                 if (Mouse.IsOver(elementRect))

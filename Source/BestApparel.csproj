@@ -290,6 +290,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Config.cs" />
+        <Compile Include="data\CellData.cs" />
         <Compile Include="data\ThingContainerApparel.cs" />
         <Compile Include="data\AThingContainer.cs" />
         <Compile Include="data\DataProcessor.cs" />
