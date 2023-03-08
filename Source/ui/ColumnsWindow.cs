@@ -1,3 +1,4 @@
+using System.Linq;
 using BestApparel.data;
 using UnityEngine;
 
@@ -23,7 +24,14 @@ namespace BestApparel.ui
 
         private void RenderApparelColumns(ref Rect inRect)
         {
-            UIUtils.RenderCheckboxes(ref inRect, "BestApparel.Label.Columns", ApparelThing.Stats, Parent.Config.SelectedColumns[TabId.APPAREL], null, 2);
+            UIUtils.RenderCheckboxes(
+                ref inRect,
+                "BestApparel.Label.Columns",
+                ApparelThing.StatProcessors.Select(it => it.GetStatDef()).ToList(),
+                Parent.Config.SelectedColumns[TabId.APPAREL],
+                null,
+                2
+            );
         }
     }
 }

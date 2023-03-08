@@ -1,9 +1,5 @@
-using System.Collections.Generic;
 using BestApparel.data;
-using RimWorld;
 using UnityEngine;
-using Verse;
-using Verse.Sound;
 
 namespace BestApparel.ui
 {

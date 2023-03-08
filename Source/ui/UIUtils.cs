@@ -120,6 +120,10 @@ namespace BestApparel.ui
                 {
                     GUI.DrawTexture(chkRect, TexUI.HighlightTex);
                     GUI.color = Color.yellow;
+                    if (Prefs.DevMode)
+                    {
+                        TooltipHandler.TipRegion(r, $"defName: {def.defName}");
+                    }
                 }
 
                 r.x += rowHeight + 2;

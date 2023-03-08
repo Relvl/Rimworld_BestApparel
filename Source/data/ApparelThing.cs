@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using BestApparel.stat_selector;
+using BestApparel.stat_processor;
 using RimWorld;
 using Verse;
 
@@ -9,12 +8,16 @@ namespace BestApparel.data
 {
     public class ApparelThing : ComparableThing
     {
+        private static readonly string[] IgnoredStatDefNames = { };
+
         public static readonly List<ApparelThing> AllApparels = new List<ApparelThing>();
         public static readonly List<ApparelLayerDef> Layers = new List<ApparelLayerDef>();
         public static readonly List<StuffCategoryDef> Stuffs = new List<StuffCategoryDef>();
         public static readonly List<BodyPartGroupDef> BodyParts = new List<BodyPartGroupDef>();
-        public static readonly List<StatDef> Stats = new List<StatDef>();
-        public static readonly List<IStatSelector> StatSelectors = new List<IStatSelector>();
+
+        public static readonly HashSet<AStatProcessor> StatProcessors = new HashSet<AStatProcessor>();
+
+        private ApparelThing[] _cachedApparels = { };
 
         private ApparelThing(ThingDef thingDef)
         {
@@ -66,40 +69,37 @@ namespace BestApparel.data
             BodyParts.Clear();
             BodyParts.AddRange(AllApparels.SelectMany(it => it.Def.apparel.bodyPartGroups).Where(it => it != null).Distinct());
 
-            var equippedStatOffsets = AllApparels // 
-                .Where(it => it.Def.equippedStatOffsets != null)
-                .SelectMany(it => it.Def.equippedStatOffsets)
-                .Where(it => it != null)
-                .Select(it => it.stat)
-                .Distinct()
-                .OrderBy(it => it.label)
-                .ToList();
-            var statBases = AllApparels //
-                .Where(it => it.Def.statBases != null)
-                .SelectMany(it => it.Def.statBases)
-                .Where(it => it != null)
-                .Select(it => it.stat)
-                .Distinct()
-                .OrderBy(it => it.label)
-                .ToList();
+            var temStatProcessors = new List<AStatProcessor>();
+            foreach (var apparel in AllApparels)
+            {
+                // Base stats
+                temStatProcessors.AddRange(
+                    DefDatabase<StatDef>.AllDefs //
+                        .Where(st => st.Worker.ShouldShowFor(StatRequest.For(apparel.DefaultThing)) && !st.Worker.IsDisabledFor(apparel.DefaultThing))
+                        .Select(st => new StatProcessorBaseStat(st))
+                        .Where(it => it.GetStatValue(apparel.DefaultThing) != 0)
+                );
 
-            Stats.Clear();
-            StatSelectors.Clear();
-            equippedStatOffsets.ForEach(
-                it =>
+                // Equipped stats
+                if (apparel.Def.equippedStatOffsets != null)
                 {
-                    Stats.Add(it);
-                    StatSelectors.Add(new StatSelectorEquippedOffset(it.defName));
+                    foreach (var statModifier in apparel.Def.equippedStatOffsets)
+                    {
+                        if (statModifier == null) continue;
+                        var proc = new StatProcessorCommon(statModifier.stat);
+                        if (proc.GetStatValue(apparel.DefaultThing) == 0) continue;
+                        temStatProcessors.Add(proc);
+                    }
                 }
+            }
+
+            StatProcessors.Clear();
+            StatProcessors.AddRange(
+                temStatProcessors //
+                    .GroupBy(it => it.GetStatDef().defName)
+                    .Select(it => it.First())
+                    .OrderBy(it => it.GetStatDef().label)
             );
-            statBases.ForEach(
-                it =>
-                {
-                    Stats.Add(it);
-                    StatSelectors.Add(new StatSelectorStatBases(it.defName));
-                }
-            );
-            // todo custom stats here <- StatSelectorCommon.cs + ???
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.data;
+using BestApparel.stat_processor;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -56,6 +57,13 @@ namespace BestApparel.ui
                 // i
                 Widgets.InfoCardButtonCentered(cellRect, rThing.DefaultThing);
 
+                // back row click = open info window
+                if (Widgets.ButtonInvisible(elementRect))
+                {
+                    Find.WindowStack.TryRemove(typeof(ThingInfoWindow));
+                    Find.WindowStack.Add(new ThingInfoWindow(this, rThing.DefaultThing));
+                }
+
                 // Icon
                 cellRect.x += LIST_ELEMENT_HEIGHT + 4;
                 Widgets.ThingIcon(cellRect, rThing.DefaultThing);
@@ -66,7 +74,38 @@ namespace BestApparel.ui
                 // todo захватить иконку
                 TooltipHandler.TipRegion(cellRect, rThing.DefaultThing.Label);
 
-                // todo columns
+                // Columns
+                // todo! order like in sorting weight
+                cellRect.x += cellRect.width + 2;
+                cellRect.width = 70;
+                Config.SelectedColumns[TabId.APPAREL]
+                    .ForEach(
+                        colId =>
+                        {
+                            var proc = ApparelThing.StatProcessors.FirstOrDefault(it => it.GetStatDef().defName == colId);
+                            if (proc == null) return;
+                            var value = proc.GetStatValue(rThing.DefaultThing);
+                            if (value != 0)
+                            {
+                                var formattedValue = AStatProcessor.GetStatValueFormatted(proc.GetStatDef(), value, true);
+                                Widgets.Label(cellRect, formattedValue);
+                                TooltipHandler.TipRegion(cellRect, $"{proc.GetStatDef().label}: {formattedValue}");
+                                if (Prefs.DevMode)
+                                {
+                                    TooltipHandler.TipRegion(cellRect, $"Stat defName: {colId}");
+                                }
+                            }
+                            else
+                            {
+                                GUI.color = ModEntrance.COLOR_WHITE_A20;
+                                Widgets.Label(cellRect, "---");
+                                GUI.color = Color.white;
+                            }
+
+                            // offset to the right
+                            cellRect.x += /*todo config? auto-calc?*/ cellRect.width + 2;
+                        }
+                    );
 
                 // bg and mouseover
                 if (Mouse.IsOver(elementRect))
