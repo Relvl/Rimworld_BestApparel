@@ -104,6 +104,8 @@ namespace BestApparel.ui
 
         private void OnSortingClick()
         {
+            Find.WindowStack.TryRemove(typeof(SortWindow));
+            Find.WindowStack.Add(new SortWindow(this));
         }
 
         private void OnIgnoredClick()

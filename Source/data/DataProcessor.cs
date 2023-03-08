@@ -39,13 +39,10 @@ namespace BestApparel.data
 
         private static void MakeCache()
         {
-            CachedApparels = ThingContainerApparel.AllApparels //
-                .Where(ThingContainerApparel.CheckThingForFilters)
-                // Sort: Default
-                .OrderBy(it => it.DefaultThing.HitPoints)
-                .ThenBy(it => it.DefaultThing.Label)
-                .ToArray();
+            CachedApparels = ThingContainerApparel.AllApparels.Where(ThingContainerApparel.CheckThingForFilters).ToArray();
             foreach (var apparel in CachedApparels) apparel.MakeCache();
+            foreach (var apparel in CachedApparels) apparel.MakeSortingWeightsCache();
+            CachedApparels = CachedApparels.OrderByDescending(it => it.CachedSortingWeight).ThenBy(it => it.DefaultThing.Label).ToArray();
         }
     }
 }

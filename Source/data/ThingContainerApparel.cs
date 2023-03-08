@@ -21,6 +21,8 @@ namespace BestApparel.data
 
         public CellData[] CachedCells { get; private set; } = { };
 
+        public float CachedSortingWeight { get; private set; } = 0f;
+
         private ThingContainerApparel(ThingDef thingDef)
         {
             Def = thingDef;
@@ -156,25 +158,56 @@ namespace BestApparel.data
         {
             CachedCells = Config.Instance.SelectedColumns[TabId.APPAREL]
                 .Select(
-                    colId =>
+                    defName =>
                     {
-                        var proc = StatProcessors.FirstOrDefault(it => it.GetStatDef().defName == colId);
+                        var proc = StatProcessors.FirstOrDefault(it => it.GetStatDef().defName == defName);
                         if (proc == null) return null;
+
                         var value = proc.GetStatValue(DefaultThing);
+
                         if (Math.Abs(value - proc.GetStatDef().defaultBaseValue) > 0.00001)
                         {
                             var formattedValue = AStatProcessor.GetStatValueFormatted(proc.GetStatDef(), value, true);
-                            return new CellData(colId, formattedValue, new[] { $"{proc.GetStatDef().label}: {formattedValue}" }, false);
+                            return new CellData(defName, formattedValue, new[] { $"{proc.GetStatDef().label}: {formattedValue}" }, false, value, proc.GetStatDef());
                         }
                         else
                         {
                             const string formattedValue = "---";
-                            return new CellData(colId, formattedValue, new string[] { }, false);
+                            return new CellData(defName, formattedValue, new string[] { }, false, value, proc.GetStatDef());
                         }
                     }
                 )
                 .Where(it => it != null)
                 .ToArray();
         }
+
+        public void MakeSortingWeightsCache()
+        {
+            // здесь найти процент от мин-макса, умножить на вес, а в сорте вернуть сумму всех процентов
+            foreach (var defName in Config.Instance.SelectedColumns[TabId.APPAREL])
+            {
+                var thisCell = CachedCells.FirstOrDefault(c => c.DefName == defName);
+                if (thisCell == null) continue;
+                var proc = StatProcessors.FirstOrDefault(it => it.GetStatDef().defName == defName);
+                if (proc == null) continue;
+
+                var rawValues = DataProcessor.CachedApparels //
+                    .Select(a => a.CachedCells.FirstOrDefault(c => c.DefName == defName))
+                    .Where(v => v != null)
+                    .Select(c => c.ValueRaw)
+                    .ToArray();
+                var valueMin = rawValues.Min();
+                var valueMax = rawValues.Max();
+                var value = proc.GetStatValue(DefaultThing);
+
+                if (!Config.Instance.SortingData[TabId.APPAREL].ContainsKey(defName)) Config.Instance.SortingData[TabId.APPAREL][defName] = 0f;
+                thisCell.NormalizedWeight = (value - valueMin) / (valueMax - valueMin);
+                thisCell.WeightFactor = Config.Instance.SortingData[TabId.APPAREL][defName] + Config.MaxSortingWeight;
+            }
+
+            CachedSortingWeight = CachedCells.Sum(c => c.NormalizedWeight * c.WeightFactor);
+        }
+
+        public float GetSortingWeight() => CachedSortingWeight;
     }
 }

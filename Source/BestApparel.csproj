@@ -309,6 +309,7 @@
         <Compile Include="ui\utility\AUtilityWindow.cs" />
         <Compile Include="ui\utility\ColumnsWindow.cs" />
         <Compile Include="ui\utility\FilterWindow.cs" />
+        <Compile Include="ui\utility\SortWindow.cs" />
         <Compile Include="ui\utility\ThingInfoWindow.cs" />
     </ItemGroup>
     <ItemGroup>

@@ -36,5 +36,13 @@
         If have any 'OFF' state - the thing should NOT contain it.
     </BestApparel.Label.BodyPartList.Tooltip>
     <BestApparel.Label.Columns>Visible columns:</BestApparel.Label.Columns>
+    <BestApparel.Label.Sorting>Sorting priorities:</BestApparel.Label.Sorting>
+    <BestApparel.Label.Sorting.Tooltip>Only those stats that are selected in the columns window are displayed here.
+        The slider indicates how high priority (or valuable) this stat is.
+        Stats that have a higher value in smaller values should be inverted.
+        -10 totally excludes value from sorting.
+    </BestApparel.Label.Sorting.Tooltip>
+    
+    <BestApparel.Label.RangePercent>Range percent:</BestApparel.Label.RangePercent>
 
 </LanguageData>

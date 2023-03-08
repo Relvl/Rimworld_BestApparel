@@ -51,7 +51,7 @@ namespace BestApparel.ui
             TooltipHandler.TipRegion(labelRect, $"{label}.Tooltip".Translate());
             inRect.yMin += 26;
 
-            var r = new Rect(inRect.x, inRect.y, 200, 16);
+            var r = new Rect(inRect.x, inRect.y, 0, 16);
 
             Text.Anchor = TextAnchor.MiddleLeft;
 
@@ -70,7 +70,7 @@ namespace BestApparel.ui
                 var chkRect = new Rect(r.x, r.y, rowHeight, rowHeight);
                 var isMouseOver = Mouse.IsOver(r);
 
-                r.xMax -= 24f;
+                r.xMax -= rowHeight;
 
                 if (isMulti)
                 {

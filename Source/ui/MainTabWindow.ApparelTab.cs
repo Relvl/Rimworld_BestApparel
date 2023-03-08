@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.data;
@@ -90,14 +91,16 @@ namespace BestApparel.ui
                     else
                     {
                         Widgets.Label(cellRect, cell.Value);
-                        foreach (var tooltip in cell.Tooltips)
-                        {
-                            TooltipHandler.TipRegion(cellRect, tooltip);
-                        }
-
                         if (Prefs.DevMode)
                         {
                             TooltipHandler.TipRegion(cellRect, $"Stat defName: {cell.DefName}");
+                        }
+
+                        TooltipHandler.TipRegion(cellRect, "BestApparel.Label.RangePercent".Translate() + Math.Round(cell.NormalizedWeight * 100f, 1) + "%");
+
+                        foreach (var tooltip in cell.Tooltips)
+                        {
+                            TooltipHandler.TipRegion(cellRect, tooltip);
                         }
                     }
 
