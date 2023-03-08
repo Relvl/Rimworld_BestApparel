@@ -1,7 +1,7 @@
 using BestApparel.data;
 using UnityEngine;
 
-namespace BestApparel.ui
+namespace BestApparel.ui.utility
 {
     public class FilterWindow : AUtilityWindow
     {

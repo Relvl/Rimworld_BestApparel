@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.data;
+using BestApparel.ui.utility;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -20,8 +21,6 @@ namespace BestApparel.ui
         {
             // super
             doCloseX = true;
-            doCloseButton = false;
-            closeOnClickedOutside = true;
             // this
             Config.Load();
         }
@@ -30,6 +29,13 @@ namespace BestApparel.ui
         {
             base.PreOpen();
             DoUpdate();
+        }
+
+        public override void PreClose()
+        {
+            Find.WindowStack.TryRemove(typeof(FilterWindow));
+            Find.WindowStack.TryRemove(typeof(ColumnsWindow));
+            Find.WindowStack.TryRemove(typeof(ThingInfoWindow));
         }
 
         public override void DoWindowContents(Rect inRect)

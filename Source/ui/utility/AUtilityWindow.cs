@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Verse;
 
-namespace BestApparel.ui
+namespace BestApparel.ui.utility
 {
     public abstract class AUtilityWindow : Window
     {

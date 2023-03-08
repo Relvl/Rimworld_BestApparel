@@ -1,11 +1,7 @@
-using System;
-using System.Linq;
-using BestApparel.data;
-using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace BestApparel.ui
+namespace BestApparel.ui.utility
 {
     public class ThingInfoWindow : AUtilityWindow
     {
