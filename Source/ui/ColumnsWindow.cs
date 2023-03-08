@@ -1,6 +1,7 @@
 using System.Linq;
 using BestApparel.data;
 using UnityEngine;
+using Verse;
 
 namespace BestApparel.ui
 {
@@ -10,21 +11,28 @@ namespace BestApparel.ui
         {
         }
 
-        public override void DoWindowContents(Rect inRect)
+        protected override float DoWindowContentsInner(ref Rect inRect)
         {
+            float heightCounter = 0;
             switch (Parent.Config.SelectedTab)
             {
                 case TabId.APPAREL:
-                    RenderApparelColumns(ref inRect);
+                    heightCounter += RenderApparelColumns(ref inRect);
+                    heightCounter += RenderApparelColumns(ref inRect);
+                    heightCounter += RenderApparelColumns(ref inRect);
+                    heightCounter += RenderApparelColumns(ref inRect);
+                    heightCounter += RenderApparelColumns(ref inRect);
                     break;
             }
 
-            RenderBottom(ref inRect);
+            return heightCounter;
         }
 
-        private void RenderApparelColumns(ref Rect inRect)
+        protected override void OnResetClick() => Parent.Config.RestoreDefaultColumns();
+
+        private float RenderApparelColumns(ref Rect inRect)
         {
-            UIUtils.RenderCheckboxes(
+            return UIUtils.RenderCheckboxes(
                 ref inRect,
                 "BestApparel.Label.Columns",
                 ApparelThing.StatProcessors.Select(it => it.GetStatDef()).ToList(),

@@ -10,6 +10,7 @@ namespace BestApparel.ui
     public class ThingInfoWindow : AUtilityWindow
     {
         public override Vector2 InitialSize => new Vector2(650, 800);
+        public override bool UseBottomButtons => false;
         private readonly Thing _thing;
 
         public ThingInfoWindow(MainTabWindow parent, Thing thing) : base(parent)
@@ -17,7 +18,12 @@ namespace BestApparel.ui
             _thing = thing;
         }
 
-        public override void DoWindowContents(Rect inRect)
+        protected override float DoWindowContentsInner(ref Rect inRect)
+        {
+            return 0;
+        }
+
+        protected override void OnResetClick()
         {
         }
     }

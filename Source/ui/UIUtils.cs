@@ -15,15 +15,17 @@ namespace BestApparel.ui
             GUI.color = Color.white;
         }
 
-        public static void RenderCheckboxes(ref Rect inRect,
+        /** Returns total used height */
+        public static float RenderCheckboxes(ref Rect inRect,
             string label,
             IReadOnlyList<Def> defs,
             ICollection<string> enabled,
             ICollection<string> disabled = null,
             int columnCount = 3)
         {
-            if (enabled == null && disabled == null) return;
+            if (enabled == null && disabled == null) return 0;
             var isMulti = enabled != null && disabled != null;
+            var inRectStartsAt = inRect.yMin;
 
             Text.Anchor = TextAnchor.UpperLeft;
             Text.Font = GameFont.Small;
@@ -134,6 +136,8 @@ namespace BestApparel.ui
 
             Text.Anchor = TextAnchor.UpperLeft;
             inRect.yMin += defs.Count / columnCount * (rowHeight + 2) + 20;
+
+            return inRect.yMin - inRectStartsAt;
         }
     }
 }

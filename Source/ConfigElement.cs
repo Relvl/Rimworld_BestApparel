@@ -20,13 +20,16 @@ namespace BestApparel
             Enum.GetValues(typeof(TabId)).Cast<TabId>().ToDictionary(t => t, t => new List<string>())
         );
 
-        public void Defaults()
+        public void RestoreDefaultFilters()
         {
             EnabledLayers.Clear();
             DisabledLayers.Clear();
             EnabledBodyParts.Clear();
             DisabledBodyParts.Clear();
+        }
 
+        public void RestoreDefaultColumns()
+        {
             foreach (var (_, list) in SelectedColumns) list.Clear();
             /*todo! default columns:
              apparel: p-armor, b-armor, h-armor, move-speed, work-speed, social
