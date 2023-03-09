@@ -301,7 +301,6 @@
         <Compile Include="stat_processor\BaseStatProcessor.cs" />
         <Compile Include="ui\TabId.cs" />
         <Compile Include="ui\MainTabWindow.ApparelTab.cs" />
-        <Compile Include="ui\MainTabWindow.Const.cs" />
         <Compile Include="ui\MainTabWindow.cs" />
         <Compile Include="ui\MainTabWindow.MeleeTab.cs" />
         <Compile Include="ui\MainTabWindow.RangedTab.cs" />

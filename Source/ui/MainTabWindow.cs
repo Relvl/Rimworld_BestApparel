@@ -71,7 +71,7 @@ namespace BestApparel.ui
             const int searchTypeWidth = 150;
             const int btnWidth = 100;
 
-            var searchTypeRect = new Rect(windowRect.width - WINDOW_BORDER - 10 - searchTypeWidth - btnWidth - 10, 8, searchTypeWidth, 24);
+            var searchTypeRect = new Rect(windowRect.width - Margin * 2 - 10 - searchTypeWidth - btnWidth - 10, 8, searchTypeWidth, 24);
             UIUtils.RenderCheckboxLeft(
                 ref searchTypeRect,
                 (BestApparel.Config.UseAllThings ? "BestApparel.Control.UseAllThings" : "BestApparel.Control.UseCraftableThings").Translate(),
@@ -87,12 +87,15 @@ namespace BestApparel.ui
                 (BestApparel.Config.UseAllThings ? "BestApparel.Control.UseAllThings.Tooltip" : "BestApparel.Control.UseCraftableThings.Tooltip").Translate()
             );
 
-            var addControlRect = new Rect(windowRect.width - btnWidth - WINDOW_BORDER - 10, 4, btnWidth, 32);
+            var addControlRect = new Rect(windowRect.width - btnWidth - Margin * 2 - 10, 4, btnWidth, 32);
             if (Widgets.ButtonText(addControlRect, "BestApparel.Profiles".Translate()))
             {
                 Log.Message($"windowRect: ({windowRect.x}, {windowRect.y}, {windowRect.width}, {windowRect.height}) ");
                 Log.Message($"inRect: ({inRect.x}, {inRect.y}, {inRect.width}, {inRect.height}) ");
             }
+
+            Text.Anchor = TextAnchor.UpperLeft;
+            GUI.color = Color.white;
         }
 
         private void OnFilterClick()

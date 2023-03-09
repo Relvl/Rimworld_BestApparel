@@ -83,6 +83,7 @@ namespace BestApparel.ui
 
             Text.Anchor = TextAnchor.MiddleLeft;
 
+            Text.Font = GameFont.Tiny;
             const int rowHeight = 24;
             var colWidth = inRect.width / columnCount - 2;
             for (var idx = 0; idx < defs.Count; idx++)
@@ -177,6 +178,8 @@ namespace BestApparel.ui
 
                 GUI.color = Color.white;
             }
+
+            Text.Font = GameFont.Small;
 
             Text.Anchor = TextAnchor.UpperLeft;
             inRect.yMin += defs.Count / columnCount * (rowHeight + 2) + 20;

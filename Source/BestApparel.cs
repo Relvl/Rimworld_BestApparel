@@ -9,6 +9,7 @@ namespace BestApparel
         public static Config Config { get; private set; } = new Config();
 
         public static Color COLOR_WHITE_A20 = new Color(1f, 1f, 1f, 0.2f);
+        public static Color COLOR_WHITE_A50 = new Color(1f, 1f, 1f, 0.5f);
 
         public BestApparel(ModContentPack content) : base(content)
         {

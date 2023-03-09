@@ -32,8 +32,43 @@ namespace BestApparel.ui
 
             // region TABLE
 
+            // Table header
+            const int cellPadding = 2;
+            const int nameCellWidth = 200;
+            const int cellWidth = 70;
+            const int cellHeight = 24;
+
+            if (DataProcessor.CachedApparels.Length > 0)
+            {
+                var apparel = DataProcessor.CachedApparels.FirstOrDefault();
+                if (apparel != null)
+                {
+                    Text.Font = GameFont.Tiny;
+                    var headerRect = new Rect(inRect.x + cellHeight * 2 + nameCellWidth + cellPadding * 3, inRect.y, cellWidth, cellHeight);
+                    foreach (var cell in apparel.CachedCells)
+                    {
+                        GUI.color = BestApparel.COLOR_WHITE_A50;
+                        Text.Anchor = TextAnchor.MiddleCenter;
+
+                        headerRect.width = cellWidth;
+
+                        Widgets.Label(headerRect, cell.DefLabel);
+                        TooltipHandler.TipRegion(headerRect, cell.DefLabel);
+
+                        headerRect.x += cellWidth + cellPadding;
+                        headerRect.width = 1;
+
+                        GUI.DrawTexture(headerRect, BaseContent.WhiteTex);
+                    }
+
+                    GUI.color = Color.white;
+                    Text.Font = GameFont.Small;
+                    inRect.yMin += cellHeight + cellPadding;
+                }
+            }
+
             // todo! может быть, тоже не вычислять, а получать высоту от предыдущего кадра?
-            var innerScrolledRect = new Rect(0, 0, inRect.width - 16, DataProcessor.CachedApparels.Length * LIST_ELEMENT_HEIGHT);
+            var innerScrolledRect = new Rect(0, 0, inRect.width - 16, DataProcessor.CachedApparels.Length * cellHeight);
 
             Widgets.BeginScrollView(inRect, ref _scrollPosition, innerScrolledRect);
             Text.Anchor = TextAnchor.MiddleLeft;
@@ -43,8 +78,8 @@ namespace BestApparel.ui
             for (var idx = 0; idx < DataProcessor.CachedApparels.Length; idx++)
             {
                 var apparel = DataProcessor.CachedApparels[idx];
-                var elementRect = new Rect(0, LIST_ELEMENT_HEIGHT * idx, inRect.width, LIST_ELEMENT_HEIGHT);
-                var cellRect = new Rect(elementRect.x, elementRect.y, LIST_ELEMENT_HEIGHT, LIST_ELEMENT_HEIGHT);
+                var elementRect = new Rect(0, cellHeight * idx, inRect.width, cellHeight);
+                var cellRect = new Rect(elementRect.x, elementRect.y, cellHeight, cellHeight);
 
                 // i
                 Widgets.InfoCardButtonCentered(cellRect, apparel.DefaultThing);
@@ -57,13 +92,15 @@ namespace BestApparel.ui
                 }
 
                 // Icon
-                cellRect.x += LIST_ELEMENT_HEIGHT + 4;
+                cellRect.x += cellHeight + cellPadding;
                 Widgets.ThingIcon(cellRect, apparel.DefaultThing);
 
                 // Label
-                cellRect.x += LIST_ELEMENT_HEIGHT + 4;
-                cellRect.width = 200;
+                Text.Font = GameFont.Tiny;
+                cellRect.x += cellHeight + cellPadding;
+                cellRect.width = nameCellWidth;
                 Widgets.Label(cellRect, apparel.DefaultThing.def.label);
+                Text.Font = GameFont.Small;
 
                 if (Prefs.DevMode)
                 {
@@ -74,8 +111,8 @@ namespace BestApparel.ui
                 TooltipHandler.TipRegion(cellRect, apparel.DefaultThing.Label);
 
                 // Columns
-                cellRect.x += cellRect.width + 2;
-                cellRect.width = 70;
+                cellRect.x += cellRect.width + cellPadding;
+                cellRect.width = cellWidth;
 
                 for (var cellIdx = 0; cellIdx < apparel.CachedCells.Length; cellIdx++)
                 {
@@ -108,7 +145,7 @@ namespace BestApparel.ui
                     }
 
                     // offset to the right
-                    cellRect.x += /*todo config? auto-calc?*/ cellRect.width + 2;
+                    cellRect.x += /*todo config? auto-calc?*/ cellRect.width + cellPadding;
                 }
 
                 // bg and mouseover
@@ -119,7 +156,7 @@ namespace BestApparel.ui
 
                 if (idx < DataProcessor.CachedApparels.Length - 1)
                 {
-                    UIUtils.DrawLineFull(BestApparel.COLOR_WHITE_A20, LIST_ELEMENT_HEIGHT * idx + LIST_ELEMENT_HEIGHT, inRect.width);
+                    UIUtils.DrawLineFull(BestApparel.COLOR_WHITE_A20, cellHeight * (idx + 1), inRect.width);
                 }
             }
 
