@@ -50,7 +50,7 @@ namespace BestApparel.ui.utility
             const int columnCount = 2;
             var colWidth = inRect.width / columnCount - 2;
 
-            var columns = BestApparel.Config.Columns.Apparel;
+            var columns = BestApparel.Config.Columns.Apparel.OrderBy(it => it).ToList();
             if (columns.Count == 0) return inRect.yMin - inRectStartsAt;
             for (var idx = 0; idx < columns.Count; idx++)
             {

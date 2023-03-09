@@ -13,81 +13,85 @@ namespace BestApparel.ui
     // ReSharper disable once UnusedType.Global, ClassNeverInstantiated.Global -> /Defs/MainWindow.xml
     public partial class MainTabWindow
     {
+        private int _apparelLastFrameRow = -1;
+
         private void RenderApparelTab(Rect inRect)
         {
-            /*  [Filter...] [Sorting...] [Ignored...] [Colons...]
-             *  {{{{{{{{{{{{{{{{{{{{{
-             *  LIST
-             *  }}}}}}}}}}}}}}}}}}}}}
-             */
-            const int btnWidth = 85;
-            var r = new Rect(0, inRect.y, btnWidth, 24);
+            UIUtils.DrawButtonsRow(
+                ref inRect,
+                85,
+                24,
+                10,
+                ("BestApparel.Btn.Columns", OnColumnsClick),
+                ("BestApparel.Btn.Filter", OnFilterClick),
+                ("BestApparel.Btn.Sorting", OnSortingClick)
+                //,("BestApparel.Btn.Ignored", OnIgnoredClick)
+            );
 
-            if (Widgets.ButtonText(r, "BestApparel.Btn.Filter".Translate())) OnFilterClick();
-            r.x += btnWidth + 10;
-
-            if (Widgets.ButtonText(r, "BestApparel.Btn.Sorting".Translate())) OnSortingClick();
-            r.x += btnWidth + 10;
-
-            if (Widgets.ButtonText(r, "BestApparel.Btn.Ignored".Translate())) OnIgnoredClick();
-            r.x += btnWidth + 10;
-
-            if (Widgets.ButtonText(r, "BestApparel.Btn.Columns".Translate())) OnColumnsClick();
-            r.x += btnWidth + 10;
-
-            inRect.yMin += 34;
-
-            UIUtils.DrawLineFull(BestApparel.COLOR_WHITE_A20, inRect.y, inRect.width - /*scrollbar width*/16);
-
-            inRect.yMin += 10;
+            UIUtils.DrawLineAtTop(ref inRect);
 
             // region TABLE
 
+            // todo! может быть, тоже не вычислять, а получать высоту от предыдущего кадра?
             var innerScrolledRect = new Rect(0, 0, inRect.width - 16, DataProcessor.CachedApparels.Length * LIST_ELEMENT_HEIGHT);
 
             Widgets.BeginScrollView(inRect, ref _scrollPosition, innerScrolledRect);
             Text.Anchor = TextAnchor.MiddleLeft;
 
-            for (var i = 0; i < DataProcessor.CachedApparels.Length; i++)
+            var mouseOverAnyCell = false;
+
+            for (var idx = 0; idx < DataProcessor.CachedApparels.Length; idx++)
             {
-                var rThing = DataProcessor.CachedApparels[i];
-                var elementRect = new Rect(0, LIST_ELEMENT_HEIGHT * i, inRect.width, LIST_ELEMENT_HEIGHT);
+                var apparel = DataProcessor.CachedApparels[idx];
+                var elementRect = new Rect(0, LIST_ELEMENT_HEIGHT * idx, inRect.width, LIST_ELEMENT_HEIGHT);
                 var cellRect = new Rect(elementRect.x, elementRect.y, LIST_ELEMENT_HEIGHT, LIST_ELEMENT_HEIGHT);
 
                 // i
-                Widgets.InfoCardButtonCentered(cellRect, rThing.DefaultThing);
+                Widgets.InfoCardButtonCentered(cellRect, apparel.DefaultThing);
 
                 // back row click = open info window
-                if (Widgets.ButtonInvisible(elementRect))
+                if (Prefs.DevMode && Widgets.ButtonInvisible(elementRect))
                 {
                     Find.WindowStack.TryRemove(typeof(ThingInfoWindow));
-                    Find.WindowStack.Add(new ThingInfoWindow(this, rThing.DefaultThing));
+                    Find.WindowStack.Add(new ThingInfoWindow(this, apparel.DefaultThing));
                 }
 
                 // Icon
                 cellRect.x += LIST_ELEMENT_HEIGHT + 4;
-                Widgets.ThingIcon(cellRect, rThing.DefaultThing);
+                Widgets.ThingIcon(cellRect, apparel.DefaultThing);
+
                 // Label
                 cellRect.x += LIST_ELEMENT_HEIGHT + 4;
                 cellRect.width = 200;
-                Widgets.Label(cellRect, rThing.DefaultThing.def.label);
+                Widgets.Label(cellRect, apparel.DefaultThing.def.label);
 
                 if (Prefs.DevMode)
                 {
-                    TooltipHandler.TipRegion(cellRect, $"Total sorting weight: {rThing.CachedSortingWeight}");
+                    TooltipHandler.TipRegion(cellRect, $"Total sorting weight: {apparel.CachedSortingWeight}");
                 }
 
                 // todo захватить иконку в тултип
-                TooltipHandler.TipRegion(cellRect, rThing.DefaultThing.Label);
+                TooltipHandler.TipRegion(cellRect, apparel.DefaultThing.Label);
 
                 // Columns
-                // todo! order like in sorting weight
                 cellRect.x += cellRect.width + 2;
                 cellRect.width = 70;
 
-
-                foreach (var cell in rThing.CachedCells)
+                for (var cellIdx = 0; cellIdx < apparel.CachedCells.Length; cellIdx++)
                 {
+                    var cell = apparel.CachedCells[cellIdx];
+
+                    if (_apparelLastFrameRow == cellIdx)
+                    {
+                        GUI.DrawTexture(cellRect, TexUI.HighlightTex);
+                    }
+
+                    if (Mouse.IsOver(cellRect))
+                    {
+                        _apparelLastFrameRow = cellIdx;
+                        mouseOverAnyCell = true;
+                    }
+
                     if (cell.IsEmpty)
                     {
                         GUI.color = BestApparel.COLOR_WHITE_A20;
@@ -113,10 +117,15 @@ namespace BestApparel.ui
                     GUI.DrawTexture(elementRect, TexUI.HighlightTex);
                 }
 
-                if (i < DataProcessor.CachedApparels.Length - 1)
+                if (idx < DataProcessor.CachedApparels.Length - 1)
                 {
-                    UIUtils.DrawLineFull(BestApparel.COLOR_WHITE_A20, LIST_ELEMENT_HEIGHT * i + LIST_ELEMENT_HEIGHT, inRect.width);
+                    UIUtils.DrawLineFull(BestApparel.COLOR_WHITE_A20, LIST_ELEMENT_HEIGHT * idx + LIST_ELEMENT_HEIGHT, inRect.width);
                 }
+            }
+
+            if (!mouseOverAnyCell)
+            {
+                _apparelLastFrameRow = -1;
             }
 
             Text.Anchor = TextAnchor.UpperLeft;

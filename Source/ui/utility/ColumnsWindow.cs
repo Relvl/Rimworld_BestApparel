@@ -25,7 +25,7 @@ namespace BestApparel.ui.utility
 
         protected override void OnResetClick() => BestApparel.Config.RestoreDefaultColumns();
 
-        private float RenderApparelColumns(ref Rect inRect)
+        private static float RenderApparelColumns(ref Rect inRect)
         {
             return UIUtils.RenderCheckboxes(
                 ref inRect,

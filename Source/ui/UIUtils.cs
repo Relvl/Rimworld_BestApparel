@@ -9,11 +9,39 @@ namespace BestApparel.ui
 {
     public static class UIUtils
     {
+        public static void DrawLineAtTop(ref Rect inRect, bool usesScroll = true, int bottomMargin = 10)
+        {
+            DrawLineFull(BestApparel.COLOR_WHITE_A20, inRect.y, inRect.width - /*scrollbar width*/(usesScroll ? 16 : 0));
+            if (bottomMargin > 0)
+            {
+                inRect.yMin += 10;
+            }
+        }
+
         public static void DrawLineFull(Color color, float y, float width)
         {
             GUI.color = color;
             Widgets.DrawLineHorizontal(0, y, width);
             GUI.color = Color.white;
+        }
+
+        public static void DrawButtonsRow(ref Rect inRect, int btnWidth, int btnHeight, int margin, params (string, Action)[] buttons)
+        {
+            var r = new Rect(0, inRect.y, 0, 0);
+            foreach (var (label, action) in buttons)
+            {
+                DrawButtonRightOffset(ref r, label, action, btnWidth, btnHeight);
+            }
+
+            inRect.yMin += btnHeight + margin;
+        }
+
+        public static void DrawButtonRightOffset(ref Rect r, string label, Action onClick, int btnWidth = 85, int btnHeight = 24)
+        {
+            r.width = btnWidth;
+            r.height = btnHeight;
+            if (Widgets.ButtonText(r, label.Translate())) onClick();
+            r.x += btnWidth + 10;
         }
 
         public static void RenderCheckboxLeft(ref Rect inRect, string label, bool state, Action<bool> onStateChanged, float maxWidth = 0)
