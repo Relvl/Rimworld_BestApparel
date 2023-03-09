@@ -17,15 +17,32 @@ All it does is to quickly find the desired item according to the desired stats.
 
 ### Incompatible
 
-- Not yet... ;P
+Not yet found... ;P
+
+Actually i don't think there is any incompatible mod... ;o
 
 ### Compatible
 
 + modpack: HardcoreSK
 + mod: Combat Extended
++ vanilla ofc, but who cares? xD
+
+### Translations
+
++ English
++ Russian
+
+If you want to add/correct translation - please contact me in the Discord: `Johnson1893#1084` and send me a translation
+files.
+
+### Legal
+
+    Feel free to use this mod in any public modpacks.
+    Feel free to use any part of this mod for any purpose.
 
 ### TODO
 
 + Columns window search
 + Ignore/Pin column window element, edit those items window
-+ 
++ Weapon support
++ Few preset profiles
