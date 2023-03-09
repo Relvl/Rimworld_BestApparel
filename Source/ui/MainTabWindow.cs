@@ -24,7 +24,6 @@ namespace BestApparel.ui
         public override void PreOpen()
         {
             base.PreOpen();
-            Config.Instance.Load();
             DataProcessor.CollectData();
         }
 
@@ -47,15 +46,15 @@ namespace BestApparel.ui
                 inRect,
                 new List<TabRecord>
                 {
-                    new TabRecord("BestApparel.Apparel".Translate(), () => Config.Instance.SelectedTab = TabId.APPAREL, Config.Instance.SelectedTab == TabId.APPAREL),
-                    new TabRecord("BestApparel.Ranged".Translate(), () => Config.Instance.SelectedTab = TabId.RANGED, Config.Instance.SelectedTab == TabId.RANGED),
-                    new TabRecord("BestApparel.Melee".Translate(), () => Config.Instance.SelectedTab = TabId.MELEE, Config.Instance.SelectedTab == TabId.MELEE),
+                    new TabRecord("BestApparel.Apparel".Translate(), () => BestApparel.Config.SelectedTab = TabId.APPAREL, BestApparel.Config.SelectedTab == TabId.APPAREL),
+                    new TabRecord("BestApparel.Ranged".Translate(), () => BestApparel.Config.SelectedTab = TabId.RANGED, BestApparel.Config.SelectedTab == TabId.RANGED),
+                    new TabRecord("BestApparel.Melee".Translate(), () => BestApparel.Config.SelectedTab = TabId.MELEE, BestApparel.Config.SelectedTab == TabId.MELEE),
                 }
             );
 
             inRect.yMin += 10f;
 
-            switch (Config.Instance.SelectedTab)
+            switch (BestApparel.Config.SelectedTab)
             {
                 case TabId.APPAREL:
                     RenderApparelTab(inRect);
@@ -75,17 +74,17 @@ namespace BestApparel.ui
             var searchTypeRect = new Rect(windowRect.width - WINDOW_BORDER - 10 - searchTypeWidth - btnWidth - 10, 8, searchTypeWidth, 24);
             UIUtils.RenderCheckboxLeft(
                 ref searchTypeRect,
-                (Config.Instance.UseAllThings ? "BestApparel.Control.UseAllThings" : "BestApparel.Control.UseCraftableThings").Translate(),
-                Config.Instance.UseAllThings,
+                (BestApparel.Config.UseAllThings ? "BestApparel.Control.UseAllThings" : "BestApparel.Control.UseCraftableThings").Translate(),
+                BestApparel.Config.UseAllThings,
                 state =>
                 {
-                    Config.Instance.UseAllThings = state;
+                    BestApparel.Config.UseAllThings = state;
                     DataProcessor.CollectData();
                 }
             );
             TooltipHandler.TipRegion(
                 searchTypeRect,
-                (Config.Instance.UseAllThings ? "BestApparel.Control.UseAllThings.Tooltip" : "BestApparel.Control.UseCraftableThings.Tooltip").Translate()
+                (BestApparel.Config.UseAllThings ? "BestApparel.Control.UseAllThings.Tooltip" : "BestApparel.Control.UseCraftableThings.Tooltip").Translate()
             );
 
             var addControlRect = new Rect(windowRect.width - btnWidth - WINDOW_BORDER - 10, 4, btnWidth, 32);

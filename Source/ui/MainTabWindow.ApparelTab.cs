@@ -37,7 +37,7 @@ namespace BestApparel.ui
 
             inRect.yMin += 34;
 
-            UIUtils.DrawLineFull(ModEntrance.COLOR_WHITE_A20, inRect.y, inRect.width - /*scrollbar width*/16);
+            UIUtils.DrawLineFull(BestApparel.COLOR_WHITE_A20, inRect.y, inRect.width - /*scrollbar width*/16);
 
             inRect.yMin += 10;
 
@@ -71,7 +71,13 @@ namespace BestApparel.ui
                 cellRect.x += LIST_ELEMENT_HEIGHT + 4;
                 cellRect.width = 200;
                 Widgets.Label(cellRect, rThing.DefaultThing.def.label);
-                // todo захватить иконку
+
+                if (Prefs.DevMode)
+                {
+                    TooltipHandler.TipRegion(cellRect, $"Total sorting weight: {rThing.CachedSortingWeight}");
+                }
+
+                // todo захватить иконку в тултип
                 TooltipHandler.TipRegion(cellRect, rThing.DefaultThing.Label);
 
                 // Columns
@@ -84,20 +90,13 @@ namespace BestApparel.ui
                 {
                     if (cell.None)
                     {
-                        GUI.color = ModEntrance.COLOR_WHITE_A20;
+                        GUI.color = BestApparel.COLOR_WHITE_A20;
                         Widgets.Label(cellRect, cell.Value);
                         GUI.color = Color.white;
                     }
                     else
                     {
                         Widgets.Label(cellRect, cell.Value);
-                        if (Prefs.DevMode)
-                        {
-                            TooltipHandler.TipRegion(cellRect, $"Stat defName: {cell.DefName}");
-                        }
-
-                        TooltipHandler.TipRegion(cellRect, "BestApparel.Label.RangePercent".Translate() + Math.Round(cell.NormalizedWeight * 100f, 1) + "%");
-
                         foreach (var tooltip in cell.Tooltips)
                         {
                             TooltipHandler.TipRegion(cellRect, tooltip);
@@ -116,7 +115,7 @@ namespace BestApparel.ui
 
                 if (i < DataProcessor.CachedApparels.Length - 1)
                 {
-                    UIUtils.DrawLineFull(ModEntrance.COLOR_WHITE_A20, LIST_ELEMENT_HEIGHT * i + LIST_ELEMENT_HEIGHT, inRect.width);
+                    UIUtils.DrawLineFull(BestApparel.COLOR_WHITE_A20, LIST_ELEMENT_HEIGHT * i + LIST_ELEMENT_HEIGHT, inRect.width);
                 }
             }
 

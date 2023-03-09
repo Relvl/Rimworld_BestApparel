@@ -58,7 +58,7 @@ namespace BestApparel.ui.utility
             btnRect.x += btnWidth + 10;
             btnRect.width = inRect.width - btnRect.x;
             Text.Anchor = TextAnchor.MiddleLeft;
-            GUI.color = ModEntrance.COLOR_WHITE_A20;
+            GUI.color = BestApparel.COLOR_WHITE_A20;
             Widgets.Label(btnRect, "BestApparel.Btn.Resort.Additional".Translate());
             Text.Anchor = TextAnchor.UpperLeft;
             GUI.color = Color.white;

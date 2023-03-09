@@ -116,36 +116,36 @@ namespace BestApparel.data
         public static bool CheckThingForFilters(ThingContainerApparel it)
         {
             // if have any 'ON' state - the thing should contain ALL of it
-            if (Config.Instance.EnabledLayers.Count > 0)
+            if (BestApparel.Config.EnabledLayers.Count > 0)
             {
-                if (!it.Def.apparel.layers.All(l => Config.Instance.EnabledLayers.Contains(l.defName)))
+                if (!it.Def.apparel.layers.All(l => BestApparel.Config.EnabledLayers.Contains(l.defName)))
                 {
                     return false;
                 }
             }
 
             // if have any 'OFF' state - the thing should not contain it
-            if (Config.Instance.DisabledLayers.Count > 0)
+            if (BestApparel.Config.DisabledLayers.Count > 0)
             {
-                if (it.Def.apparel.layers.Any(l => Config.Instance.DisabledLayers.Contains(l.defName)))
+                if (it.Def.apparel.layers.Any(l => BestApparel.Config.DisabledLayers.Contains(l.defName)))
                 {
                     return false;
                 }
             }
 
             // if have any 'ON' state - the thing should contain ANY of it
-            if (Config.Instance.EnabledBodyParts.Count > 0)
+            if (BestApparel.Config.EnabledBodyParts.Count > 0)
             {
-                if (!it.Def.apparel.bodyPartGroups.Any(l => Config.Instance.EnabledBodyParts.Contains(l.defName)))
+                if (!it.Def.apparel.bodyPartGroups.Any(l => BestApparel.Config.EnabledBodyParts.Contains(l.defName)))
                 {
                     return false;
                 }
             }
 
             // if have any 'OFF' state - the thing should not contain it
-            if (Config.Instance.DisabledBodyParts.Count > 0)
+            if (BestApparel.Config.DisabledBodyParts.Count > 0)
             {
-                if (it.Def.apparel.bodyPartGroups.Any(l => Config.Instance.DisabledBodyParts.Contains(l.defName)))
+                if (it.Def.apparel.bodyPartGroups.Any(l => BestApparel.Config.DisabledBodyParts.Contains(l.defName)))
                 {
                     return false;
                 }
@@ -156,8 +156,7 @@ namespace BestApparel.data
 
         public override void MakeCache()
         {
-            CachedCells = Config.Instance.SelectedColumns[TabId.APPAREL]
-                .Select(
+            CachedCells = BestApparel.Config.Columns.Apparel.Select(
                     defName =>
                     {
                         var proc = StatProcessors.FirstOrDefault(it => it.GetStatDef().defName == defName);
@@ -168,12 +167,19 @@ namespace BestApparel.data
                         if (Math.Abs(value - proc.GetStatDef().defaultBaseValue) > 0.00001)
                         {
                             var formattedValue = AStatProcessor.GetStatValueFormatted(proc.GetStatDef(), value, true);
-                            return new CellData(defName, formattedValue, new[] { $"{proc.GetStatDef().label}: {formattedValue}" }, false, value, proc.GetStatDef());
+                            return new CellData(
+                                defName,
+                                formattedValue,
+                                new List<string>(new[] { $"{proc.GetStatDef().label}: {formattedValue}" }),
+                                false,
+                                value,
+                                proc.GetStatDef()
+                            );
                         }
                         else
                         {
                             const string formattedValue = "---";
-                            return new CellData(defName, formattedValue, new string[] { }, false, value, proc.GetStatDef());
+                            return new CellData(defName, formattedValue, new List<string>(), false, value, proc.GetStatDef());
                         }
                     }
                 )
@@ -184,7 +190,7 @@ namespace BestApparel.data
         public void MakeSortingWeightsCache()
         {
             // здесь найти процент от мин-макса, умножить на вес, а в сорте вернуть сумму всех процентов
-            foreach (var defName in Config.Instance.SelectedColumns[TabId.APPAREL])
+            foreach (var defName in BestApparel.Config.Columns.Apparel)
             {
                 var thisCell = CachedCells.FirstOrDefault(c => c.DefName == defName);
                 if (thisCell == null) continue;
@@ -200,14 +206,20 @@ namespace BestApparel.data
                 var valueMax = rawValues.Max();
                 var value = proc.GetStatValue(DefaultThing);
 
-                if (!Config.Instance.SortingData[TabId.APPAREL].ContainsKey(defName)) Config.Instance.SortingData[TabId.APPAREL][defName] = 0f;
+                if (!BestApparel.Config.Sorting.Apparel.ContainsKey(defName)) BestApparel.Config.Sorting.Apparel[defName] = 0f;
                 thisCell.NormalizedWeight = (value - valueMin) / (valueMax - valueMin);
-                thisCell.WeightFactor = Config.Instance.SortingData[TabId.APPAREL][defName] + Config.MaxSortingWeight;
+                if (float.IsNaN(thisCell.NormalizedWeight)) thisCell.NormalizedWeight = 0f;
+                thisCell.WeightFactor = BestApparel.Config.Sorting.Apparel[defName] + Config.MaxSortingWeight;
+                if (Prefs.DevMode)
+                {
+                    thisCell.Tooltips.Add($"defName: {thisCell.DefName}");
+                    thisCell.Tooltips.Add($"min: {valueMin}, val: {value}, max: {valueMax}, norm: {thisCell.NormalizedWeight}");
+                }
+
+                thisCell.Tooltips.Add("BestApparel.Label.RangePercent".Translate(Math.Round(thisCell.NormalizedWeight * 100f, 1), thisCell.WeightFactor));
             }
 
             CachedSortingWeight = CachedCells.Sum(c => c.NormalizedWeight * c.WeightFactor);
         }
-
-        public float GetSortingWeight() => CachedSortingWeight;
     }
 }

@@ -13,22 +13,22 @@ namespace BestApparel.ui.utility
         {
             float heightCounter = 0;
 
-            switch (Config.Instance.SelectedTab)
+            switch (BestApparel.Config.SelectedTab)
             {
                 case TabId.APPAREL:
                     heightCounter += UIUtils.RenderCheckboxes(
                         ref inRect,
                         "BestApparel.Label.LayerList",
                         ThingContainerApparel.Layers,
-                        Config.Instance.EnabledLayers,
-                        Config.Instance.DisabledLayers
+                        BestApparel.Config.EnabledLayers,
+                        BestApparel.Config.DisabledLayers
                     );
                     heightCounter += UIUtils.RenderCheckboxes(
                         ref inRect,
                         "BestApparel.Label.BodyPartList",
                         ThingContainerApparel.BodyParts,
-                        Config.Instance.EnabledBodyParts,
-                        Config.Instance.DisabledBodyParts
+                        BestApparel.Config.EnabledBodyParts,
+                        BestApparel.Config.DisabledBodyParts
                     );
                     // todo! kid/adult
                     break;
@@ -37,6 +37,6 @@ namespace BestApparel.ui.utility
             return heightCounter;
         }
 
-        protected override void OnResetClick() => Config.Instance.RestoreDefaultFilters();
+        protected override void OnResetClick() => BestApparel.Config.RestoreDefaultFilters();
     }
 }

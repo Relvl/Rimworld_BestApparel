@@ -16,7 +16,7 @@ namespace BestApparel.ui.utility
         {
             float heightCounter = 0;
 
-            switch (Config.Instance.SelectedTab)
+            switch (BestApparel.Config.SelectedTab)
             {
                 case TabId.APPAREL:
                     heightCounter += RenderApparelSorting(ref inRect);
@@ -28,7 +28,7 @@ namespace BestApparel.ui.utility
 
         protected override void OnResetClick()
         {
-            Config.Instance.RestoreDefaultSortingFor(Config.Instance.SelectedTab);
+            BestApparel.Config.RestoreDefaultSortingFor(BestApparel.Config.SelectedTab);
         }
 
         private float RenderApparelSorting(ref Rect inRect)
@@ -50,7 +50,7 @@ namespace BestApparel.ui.utility
             const int columnCount = 2;
             var colWidth = inRect.width / columnCount - 2;
 
-            var columns = Config.Instance.SelectedColumns[TabId.APPAREL];
+            var columns = BestApparel.Config.Columns.Apparel;
             if (columns.Count == 0) return inRect.yMin - inRectStartsAt;
             for (var idx = 0; idx < columns.Count; idx++)
             {
@@ -69,14 +69,14 @@ namespace BestApparel.ui.utility
                 r.y = inRect.y + sliderHeight * rowIdx + 2 * rowIdx;
                 r.height = sliderHeight;
 
-                if (!Config.Instance.SortingData[TabId.APPAREL].ContainsKey(statDefName)) Config.Instance.SortingData[TabId.APPAREL][statDefName] = 0f;
+                if (!BestApparel.Config.Sorting.Apparel.ContainsKey(statDefName)) BestApparel.Config.Sorting.Apparel[statDefName] = 0f;
 
-                var oldValue = Config.Instance.SortingData[TabId.APPAREL][statDefName];
+                var oldValue = BestApparel.Config.Sorting.Apparel[statDefName];
                 var value = oldValue;
                 Widgets.HorizontalSlider(r, ref value, new FloatRange(-Config.MaxSortingWeight, Config.MaxSortingWeight), $"{statDef.label}: {value}", 1);
                 if (Math.Abs(oldValue - value) > 0.1)
                 {
-                    Config.Instance.SortingData[TabId.APPAREL][statDefName] = value;
+                    BestApparel.Config.Sorting.Apparel[statDefName] = value;
                 }
             }
 

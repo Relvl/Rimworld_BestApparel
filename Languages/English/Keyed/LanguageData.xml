@@ -43,6 +43,6 @@
         -10 totally excludes value from sorting.
     </BestApparel.Label.Sorting.Tooltip>
     
-    <BestApparel.Label.RangePercent>Range percent:</BestApparel.Label.RangePercent>
+    <BestApparel.Label.RangePercent>Range percent: {0}%, Weight factor: {1}</BestApparel.Label.RangePercent>
 
 </LanguageData>

@@ -8,10 +8,10 @@ using Verse;
 
 namespace BestApparel
 {
-    public class Config
+    public class Config : ModSettings
     {
-        public static readonly Config Instance = new Config();
         public static readonly float MaxSortingWeight = 10f;
+        public static BestApparel ModInstance;
 
         // ========================== NON storable
 
@@ -21,18 +21,14 @@ namespace BestApparel
 
         /* Do show all the things? Otherwise - only available on the workbenches. */
         public bool UseAllThings = false;
-        public readonly HashSet<string> DisabledLayers = new HashSet<string>();
-        public readonly HashSet<string> EnabledLayers = new HashSet<string>();
-        public readonly HashSet<string> DisabledBodyParts = new HashSet<string>();
-        public readonly HashSet<string> EnabledBodyParts = new HashSet<string>();
 
-        public readonly ReadOnlyDictionary<TabId, List<string>> SelectedColumns = new ReadOnlyDictionary<TabId, List<string>>( //
-            Enum.GetValues(typeof(TabId)).Cast<TabId>().ToDictionary(t => t, t => new List<string>())
-        );
+        public HashSet<string> DisabledLayers = new HashSet<string>();
+        public HashSet<string> EnabledLayers = new HashSet<string>();
+        public HashSet<string> DisabledBodyParts = new HashSet<string>();
+        public HashSet<string> EnabledBodyParts = new HashSet<string>();
 
-        public readonly ReadOnlyDictionary<TabId, Dictionary<string, float>> SortingData = new ReadOnlyDictionary<TabId, Dictionary<string, float>>( //
-            Enum.GetValues(typeof(TabId)).Cast<TabId>().ToDictionary(t => t, t => new Dictionary<string, float>())
-        );
+        public SortingData Sorting = new SortingData();
+        public SelectedColumnsData Columns = new SelectedColumnsData();
 
         public void RestoreDefaultFilters()
         {
@@ -44,25 +40,67 @@ namespace BestApparel
 
         public void RestoreDefaultColumns() // todo! по вкладкам отдельно!
         {
-            foreach (var (_, list) in SelectedColumns) list.Clear();
-            /*todo! default columns:
-             apparel: p-armor, b-armor, h-armor, move-speed, work-speed, social
-             ranged: 
-             melee:
-            */
+            switch (SelectedTab)
+            {
+                case TabId.APPAREL:
+                    Columns.Apparel.Clear();
+                    // todo defaults!
+                    break;
+            }
         }
 
         public void RestoreDefaultSortingFor(TabId tabId)
         {
-            SortingData[tabId].Clear();
+            switch (SelectedTab)
+            {
+                case TabId.APPAREL:
+                    Sorting.Apparel.Clear();
+                    break;
+            }
         }
 
-        public void Load()
+        public override void ExposeData()
         {
+            Scribe_Values.Look(ref UseAllThings, "UseAllThings", false, true);
+
+            Scribe_Collections.Look(ref DisabledLayers, true, "DisabledLayers");
+            Scribe_Collections.Look(ref EnabledLayers, true, "EnabledLayers");
+            Scribe_Collections.Look(ref DisabledBodyParts, true, "DisabledBodyParts");
+            Scribe_Collections.Look(ref EnabledBodyParts, true, "EnabledBodyParts");
+
+            Scribe_Deep.Look(ref Columns, "Columns");
+            if (Columns == null) Columns = new SelectedColumnsData();
+
+            Scribe_Deep.Look(ref Sorting, "SortingData");
+            if (Sorting == null) Sorting = new SortingData();
         }
 
-        public void Save()
+        public class SortingData : IExposable
         {
+            public Dictionary<string, float> Apparel = new Dictionary<string, float>();
+            public Dictionary<string, float> Ranged = new Dictionary<string, float>();
+            public Dictionary<string, float> Melee = new Dictionary<string, float>();
+
+            public void ExposeData()
+            {
+                Scribe_Collections.Look(ref Apparel, "Apparel");
+                Scribe_Collections.Look(ref Ranged, "Ranged");
+                Scribe_Collections.Look(ref Melee, "Melee");
+            }
+        }
+
+        public class SelectedColumnsData : IExposable
+        {
+            public List<string> Apparel = new List<string>();
+            public List<string> Ranged = new List<string>();
+            public List<string> Melee = new List<string>();
+
+            public void ExposeData()
+            {
+                Scribe_Collections.Look(ref Apparel, "Apparel");
+                Scribe_Collections.Look(ref Ranged, "Ranged");
+                Scribe_Collections.Look(ref Melee, "Melee");
+            }
         }
     }
 }

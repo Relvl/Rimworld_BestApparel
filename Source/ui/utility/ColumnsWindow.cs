@@ -13,7 +13,7 @@ namespace BestApparel.ui.utility
         protected override float DoWindowContentsInner(ref Rect inRect)
         {
             float heightCounter = 0;
-            switch (Config.Instance.SelectedTab)
+            switch (BestApparel.Config.SelectedTab)
             {
                 case TabId.APPAREL:
                     heightCounter += RenderApparelColumns(ref inRect);
@@ -23,7 +23,7 @@ namespace BestApparel.ui.utility
             return heightCounter;
         }
 
-        protected override void OnResetClick() => Config.Instance.RestoreDefaultColumns();
+        protected override void OnResetClick() => BestApparel.Config.RestoreDefaultColumns();
 
         private float RenderApparelColumns(ref Rect inRect)
         {
@@ -31,7 +31,7 @@ namespace BestApparel.ui.utility
                 ref inRect,
                 "BestApparel.Label.Columns",
                 ThingContainerApparel.StatProcessors.Select(it => it.GetStatDef()).ToList(),
-                Config.Instance.SelectedColumns[TabId.APPAREL],
+                BestApparel.Config.Columns.Apparel,
                 null,
                 2
             );

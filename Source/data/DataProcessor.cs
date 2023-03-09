@@ -12,7 +12,7 @@ namespace BestApparel.data
         {
             ThingContainerApparel.ClearThingDefs();
 
-            if (Config.Instance.UseAllThings)
+            if (BestApparel.Config.UseAllThings)
             {
                 DefDatabase<ThingDef>.AllDefs.Distinct().ToList().ForEach(ProcessThing);
             }
@@ -30,6 +30,7 @@ namespace BestApparel.data
             ThingContainerApparel.FinalyzeThingDefs();
 
             MakeCache();
+            Config.ModInstance.WriteSettings();
         }
 
         private static void ProcessThing(ThingDef thingDef)
@@ -42,7 +43,10 @@ namespace BestApparel.data
             CachedApparels = ThingContainerApparel.AllApparels.Where(ThingContainerApparel.CheckThingForFilters).ToArray();
             foreach (var apparel in CachedApparels) apparel.MakeCache();
             foreach (var apparel in CachedApparels) apparel.MakeSortingWeightsCache();
-            CachedApparels = CachedApparels.OrderByDescending(it => it.CachedSortingWeight).ThenBy(it => it.DefaultThing.Label).ToArray();
+            CachedApparels = CachedApparels //
+                .OrderByDescending(it => it.CachedSortingWeight)
+                .ThenBy(it => it.DefaultThing.Label)
+                .ToArray();
         }
     }
 }
