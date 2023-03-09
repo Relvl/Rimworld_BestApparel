@@ -1,7 +1,6 @@
 using System.Linq;
 using BestApparel.data;
 using UnityEngine;
-using Verse;
 
 namespace BestApparel.ui.utility
 {

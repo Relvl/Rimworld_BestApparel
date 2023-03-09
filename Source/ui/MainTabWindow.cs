@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BestApparel.data;
 using BestApparel.ui.utility;
-using RimWorld;
 using UnityEngine;
 using Verse;
 

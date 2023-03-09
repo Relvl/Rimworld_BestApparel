@@ -16,7 +16,7 @@ namespace BestApparel.ui.utility
         protected string SearchString;
 
         private Vector2 _mainScrollPosition = Vector2.zero;
-        private float _lastFrameScrollHeight = 0f;
+        private float _lastFrameScrollHeight;
 
         protected AUtilityWindow(MainTabWindow parent)
         {
