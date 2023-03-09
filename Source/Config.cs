@@ -1,16 +1,13 @@
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using BestApparel.ui;
-using JetBrains.Annotations;
 using Verse;
 
 namespace BestApparel
 {
     public class Config : ModSettings
     {
-        public static readonly float MaxSortingWeight = 10f;
+        public const float MaxSortingWeight = 10f;
+        public const float DefaultTolerance = 0.0001f;
         public static BestApparel ModInstance;
 
         // ========================== NON storable
@@ -56,6 +53,33 @@ namespace BestApparel
                 case TabId.APPAREL:
                     Sorting.Apparel.Clear();
                     break;
+            }
+        }
+
+        public void PrefillSorting()
+        {
+            foreach (var colId in Columns.Apparel)
+            {
+                if (!Sorting.Apparel.ContainsKey(colId))
+                {
+                    Sorting.Apparel[colId] = 0f;
+                }
+            }
+
+            foreach (var colId in Columns.Ranged)
+            {
+                if (!Sorting.Ranged.ContainsKey(colId))
+                {
+                    Sorting.Ranged[colId] = 0f;
+                }
+            }
+
+            foreach (var colId in Columns.Melee)
+            {
+                if (!Sorting.Melee.ContainsKey(colId))
+                {
+                    Sorting.Melee[colId] = 0f;
+                }
             }
         }
 

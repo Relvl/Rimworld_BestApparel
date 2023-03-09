@@ -69,8 +69,6 @@ namespace BestApparel.ui.utility
                 r.y = inRect.y + sliderHeight * rowIdx + 2 * rowIdx;
                 r.height = sliderHeight;
 
-                if (!BestApparel.Config.Sorting.Apparel.ContainsKey(statDefName)) BestApparel.Config.Sorting.Apparel[statDefName] = 0f;
-
                 var oldValue = BestApparel.Config.Sorting.Apparel[statDefName];
                 var value = oldValue;
                 Widgets.HorizontalSlider(r, ref value, new FloatRange(-Config.MaxSortingWeight, Config.MaxSortingWeight), $"{statDef.label}: {value}", 1);

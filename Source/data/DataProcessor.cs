@@ -10,6 +10,8 @@ namespace BestApparel.data
 
         public static void CollectData()
         {
+            BestApparel.Config.PrefillSorting();
+
             ThingContainerApparel.ClearThingDefs();
 
             if (BestApparel.Config.UseAllThings)
@@ -40,7 +42,7 @@ namespace BestApparel.data
 
         private static void MakeCache()
         {
-            CachedApparels = ThingContainerApparel.AllApparels.Where(ThingContainerApparel.CheckThingForFilters).ToArray();
+            CachedApparels = ThingContainerApparel.AllApparels.Where(it => it.CheckForFilters()).ToArray();
             foreach (var apparel in CachedApparels) apparel.MakeCache();
             foreach (var apparel in CachedApparels) apparel.MakeSortingWeightsCache();
             CachedApparels = CachedApparels //

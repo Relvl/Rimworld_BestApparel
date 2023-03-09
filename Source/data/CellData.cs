@@ -1,28 +1,34 @@
+using System;
 using System.Collections.Generic;
-using RimWorld;
+using BestApparel.stat_processor;
+using Verse;
 
 namespace BestApparel.data
 {
     public class CellData
     {
         public readonly string DefName;
-        public readonly string Value;
         public readonly float ValueRaw;
-        public readonly List<string> Tooltips;
-        public readonly bool None;
-        public readonly StatDef StatDef;
+        public readonly string Value;
+        public readonly bool IsEmpty;
+        public readonly float WeightFactor;
+        public readonly string DefLabel;
+        public readonly List<string> Tooltips = new List<string>();
 
-        public float NormalizedWeight = 0f;
-        public float WeightFactor = Config.MaxSortingWeight;
+        public float NormalizedWeight { get; set; }
 
-        public CellData(string defName, string value, List<string> tooltips, bool none, float valueRaw, StatDef statDef)
+        public CellData(AStatProcessor processor, Thing defaultThing)
         {
-            DefName = defName;
-            Value = value;
-            Tooltips = tooltips;
-            None = none;
-            ValueRaw = valueRaw;
-            StatDef = statDef;
+            DefName = processor.GetStatDef().defName;
+            ValueRaw = processor.GetStatValue(defaultThing);
+            IsEmpty = processor.IsValueDefault(defaultThing);
+            Value = IsEmpty ? "---" : processor.GetStatValueFormatted(defaultThing, true);
+            WeightFactor = BestApparel.Config.Sorting.Apparel[DefName] + Config.MaxSortingWeight;
+            DefLabel = processor.GetStatDef().label;
+            if (!IsEmpty)
+            {
+                Tooltips.Add($"{processor.GetStatDef().label}: {Value}");
+            }
         }
     }
 }

@@ -297,8 +297,8 @@
         <Compile Include="BestApparel.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="stat_processor\AStatProcessor.cs" />
-        <Compile Include="stat_processor\StatProcessorCommon.cs" />
-        <Compile Include="stat_processor\StatProcessorBaseStat.cs" />
+        <Compile Include="stat_processor\CommonStatProcessor.cs" />
+        <Compile Include="stat_processor\BaseStatProcessor.cs" />
         <Compile Include="ui\TabId.cs" />
         <Compile Include="ui\MainTabWindow.ApparelTab.cs" />
         <Compile Include="ui\MainTabWindow.Const.cs" />

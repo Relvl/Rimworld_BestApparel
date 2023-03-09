@@ -4,9 +4,11 @@ namespace BestApparel.data
 {
     public abstract class AThingContainer
     {
-        public ThingDef Def;
+        protected ThingDef Def;
         public Thing DefaultThing;
 
         public abstract void MakeCache();
+
+        public abstract bool CheckForFilters();
     }
 }

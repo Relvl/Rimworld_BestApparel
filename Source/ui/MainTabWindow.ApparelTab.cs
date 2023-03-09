@@ -88,7 +88,7 @@ namespace BestApparel.ui
 
                 foreach (var cell in rThing.CachedCells)
                 {
-                    if (cell.None)
+                    if (cell.IsEmpty)
                     {
                         GUI.color = BestApparel.COLOR_WHITE_A20;
                         Widgets.Label(cellRect, cell.Value);
