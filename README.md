@@ -2,7 +2,8 @@
 
 A mod that adds a window for comparing items by various stats and filters.
 
-For apparels/clothes/armor, it allows you to sort by layers and body parts.
+For apparels/clothes/armor, it allows you to filter by layers and body parts.
+
 For weapons - ...
 
 Allows you to specify which stats to display and how to compare them.
