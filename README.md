@@ -43,7 +43,6 @@ files.
 
 ### TODO
 
-+ Columns window search
 + Ignore/Pin column window element, edit those items window
 + Weapon support
 + Few preset profiles

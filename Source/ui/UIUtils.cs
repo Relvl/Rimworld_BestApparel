@@ -74,17 +74,19 @@ namespace BestApparel.ui
             Text.Anchor = TextAnchor.UpperLeft;
             Text.Font = GameFont.Small;
 
-            var labelRect = new Rect(inRect.x, inRect.y, inRect.width, 20);
-            Widgets.Label(labelRect, label.Translate());
+            var labelTranslated = label.Translate();
+            var labelWidth = Text.CalcSize(labelTranslated.RawText);
+            var labelRect = new Rect(inRect.x, inRect.y, labelWidth.x, 20);
+            Widgets.Label(labelRect, labelTranslated);
             TooltipHandler.TipRegion(labelRect, $"{label}.Tooltip".Translate());
-            inRect.yMin += 26;
+            inRect.yMin += 36;
 
             var r = new Rect(inRect.x, inRect.y, 0, 16);
 
             Text.Anchor = TextAnchor.MiddleLeft;
 
             Text.Font = GameFont.Tiny;
-            const int rowHeight = 24;
+            const int rowHeight = 20;
             var colWidth = inRect.width / columnCount - 2;
             for (var idx = 0; idx < defs.Count; idx++)
             {
@@ -92,14 +94,14 @@ namespace BestApparel.ui
                 var colIdx = idx % columnCount;
                 var rowIdx = idx / columnCount;
                 r.x = colWidth * colIdx + 2 * colIdx;
-                r.width = colWidth;
+                r.width = Text.CalcSize(def.label).x + rowHeight + 6;
                 r.y = inRect.y + rowHeight * rowIdx + 2 * rowIdx;
                 r.height = rowHeight;
 
                 var chkRect = new Rect(r.x, r.y, rowHeight, rowHeight);
                 var isMouseOver = Mouse.IsOver(r);
 
-                r.xMax -= rowHeight;
+                r.xMin += 4;
 
                 if (isMulti)
                 {
@@ -160,7 +162,7 @@ namespace BestApparel.ui
                         }
                     }
 
-                    Widgets.CheckboxDraw(chkRect.x, chkRect.y, chkState, false);
+                    Widgets.CheckboxDraw(chkRect.x, chkRect.y, chkState, false, rowHeight);
                 }
 
                 if (isMouseOver)
@@ -180,9 +182,8 @@ namespace BestApparel.ui
             }
 
             Text.Font = GameFont.Small;
-
             Text.Anchor = TextAnchor.UpperLeft;
-            inRect.yMin += defs.Count / columnCount * (rowHeight + 2) + 20;
+            inRect.yMin += defs.Count / columnCount * (rowHeight + 2);
 
             return inRect.yMin - inRectStartsAt;
         }

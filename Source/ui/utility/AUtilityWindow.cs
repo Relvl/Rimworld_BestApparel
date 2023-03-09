@@ -8,9 +8,13 @@ namespace BestApparel.ui.utility
     public abstract class AUtilityWindow : Window
     {
         public override Vector2 InitialSize => new Vector2(650, 500);
-        public virtual bool UseBottomButtons => true;
+
+        protected virtual bool UseBottomButtons => true;
+        protected virtual bool UseSearch => false;
 
         protected readonly MainTabWindow Parent;
+        protected string SearchString;
+
         private Vector2 _mainScrollPosition = Vector2.zero;
         private float _lastFrameScrollHeight = 0f;
 
@@ -23,6 +27,12 @@ namespace BestApparel.ui.utility
             Parent = parent;
         }
 
+        public override void PreOpen()
+        {
+            base.PreOpen();
+            SearchString = "";
+        }
+
         public override void DoWindowContents(Rect inRect)
         {
             var scrolledRect = new Rect(0, 0, inRect.width - 16, _lastFrameScrollHeight);
@@ -33,7 +43,22 @@ namespace BestApparel.ui.utility
             _lastFrameScrollHeight += DoWindowContentsInner(ref inRect);
             Widgets.EndScrollView();
 
-            _lastFrameScrollHeight += RenderBottom(ref inRect, OnResetClick);
+            if (UseBottomButtons)
+            {
+                _lastFrameScrollHeight += RenderBottom(ref inRect, OnResetClick);
+            }
+
+            if (UseSearch)
+            {
+                const int searchWidth = 100;
+                var r = new Rect(windowRect.width - Margin * 2 - 48 - searchWidth, 0, 24, 24);
+                GUI.DrawTexture(r, TexButton.Search);
+                GUI.SetNextControlName($"BestApparel.{GetType().Name}.Search");
+                r.x += 28;
+                r.width = searchWidth;
+                var str = Widgets.TextField(r, SearchString, 15);
+                SearchString = str;
+            }
         }
 
         protected abstract float DoWindowContentsInner(ref Rect inRect);
