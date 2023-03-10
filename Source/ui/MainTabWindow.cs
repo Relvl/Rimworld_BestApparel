@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BestApparel.data;
 using BestApparel.ui.utility;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -180,7 +181,11 @@ namespace BestApparel.ui
                 }
 
                 // todo захватить иконку в тултип
-                TooltipHandler.TipRegion(cellRect, container.DefaultThing.Label);
+                var tip = container.DefaultThing.LabelNoParenthesisCap.AsTipTitle() + //
+                          GenLabel.LabelExtras(container.DefaultThing, 1, true, true) +
+                          "\n\n" +
+                          container.DefaultThing.DescriptionDetailed;
+                TooltipHandler.TipRegion(cellRect, tip);
 
                 // Columns
                 cellRect.x += cellRect.width + CellPadding;
