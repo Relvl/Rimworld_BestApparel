@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using Verse;
@@ -7,12 +8,14 @@ namespace BestApparel.data
     public static class DataProcessor
     {
         public static ThingContainerApparel[] CachedApparels { get; private set; } = { };
+        public static ThingContainerRanged[] CachedRanged { get; private set; } = { };
 
         public static void CollectData()
         {
             BestApparel.Config.PrefillSorting();
 
             ThingContainerApparel.ClearThingDefs();
+            ThingContainerRanged.ClearThingDefs();
 
             if (BestApparel.Config.UseAllThings)
             {
@@ -30,18 +33,10 @@ namespace BestApparel.data
             }
 
             ThingContainerApparel.FinalyzeThingDefs();
+            ThingContainerRanged.FinalyzeThingDefs();
 
-            MakeCache();
-            Config.ModInstance.WriteSettings();
-        }
+            // === Make the Cache
 
-        private static void ProcessThing(ThingDef thingDef)
-        {
-            ThingContainerApparel.TryToAddThingDef(thingDef);
-        }
-
-        private static void MakeCache()
-        {
             CachedApparels = ThingContainerApparel.AllApparels.Where(it => it.CheckForFilters()).ToArray();
             foreach (var apparel in CachedApparels) apparel.MakeCache();
             foreach (var apparel in CachedApparels) apparel.MakeSortingWeightsCache();
@@ -49,6 +44,22 @@ namespace BestApparel.data
                 .OrderByDescending(it => it.CachedSortingWeight)
                 .ThenBy(it => it.DefaultThing.Label)
                 .ToArray();
+
+            CachedRanged = ThingContainerRanged.AllRanged.Where(it => it.CheckForFilters()).ToArray();
+            foreach (var ranged in CachedRanged) ranged.MakeCache();
+            foreach (var ranged in CachedRanged) ranged.MakeSortingWeightsCache();
+            CachedRanged = CachedRanged //
+                .OrderByDescending(it => it.CachedSortingWeight)
+                .ThenBy(it => it.DefaultThing.Label)
+                .ToArray();
+
+            Config.ModInstance.WriteSettings();
+        }
+
+        private static void ProcessThing(ThingDef thingDef)
+        {
+            ThingContainerApparel.TryToAddThingDef(thingDef);
+            ThingContainerRanged.TryToAddThingDef(thingDef);
         }
     }
 }

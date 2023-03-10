@@ -7,34 +7,33 @@ using Verse;
 
 namespace BestApparel.data
 {
-    public class ThingContainerApparel : AThingContainer
+    public class ThingContainerRanged : AThingContainer
     {
-        public static readonly List<ThingContainerApparel> AllApparels = new List<ThingContainerApparel>();
-        public static readonly List<ApparelLayerDef> Layers = new List<ApparelLayerDef>();
-        public static readonly List<BodyPartGroupDef> BodyParts = new List<BodyPartGroupDef>();
-
+        public static readonly List<ThingContainerRanged> AllRanged = new List<ThingContainerRanged>();
+        public static readonly List<WeaponClassDef> WeaponClasses = new List<WeaponClassDef>();
         public static readonly List<AStatProcessor> StatProcessors = new List<AStatProcessor>();
         public static readonly List<ThingCategoryDef> Categories = new List<ThingCategoryDef>();
         public static readonly List<StuffCategoryDef> Stuffs = new List<StuffCategoryDef>();
 
-        private ThingContainerApparel(ThingDef thingDef) : base(thingDef)
+        private ThingContainerRanged(ThingDef thingDef) : base(thingDef)
         {
         }
 
         public static void ClearThingDefs()
         {
-            AllApparels.Clear();
-            Layers.Clear();
-            Stuffs.Clear();
-            BodyParts.Clear();
+            AllRanged.Clear();
+            WeaponClasses.Clear();
             Categories.Clear();
+            Stuffs.Clear();
             StatProcessors.Clear();
         }
 
         public static void TryToAddThingDef(ThingDef thingDef)
         {
-            if (thingDef.IsApparel)
+            if (thingDef.IsWeapon)
             {
+                if (thingDef.weaponTags == null || !thingDef.weaponTags.Contains("Gun")) return;
+
                 try
                 {
                     if (Prefs.DevMode && BestApparel.Config.DoLogThingsLoading)
@@ -42,52 +41,44 @@ namespace BestApparel.data
                         Log.Message($"--> BestApparel process thingDef: {thingDef.defName}");
                     }
 
-                    AllApparels.Add(new ThingContainerApparel(thingDef));
+                    AllRanged.Add(new ThingContainerRanged(thingDef));
                 }
                 catch (Exception e)
                 {
-                    Log.Warning($"Can not make apparel cache for ThingDef '{thingDef.defName}' -> NRE {e.Message}");
+                    Log.Warning($"Can not make ranged cache for ThingDef '{thingDef.defName}' -> {e.Message}");
                 }
             }
         }
 
         public static void FinalyzeThingDefs()
         {
-            Layers.AddRange(
-                AllApparels //
-                    .SelectMany(it => it.Def.apparel.layers)
-                    .Where(it => it != null)
-                    .Distinct()
+            WeaponClasses.AddRange(
+                AllRanged //
+                    .Where(it => it.Def.weaponClasses != null)
+                    .SelectMany(it => it.Def.weaponClasses)
+                    .GroupBy(it => it.defName)
+                    .Select(it => it.First())
             );
-
             Stuffs.AddRange(
-                AllApparels //
+                AllRanged //
                     .Where(it => it.Def.stuffProps?.categories != null)
                     .SelectMany(it => it.Def.stuffProps?.categories)
                     .Distinct()
             );
-
-            BodyParts.AddRange(
-                AllApparels //
-                    .SelectMany(it => it.Def.apparel.bodyPartGroups)
-                    .Where(it => it != null)
-                    .Distinct()
-            );
-
             Categories.AddRange(
-                AllApparels //
+                AllRanged //
                     .Where(it => it.Def.thingCategories != null)
                     .SelectMany(it => it.Def.thingCategories)
                     .GroupBy(it => it.defName)
                     .Select(it => it.First())
             );
 
+            // todo! CE flags from Verb_ShootCE
 
             var tmpStatProcessors = new List<AStatProcessor>();
-
             // Base stats
             tmpStatProcessors.AddRange(
-                AllApparels.SelectMany(
+                AllRanged.SelectMany(
                     apparel => DefDatabase<StatDef>.AllDefs //
                         .Where(def => def.Worker.ShouldShowFor(StatRequest.For(apparel.DefaultThing)) && !def.Worker.IsDisabledFor(apparel.DefaultThing))
                         .Select(def => new BaseStatProcessor(def))
@@ -95,17 +86,26 @@ namespace BestApparel.data
                 )
             );
 
-            // Equipped stats
-            tmpStatProcessors.AddRange(
-                AllApparels //
-                    .Where(apparel => apparel.Def.equippedStatOffsets != null)
-                    .SelectMany(
-                        apparel => apparel.Def.equippedStatOffsets //
-                            .Where(modifier => modifier != null)
-                            .Select(statModifier => new CommonStatProcessor(statModifier.stat))
-                            .Where(processor => !processor.IsValueDefault(apparel.DefaultThing))
-                    )
-            );
+            if (Config.IsCeLoaded)
+            {
+                // Verb_LaunchProjectileCE
+                // Verb_LaunchProjectileChangeAble
+                // Verb_LaunchProjectileStaticCE
+                // Verb_MarkForArtillery
+                // Verb_MeleeAttackCE
+                // Verb_ShootCE
+                // Verb_ShootCEOneUse (grenades, javelin)
+                // Verb_ShootFlareCE
+                // Verb_ShootMortarCE
+
+                AllRanged //
+                    .Where(r => r.Def.Verbs != null)
+                    .SelectMany(r => r.Def.Verbs)
+                    .Where(v => v.verbClass.FullName == "CombatExtended.Verb_ShootCE")
+                    .ToList()
+                    .ForEach(verb => { tmpStatProcessors.Add(new FuncStatProcessor(thing => verb.range, "Ability_Range.label")); });
+                tmpStatProcessors.Add(new CommonStatProcessor(StatDef.Named("MagazineCapacity")));
+            }
 
             StatProcessors.AddRange(
                 tmpStatProcessors //
@@ -115,22 +115,14 @@ namespace BestApparel.data
             );
         }
 
-        public override bool CheckForFilters()
-        {
-            if (!BestApparel.Config.ApparelLayers.IsCollectionAllowed(Def.apparel.layers)) return false;
-            if (!BestApparel.Config.ApparelBodyParts.IsCollectionAllowed(Def.apparel.bodyPartGroups)) return false;
-            if (!BestApparel.Config.ApparelCategories.IsCollectionAllowed(Def.thingCategories)) return false;
-            return true;
-        }
-
         public override void MakeCache()
         {
-            CachedCells = BestApparel.Config.Columns.Apparel //
+            CachedCells = BestApparel.Config.Columns.Ranged //
                 .Select(
                     defName =>
                     {
                         var proc = StatProcessors.FirstOrDefault(it => it.GetDefName() == defName);
-                        return proc == null ? null : new CellData(proc, DefaultThing, BestApparel.Config.Sorting.Apparel[proc.GetDefName()] + Config.MaxSortingWeight);
+                        return proc == null ? null : new CellData(proc, DefaultThing, BestApparel.Config.Sorting.Ranged[proc.GetDefName()] + Config.MaxSortingWeight);
                     }
                 )
                 .Where(it => it != null)
@@ -139,14 +131,21 @@ namespace BestApparel.data
                 .ToArray();
         }
 
+        public override bool CheckForFilters()
+        {
+            if (!BestApparel.Config.RangedCategories.IsCollectionAllowed(Def.thingCategories)) return false;
+            if (!BestApparel.Config.RangedTypes.IsCollectionAllowed(Def.weaponClasses)) return false;
+            return true;
+        }
+
         public override void MakeSortingWeightsCache()
         {
-            foreach (var defName in BestApparel.Config.Columns.Apparel)
+            foreach (var defName in BestApparel.Config.Columns.Ranged)
             {
                 var thisCell = CachedCells.FirstOrDefault(c => c.DefName == defName);
                 if (thisCell == null) continue;
 
-                var rawValues = DataProcessor.CachedApparels //
+                var rawValues = DataProcessor.CachedRanged //
                     .Select(a => a.CachedCells.FirstOrDefault(c => c.DefName == defName))
                     .Where(v => v != null)
                     .Select(c => c.ValueRaw)

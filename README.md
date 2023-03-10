@@ -46,3 +46,5 @@ files.
 + Ignore/Pin column window element, edit those items window
 + Weapon support
 + Few preset profiles
++ Stuff list and select better stuff for things
++ UI for configs

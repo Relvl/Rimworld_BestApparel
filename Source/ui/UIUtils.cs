@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using BestApparel.data;
+using BestApparel.stat_processor;
 using RimWorld;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Verse;
 using Verse.Sound;
 
@@ -14,7 +18,7 @@ namespace BestApparel.ui
             DrawLineFull(BestApparel.COLOR_WHITE_A20, inRect.y, inRect.width - /*scrollbar width*/(usesScroll ? 16 : 0));
             if (bottomMargin > 0)
             {
-                inRect.yMin += 10;
+                inRect.yMin += bottomMargin;
             }
         }
 
@@ -59,18 +63,10 @@ namespace BestApparel.ui
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
-        /** Returns total used height */
-        public static float RenderCheckboxes(ref Rect inRect,
-            string label,
-            IReadOnlyList<Def> defs,
-            ICollection<string> enabled,
-            ICollection<string> disabled = null,
-            int columnCount = 3)
+        public static float RenderFeatureSwitches(ref Rect inRect, string label, IReadOnlyList<Def> defs, Config.FeatureEnableDisable feature, int columnCount = 3)
         {
-            if (enabled == null && disabled == null) return 0;
-            var isMulti = enabled != null && disabled != null;
+            if (defs == null || defs.Count == 0) return 0;
             var inRectStartsAt = inRect.yMin;
-
             Text.Anchor = TextAnchor.UpperLeft;
             Text.Font = GameFont.Small;
 
@@ -79,6 +75,7 @@ namespace BestApparel.ui
             var labelRect = new Rect(inRect.x, inRect.y, labelWidth.x, 20);
             Widgets.Label(labelRect, labelTranslated);
             TooltipHandler.TipRegion(labelRect, $"{label}.Tooltip".Translate());
+
             inRect.yMin += 36;
 
             var r = new Rect(inRect.x, inRect.y, 0, 16);
@@ -88,6 +85,7 @@ namespace BestApparel.ui
             Text.Font = GameFont.Tiny;
             const int rowHeight = 20;
             var colWidth = inRect.width / columnCount - 2;
+
             for (var idx = 0; idx < defs.Count; idx++)
             {
                 var def = defs[idx];
@@ -103,67 +101,18 @@ namespace BestApparel.ui
 
                 r.xMin += 4;
 
-                if (isMulti)
+                var chkState = feature.GetState(def.defName);
+                if (Widgets.ButtonInvisible(r))
                 {
-                    var chkState = MultiCheckboxState.Partial;
-                    if (disabled.Contains(def.defName))
-                    {
-                        chkState = MultiCheckboxState.Off;
-                    }
-                    else if (enabled.Contains(def.defName))
-                    {
-                        chkState = MultiCheckboxState.On;
-                    }
+                    chkState = feature.Toggle(def.defName);
 
-                    if (Widgets.ButtonInvisible(r))
+                    if (BestApparel.Config.DoAutoResortOnAnyChanges)
                     {
-                        switch (chkState)
-                        {
-                            case MultiCheckboxState.On:
-                                SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
-                                enabled.Remove(def.defName);
-                                disabled.Add(def.defName);
-                                chkState = MultiCheckboxState.Off;
-                                break;
-                            case MultiCheckboxState.Off:
-                                SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
-                                enabled.Remove(def.defName);
-                                disabled.Remove(def.defName);
-                                chkState = MultiCheckboxState.Partial;
-                                break;
-                            default:
-                                SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
-                                enabled.Add(def.defName);
-                                disabled.Remove(def.defName);
-                                chkState = MultiCheckboxState.On;
-                                break;
-                        }
+                        DataProcessor.CollectData();
                     }
-
-                    Widgets.CheckboxMulti(chkRect, chkState);
                 }
-                else
-                {
-                    var states = enabled ?? disabled;
-                    var selected = states;
-                    var chkState = selected.Contains(def.defName);
 
-                    if (Widgets.ButtonInvisible(r))
-                    {
-                        if (chkState)
-                        {
-                            selected.Remove(def.defName);
-                            chkState = false;
-                        }
-                        else
-                        {
-                            selected.Add(def.defName);
-                            chkState = true;
-                        }
-                    }
-
-                    Widgets.CheckboxDraw(chkRect.x, chkRect.y, chkState, false, rowHeight);
-                }
+                Widgets.CheckboxMulti(chkRect, chkState);
 
                 if (isMouseOver)
                 {
@@ -183,7 +132,151 @@ namespace BestApparel.ui
 
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
-            inRect.yMin += defs.Count / columnCount * (rowHeight + 2);
+
+            inRect.yMin += (int)Math.Ceiling(defs.Count / (float)columnCount) * (rowHeight + 2);
+            inRect.yMin += 16;
+
+            return inRect.yMin - inRectStartsAt;
+        }
+
+        /** Returns total used height */
+        public static float RenderCheckboxes(ref Rect inRect,
+            string label,
+            IReadOnlyList<AStatProcessor> defs,
+            ICollection<string> enabled,
+            ICollection<string> disabled,
+            int columnCount = 3)
+        {
+            if (defs == null || defs.Count == 0) return 0;
+            var isMulti = enabled != null && disabled != null;
+            var inRectStartsAt = inRect.yMin;
+
+            Text.Anchor = TextAnchor.UpperLeft;
+            Text.Font = GameFont.Small;
+
+            var labelTranslated = label.Translate();
+            var labelWidth = Text.CalcSize(labelTranslated.RawText);
+            var labelRect = new Rect(inRect.x, inRect.y, labelWidth.x, 20);
+            Widgets.Label(labelRect, labelTranslated);
+            TooltipHandler.TipRegion(labelRect, $"{label}.Tooltip".Translate());
+
+            inRect.yMin += 36;
+
+            var r = new Rect(inRect.x, inRect.y, 0, 16);
+
+            Text.Anchor = TextAnchor.MiddleLeft;
+
+            Text.Font = GameFont.Tiny;
+            const int rowHeight = 20;
+            var colWidth = inRect.width / columnCount - 2;
+            for (var idx = 0; idx < defs.Count; idx++)
+            {
+                var processor = defs[idx];
+                var colIdx = idx % columnCount;
+                var rowIdx = idx / columnCount;
+                r.x = colWidth * colIdx + 2 * colIdx;
+                r.width = Text.CalcSize(processor.GetDefLabel()).x + rowHeight + 6;
+                r.y = inRect.y + rowHeight * rowIdx + 2 * rowIdx;
+                r.height = rowHeight;
+
+                var chkRect = new Rect(r.x, r.y, rowHeight, rowHeight);
+                var isMouseOver = Mouse.IsOver(r);
+
+                r.xMin += 4;
+
+                if (isMulti)
+                {
+                    var chkState = MultiCheckboxState.Partial;
+                    if (disabled.Contains(processor.GetDefName()))
+                    {
+                        chkState = MultiCheckboxState.Off;
+                    }
+                    else if (enabled.Contains(processor.GetDefName()))
+                    {
+                        chkState = MultiCheckboxState.On;
+                    }
+
+                    if (Widgets.ButtonInvisible(r))
+                    {
+                        if (BestApparel.Config.DoAutoResortOnAnyChanges)
+                        {
+                            DataProcessor.CollectData();
+                        }
+
+                        switch (chkState)
+                        {
+                            case MultiCheckboxState.On:
+                                SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+                                enabled.Remove(processor.GetDefName());
+                                disabled.Add(processor.GetDefName());
+                                chkState = MultiCheckboxState.Off;
+                                break;
+                            case MultiCheckboxState.Off:
+                                SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+                                enabled.Remove(processor.GetDefName());
+                                disabled.Remove(processor.GetDefName());
+                                chkState = MultiCheckboxState.Partial;
+                                break;
+                            default:
+                                SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
+                                enabled.Add(processor.GetDefName());
+                                disabled.Remove(processor.GetDefName());
+                                chkState = MultiCheckboxState.On;
+                                break;
+                        }
+                    }
+
+                    Widgets.CheckboxMulti(chkRect, chkState);
+                }
+                else
+                {
+                    bool chkState;
+                    if (enabled == null && disabled == null)
+                    {
+                        chkState = true;
+                    }
+                    else if (enabled != null)
+                    {
+                        chkState = enabled.Contains(processor.GetDefName());
+                        if (Widgets.ButtonInvisible(r))
+                        {
+                            if (chkState) enabled.Remove(processor.GetDefName());
+                            else enabled.Add(processor.GetDefName());
+                        }
+                    }
+                    else
+                    {
+                        chkState = !disabled.Contains(processor.GetDefName());
+                        if (Widgets.ButtonInvisible(r))
+                        {
+                            if (chkState) disabled.Add(processor.GetDefName());
+                            else disabled.Remove(processor.GetDefName());
+                        }
+                    }
+
+                    Widgets.CheckboxDraw(chkRect.x, chkRect.y, chkState, false, rowHeight);
+                }
+
+                if (isMouseOver)
+                {
+                    GUI.DrawTexture(chkRect, TexUI.HighlightTex);
+                    GUI.color = Color.yellow;
+                    if (Prefs.DevMode)
+                    {
+                        TooltipHandler.TipRegion(r, $"defName: {processor.GetDefName()}");
+                    }
+                }
+
+                r.x += rowHeight + 2;
+                Widgets.Label(r, processor.GetDefLabel());
+
+                GUI.color = Color.white;
+            }
+
+            Text.Font = GameFont.Small;
+            Text.Anchor = TextAnchor.UpperLeft;
+
+            inRect.yMin += (int)Math.Ceiling(defs.Count / (float)columnCount) * (rowHeight + 2);
 
             return inRect.yMin - inRectStartsAt;
         }

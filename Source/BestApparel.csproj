@@ -295,15 +295,14 @@
         <Compile Include="data\AThingContainer.cs" />
         <Compile Include="data\DataProcessor.cs" />
         <Compile Include="BestApparel.cs" />
+        <Compile Include="data\ThingContainerRanged.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="stat_processor\AStatProcessor.cs" />
         <Compile Include="stat_processor\CommonStatProcessor.cs" />
         <Compile Include="stat_processor\BaseStatProcessor.cs" />
+        <Compile Include="stat_processor\FuncStatProcessor.cs" />
         <Compile Include="ui\TabId.cs" />
-        <Compile Include="ui\MainTabWindow.ApparelTab.cs" />
         <Compile Include="ui\MainTabWindow.cs" />
-        <Compile Include="ui\MainTabWindow.MeleeTab.cs" />
-        <Compile Include="ui\MainTabWindow.RangedTab.cs" />
         <Compile Include="ui\UIUtils.cs" />
         <Compile Include="ui\utility\AUtilityWindow.cs" />
         <Compile Include="ui\utility\ColumnsWindow.cs" />

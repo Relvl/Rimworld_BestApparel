@@ -56,8 +56,8 @@ namespace BestApparel.ui.utility
             {
                 var statDefName = columns[idx];
 
-                var statDef = ThingContainerApparel.StatProcessors.FirstOrDefault(p => p.GetStatDef().defName == statDefName)?.GetStatDef();
-                if (statDef == null) continue;
+                var defLabel = ThingContainerApparel.StatProcessors.FirstOrDefault(p => p.GetDefName() == statDefName)?.GetDefLabel();
+                if (defLabel == null) continue;
 
 
                 var colIdx = idx % columnCount;
@@ -71,7 +71,7 @@ namespace BestApparel.ui.utility
 
                 var oldValue = BestApparel.Config.Sorting.Apparel[statDefName];
                 var value = oldValue;
-                Widgets.HorizontalSlider(r, ref value, new FloatRange(-Config.MaxSortingWeight, Config.MaxSortingWeight), $"{statDef.label}: {value}", 1);
+                Widgets.HorizontalSlider(r, ref value, new FloatRange(-Config.MaxSortingWeight, Config.MaxSortingWeight), $"{defLabel}: {value}", 1);
                 if (Math.Abs(oldValue - value) > 0.1)
                 {
                     BestApparel.Config.Sorting.Apparel[statDefName] = value;

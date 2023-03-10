@@ -16,21 +16,41 @@ namespace BestApparel.ui.utility
             switch (BestApparel.Config.SelectedTab)
             {
                 case TabId.APPAREL:
-                    heightCounter += UIUtils.RenderCheckboxes(
+                    heightCounter += UIUtils.RenderFeatureSwitches( //
                         ref inRect,
                         "BestApparel.Label.LayerList",
                         ThingContainerApparel.Layers,
-                        BestApparel.Config.EnabledLayers,
-                        BestApparel.Config.DisabledLayers
+                        BestApparel.Config.ApparelLayers
                     );
-                    heightCounter += UIUtils.RenderCheckboxes(
+                    heightCounter += UIUtils.RenderFeatureSwitches( //
                         ref inRect,
                         "BestApparel.Label.BodyPartList",
                         ThingContainerApparel.BodyParts,
-                        BestApparel.Config.EnabledBodyParts,
-                        BestApparel.Config.DisabledBodyParts
+                        BestApparel.Config.ApparelBodyParts
+                    );
+                    heightCounter += UIUtils.RenderFeatureSwitches( //
+                        ref inRect,
+                        "BestApparel.Label.ThingCategories",
+                        ThingContainerApparel.Categories,
+                        BestApparel.Config.ApparelCategories
                     );
                     // todo! kid/adult
+                    break;
+
+                case TabId.RANGED:
+                    heightCounter += UIUtils.RenderFeatureSwitches( //
+                        ref inRect,
+                        "BestApparel.Label.WeaponTypes",
+                        ThingContainerRanged.WeaponClasses,
+                        BestApparel.Config.RangedTypes
+                    );
+                    heightCounter += UIUtils.RenderFeatureSwitches( //
+                        ref inRect,
+                        "BestApparel.Label.ThingCategories",
+                        ThingContainerRanged.Categories,
+                        BestApparel.Config.RangedCategories
+                    );
+
                     break;
             }
 

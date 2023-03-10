@@ -42,6 +42,8 @@
         Stats that have a higher value in smaller values should be inverted.
         -10 totally excludes value from sorting.
     </BestApparel.Label.Sorting.Tooltip>
+    <BestApparel.Label.WeaponTypes>Weapon types:</BestApparel.Label.WeaponTypes>
+    <BestApparel.Label.ThingCategories>Categories:</BestApparel.Label.ThingCategories>
     
     <BestApparel.Label.RangePercent>Range percent: {0}%, Weight factor: {1}</BestApparel.Label.RangePercent>
 

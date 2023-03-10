@@ -6,6 +6,8 @@ namespace BestApparel.stat_processor
 {
     public abstract class AStatProcessor
     {
+        protected static StatDef DEFAULT = new StatDef();
+
         protected readonly StatDef Def;
 
         protected AStatProcessor(StatDef def)
@@ -14,6 +16,9 @@ namespace BestApparel.stat_processor
         }
 
         public virtual StatDef GetStatDef() => Def;
+        public virtual string GetDefName() => Def.defName;
+        public virtual string GetDefLabel() => Def.label;
+
         public abstract float GetStatValue(Thing thing);
         public abstract string GetStatValueFormatted(Thing thing, bool forceUnformatted = false);
 

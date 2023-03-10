@@ -16,17 +16,17 @@ namespace BestApparel.data
 
         public float NormalizedWeight { get; set; }
 
-        public CellData(AStatProcessor processor, Thing defaultThing)
+        public CellData(AStatProcessor processor, Thing defaultThing, float weightFactor)
         {
-            DefName = processor.GetStatDef().defName;
+            WeightFactor = weightFactor;
+            DefName = processor.GetDefName();
             ValueRaw = processor.GetStatValue(defaultThing);
             IsEmpty = processor.IsValueDefault(defaultThing);
             Value = IsEmpty ? "---" : processor.GetStatValueFormatted(defaultThing, true);
-            WeightFactor = BestApparel.Config.Sorting.Apparel[DefName] + Config.MaxSortingWeight;
-            DefLabel = processor.GetStatDef().label;
+            DefLabel = processor.GetDefLabel();
             if (!IsEmpty)
             {
-                Tooltips.Add($"{processor.GetStatDef().label}: {Value}");
+                Tooltips.Add($"{processor.GetDefLabel()}: {Value}");
             }
         }
     }

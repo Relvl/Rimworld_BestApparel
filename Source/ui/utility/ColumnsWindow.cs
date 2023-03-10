@@ -20,6 +20,9 @@ namespace BestApparel.ui.utility
                 case TabId.APPAREL:
                     heightCounter += RenderApparelColumns(ref inRect);
                     break;
+                case TabId.RANGED:
+                    heightCounter += RenderRangedColumns(ref inRect);
+                    break;
             }
 
             return heightCounter;
@@ -32,10 +35,22 @@ namespace BestApparel.ui.utility
             return UIUtils.RenderCheckboxes(
                 ref inRect,
                 "BestApparel.Label.Columns",
-                ThingContainerApparel.StatProcessors.Select(it => it.GetStatDef())
-                    .Where(proc => SearchString == "" || proc.defName.Contains(SearchString) || proc.label.Contains(SearchString))
+                ThingContainerApparel.StatProcessors.Where(proc => SearchString == "" || proc.GetDefName().Contains(SearchString) || proc.GetDefLabel().Contains(SearchString))
                     .ToList(),
                 BestApparel.Config.Columns.Apparel,
+                null,
+                2
+            );
+        }
+
+        private float RenderRangedColumns(ref Rect inRect)
+        {
+            return UIUtils.RenderCheckboxes(
+                ref inRect,
+                "BestApparel.Label.Columns",
+                ThingContainerRanged.StatProcessors.Where(proc => SearchString == "" || proc.GetDefName().Contains(SearchString) || proc.GetDefLabel().Contains(SearchString))
+                    .ToList(),
+                BestApparel.Config.Columns.Ranged,
                 null,
                 2
             );
