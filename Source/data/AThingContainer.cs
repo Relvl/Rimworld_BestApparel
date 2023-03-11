@@ -65,7 +65,7 @@ public abstract class AThingContainer
                     return cell;
                 }
             )
-            .OrderBy(cellData => cellData.WeightFactor)
+            .OrderByDescending(cellData => cellData.WeightFactor)
             .ThenBy(cellData => cellData.DefLabel)
             .ToArray();
         CachedSortingWeight = CachedCells.Sum(c => c.NormalizedWeight * c.WeightFactor);
