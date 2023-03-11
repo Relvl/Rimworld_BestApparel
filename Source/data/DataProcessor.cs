@@ -142,7 +142,11 @@ public class DataProcessor
 
     private static void FinalizeDefs<T>(List<T> collection) where T : Def
     {
-        var final = collection.GroupBy(it => it.defName).Select(it => it.First()).ToList();
+        var final = collection //
+            .GroupBy(it => it.defName)
+            .Select(it => it.First())
+            .OrderBy(it => it.label)
+            .ToList();
         collection.Clear();
         collection.AddRange(final);
     }
