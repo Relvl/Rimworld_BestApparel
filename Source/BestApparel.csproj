@@ -297,6 +297,7 @@
         <Compile Include="BestApparel.cs" />
         <Compile Include="data\ContainerFactory.cs" />
         <Compile Include="data\impl\ThingContainerApparel.cs" />
+        <Compile Include="data\impl\ThingContainerMelee.cs" />
         <Compile Include="data\impl\ThingContainerRanged.cs" />
         <Compile Include="FeatureEnableDisable.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

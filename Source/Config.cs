@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.ui;
@@ -30,6 +31,7 @@ public class Config : ModSettings
 
     public ApparelConfig Apparel = new();
     public RangedConfig Ranged = new();
+    public MeleeConfig Melee = new();
 
     public void RestoreDefaultFilters()
     {
@@ -46,6 +48,10 @@ public class Config : ModSettings
                 Ranged.Category.Clear();
                 Ranged.WeaponClass.Clear();
                 break;
+            case TabId.Melee:
+                Melee.Stuff.Clear();
+                Melee.Category.Clear();
+                break;
         }
     }
 
@@ -59,6 +65,9 @@ public class Config : ModSettings
             case TabId.Ranged:
                 Ranged.Columns.Clear();
                 break;
+            case TabId.Melee:
+                Melee.Columns.Clear();
+                break;
         }
     }
 
@@ -69,52 +78,35 @@ public class Config : ModSettings
             case TabId.Apparel:
                 Apparel.Sorting.Clear();
                 break;
-        }
-    }
-
-    public void PrefillSorting()
-    {
-        foreach (var colId in Apparel.Columns)
-        {
-            if (!Apparel.Sorting.ContainsKey(colId))
-            {
-                Apparel.Sorting[colId] = 0f;
-            }
-        }
-
-        foreach (var colId in Ranged.Columns)
-        {
-            if (!Ranged.Sorting.ContainsKey(colId))
-            {
-                Ranged.Sorting[colId] = 0f;
-            }
+            case TabId.Ranged:
+                Ranged.Sorting.Clear();
+                break;
+            case TabId.Melee:
+                Melee.Sorting.Clear();
+                break;
         }
     }
 
     public List<string> GetColumnsFor(TabId tabId)
     {
-        switch (tabId)
+        return tabId switch
         {
-            case TabId.Apparel:
-                return Apparel.Columns;
-            case TabId.Ranged:
-                return Ranged.Columns;
-            default:
-                return null;
-        }
+            TabId.Apparel => Apparel.Columns,
+            TabId.Ranged => Ranged.Columns,
+            TabId.Melee => Melee.Columns,
+            _ => throw new ArgumentOutOfRangeException(nameof(tabId), tabId, null)
+        };
     }
 
     public Dictionary<string, float> GetSortingFor(TabId tabId)
     {
-        switch (tabId)
+        return tabId switch
         {
-            case TabId.Apparel:
-                return Apparel.Sorting;
-            case TabId.Ranged:
-                return Ranged.Sorting;
-            default:
-                return null;
-        }
+            TabId.Apparel => Apparel.Sorting,
+            TabId.Ranged => Ranged.Sorting,
+            TabId.Melee => Melee.Sorting,
+            _ => throw new ArgumentOutOfRangeException(nameof(tabId), tabId, null)
+        };
     }
 
     public override void ExposeData()
@@ -127,6 +119,8 @@ public class Config : ModSettings
         Apparel ??= new ApparelConfig();
         Scribe_Deep.Look(ref Ranged, "Ranged");
         Ranged ??= new RangedConfig();
+        Scribe_Deep.Look(ref Melee, "Melee");
+        Melee ??= new MeleeConfig();
     }
 
     public class ApparelConfig : IExposable
@@ -179,6 +173,28 @@ public class Config : ModSettings
             Stuff ??= new FeatureEnableDisable();
             Category ??= new FeatureEnableDisable();
             WeaponClass ??= new FeatureEnableDisable();
+        }
+    }
+
+    public class MeleeConfig : IExposable
+    {
+        public List<string> Columns = new();
+        public Dictionary<string, float> Sorting = new();
+
+        public FeatureEnableDisable Stuff = new();
+        public FeatureEnableDisable Category = new();
+
+        public void ExposeData()
+        {
+            Scribe_Collections.Look(ref Columns, "Columns");
+            Scribe_Collections.Look(ref Sorting, "Sorting");
+            Scribe_Deep.Look(ref Stuff, "Stuff");
+            Scribe_Deep.Look(ref Category, "Category");
+
+            Columns ??= new List<string>();
+            Sorting ??= new Dictionary<string, float>();
+            Stuff ??= new FeatureEnableDisable();
+            Category ??= new FeatureEnableDisable();
         }
     }
 }

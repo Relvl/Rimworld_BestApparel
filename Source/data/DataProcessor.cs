@@ -31,12 +31,13 @@ public class DataProcessor
         _apparelLayers.Clear();
         _apparelBodyParts.Clear();
         _rangedClasses.Clear();
-        BestApparel.Config.PrefillSorting();
     }
 
     public void Rebuild()
     {
         Clear();
+
+        var factory = new ContainerFactory();
 
         var totalThingDefs = BestApparel.Config.UseAllThings
             ? DefDatabase<ThingDef>.AllDefs
@@ -44,9 +45,6 @@ public class DataProcessor
                 .SelectMany(it => it.def.AllRecipes)
                 .Where(it => it.AvailableNow && it.ProducedThingDef != null)
                 .Select(it => it.ProducedThingDef);
-
-        var factory = new ContainerFactory();
-
         var totalThingContaners = totalThingDefs //
             .GroupBy(it => it.defName)
             .Select(it => it.First())
@@ -56,29 +54,36 @@ public class DataProcessor
 
         // Collect defs for filters 
         totalThingContaners.ForEach(FillDefs);
+        
         foreach (var (_, list) in _categories) FinalizeDefs(list);
         foreach (var (_, list) in _stuffs) FinalizeDefs(list);
         FinalizeDefs(_apparelLayers);
         FinalizeDefs(_apparelBodyParts);
         FinalizeDefs(_rangedClasses);
 
-        // Filter actual rows
-        var filteredContainers = totalThingContaners //
-            .Where(it => it.CheckForFilters())
-            .GroupBy(it => it.GetTabId())
-            .ToDictionary(it => it.Key, it => it.ToList());
-
-        foreach (var (tabId, list) in filteredContainers)
+        var groupedContainers = totalThingContaners.GroupBy(it => it.GetTabId()).ToList();
+        var filtered = MakeTabIdDictionary(() => new List<AThingContainer>());
+        foreach (var grouping in groupedContainers)
         {
-            // Collect stats 
+            var tabId = grouping.Key;
 
             _statProcessors[tabId]
-                .AddRange( //
-                    list //
-                        .SelectMany(container => container.CollectStats())
+                .AddRange(
+                    grouping //
+                        .SelectMany(it => it.CollectStats())
+                        .OrderByDescending(it => it.GetDefLabel())
                         .GroupBy(it => it.GetDefName())
                         .Select(it => it.First())
                 );
+
+            // Filter actual rows
+            filtered[tabId].AddRange(grouping.Where(it => it.CheckForFilters()));
+        }
+
+
+        foreach (var (tabId, list) in filtered)
+        {
+            // Collect minmax 
             var columns = BestApparel.Config.GetColumnsFor(tabId);
             var columnsProcessors = _statProcessors[tabId].Where(proc => columns.Contains(proc.GetDefName()));
 
@@ -118,6 +123,9 @@ public class DataProcessor
                 break;
             case TabId.Ranged:
                 if (container.Def.weaponClasses != null) _rangedClasses.AddRange(container.Def.weaponClasses);
+                break;
+            case TabId.Melee:
+
                 break;
         }
     }

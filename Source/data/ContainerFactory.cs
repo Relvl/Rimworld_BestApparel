@@ -1,4 +1,5 @@
 using System;
+using BestApparel.data.impl;
 using Verse;
 
 namespace BestApparel.data;
@@ -14,9 +15,15 @@ public class ContainerFactory
                 return new ThingContainerApparel(thingDef);
             }
 
-            if (thingDef.IsWeapon && thingDef.weaponTags != null && thingDef.weaponTags.Contains("Gun"))
+            // todo thingCategories["Grenades"] 
+            if ( /*thingDef.IsRangedWeapon ||*/ (thingDef.IsWeapon && thingDef.weaponTags != null && thingDef.weaponTags.Contains("Gun")))
             {
                 return new ThingContainerRanged(thingDef);
+            }
+
+            if (thingDef.IsMeleeWeapon && !thingDef.IsStuff && !thingDef.IsIngestible && !thingDef.IsDrug)
+            {
+                return new ThingContainerMelee(thingDef);
             }
         }
         catch (Exception e)

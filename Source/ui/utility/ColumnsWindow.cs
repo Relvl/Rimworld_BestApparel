@@ -15,11 +15,12 @@ public class ColumnsWindow : AUtilityWindow
     protected override float DoWindowContentsInner(ref Rect inRect)
     {
         float heightCounter = 0;
+        var lSearch = SearchString.ToLower();
         var defs = Parent.DataProcessor.GetStatProcessors(BestApparel.Config.SelectedTab)
-            .Where(proc => SearchString == "" || proc.GetDefName().Contains(SearchString) || proc.GetDefLabel().Contains(SearchString))
+            .Where(proc => lSearch == "" || proc.GetDefName().ToLower().Contains(lSearch) || proc.GetDefLabel().ToLower().Contains(lSearch))
             .ToList();
         const int rowHeight = 20;
-        var enabled = BestApparel.Config.GetColumnsFor(BestApparel.Config.SelectedTab);
+        var feature = BestApparel.Config.GetColumnsFor(BestApparel.Config.SelectedTab);
 
         heightCounter += UIUtils.RenderUtilityGrid(
             ref inRect,
@@ -38,11 +39,11 @@ public class ColumnsWindow : AUtilityWindow
 
                 cellRect.xMin += 4;
 
-                var chkState = enabled.Contains(defName);
+                var chkState = feature.Contains(defName);
                 if (Widgets.ButtonInvisible(cellRect))
                 {
-                    if (chkState) enabled.Remove(defName);
-                    else enabled.Add(defName);
+                    if (chkState) feature.Remove(defName);
+                    else feature.Add(defName);
                 }
 
                 Widgets.CheckboxDraw(chkRect.x, chkRect.y, chkState, false, rowHeight);

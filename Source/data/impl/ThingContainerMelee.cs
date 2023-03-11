@@ -6,18 +6,17 @@ using Verse;
 
 namespace BestApparel.data.impl;
 
-public class ThingContainerRanged : AThingContainer
+public class ThingContainerMelee : AThingContainer
 {
-    public override TabId GetTabId() => TabId.Ranged;
+    public override TabId GetTabId() => TabId.Melee;
 
-    public ThingContainerRanged(ThingDef thingDef) : base(thingDef)
+    public ThingContainerMelee(ThingDef thingDef) : base(thingDef)
     {
     }
 
     public override bool CheckForFilters()
     {
-        if (!BestApparel.Config.Ranged.Category.IsCollectionAllowed(Def.thingCategories)) return false;
-        if (!BestApparel.Config.Ranged.WeaponClass.IsCollectionAllowed(Def.weaponClasses)) return false;
+        if (!BestApparel.Config.Melee.Category.IsCollectionAllowed(Def.thingCategories)) return false;
         return true;
     }
 
@@ -37,15 +36,8 @@ public class ThingContainerRanged : AThingContainer
 
         if (Config.IsCeLoaded)
         {
-            foreach (var verb in Def.Verbs)
-            {
-                if (verb.verbClass.FullName == "CombatExtended.Verb_ShootCE")
-                {
-                    yield return new FuncStatProcessor(_ => verb.range, "Ability_Range.label");
-                }
-            }
-
-            yield return new CommonStatProcessor(StatDef.Named("MagazineCapacity"));
+            yield return new CommonStatProcessor(StatDef.Named("MeleePenetrationFactor"));
+            yield return new CommonStatProcessor(StatDef.Named("MeleeCounterParryBonus"));
         }
     }
 }

@@ -51,6 +51,7 @@ public abstract class AThingContainer
                     if (float.IsNaN(normal)) normal = 0f;
 
                     var sorting = BestApparel.Config.GetSortingFor(GetTabId());
+                    if (!sorting.ContainsKey(pair.Key.GetDefName())) sorting[pair.Key.GetDefName()] = 0;
 
                     var cell = new CellData(pair.Key, DefaultThing, sorting[pair.Key.GetDefName()] + Config.MaxSortingWeight, normal);
 
@@ -69,4 +70,6 @@ public abstract class AThingContainer
             .ToArray();
         CachedSortingWeight = CachedCells.Sum(c => c.NormalizedWeight * c.WeightFactor);
     }
+
+    public override int GetHashCode() => Def.GetHashCode();
 }

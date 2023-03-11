@@ -4,7 +4,7 @@ using BestApparel.ui;
 using RimWorld;
 using Verse;
 
-namespace BestApparel.data;
+namespace BestApparel.data.impl;
 
 public class ThingContainerApparel : AThingContainer
 {
