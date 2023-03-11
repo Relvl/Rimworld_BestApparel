@@ -1,101 +1,99 @@
 using System;
-using BestApparel.data;
 using UnityEngine;
 using Verse;
 
-namespace BestApparel.ui.utility
+namespace BestApparel.ui.utility;
+
+public abstract class AUtilityWindow : Window
 {
-    public abstract class AUtilityWindow : Window
+    public override Vector2 InitialSize => new(650, 500);
+
+    protected virtual bool UseBottomButtons => true;
+    protected virtual bool UseSearch => false;
+
+    protected readonly MainTabWindow Parent;
+    protected string SearchString;
+
+    private Vector2 _mainScrollPosition = Vector2.zero;
+    private float _lastFrameScrollHeight;
+
+    protected AUtilityWindow(MainTabWindow parent)
     {
-        public override Vector2 InitialSize => new Vector2(650, 500);
+        // base
+        doCloseX = true;
+        draggable = true;
+        // this
+        Parent = parent;
+    }
 
-        protected virtual bool UseBottomButtons => true;
-        protected virtual bool UseSearch => false;
+    public override void PreOpen()
+    {
+        base.PreOpen();
+        SearchString = "";
+    }
 
-        protected readonly MainTabWindow Parent;
-        protected string SearchString;
+    public override void DoWindowContents(Rect inRect)
+    {
+        var scrolledRect = new Rect(0, 0, inRect.width - 16, _lastFrameScrollHeight);
+        _lastFrameScrollHeight = 0;
+        inRect.height -= 40; // bottom buttons
 
-        private Vector2 _mainScrollPosition = Vector2.zero;
-        private float _lastFrameScrollHeight;
+        Widgets.BeginScrollView(inRect, ref _mainScrollPosition, scrolledRect);
+        _lastFrameScrollHeight += DoWindowContentsInner(ref inRect);
+        Widgets.EndScrollView();
 
-        protected AUtilityWindow(MainTabWindow parent)
+        if (UseBottomButtons)
         {
-            // base
-            doCloseX = true;
-            draggable = true;
-            // this
-            Parent = parent;
+            _lastFrameScrollHeight += RenderBottom(ref inRect, OnResetClick);
         }
 
-        public override void PreOpen()
+        if (UseSearch)
         {
-            base.PreOpen();
-            SearchString = "";
+            const int searchWidth = 100;
+            var r = new Rect(windowRect.width - Margin * 2 - 48 - searchWidth, 0, 24, 24);
+            GUI.DrawTexture(r, TexButton.Search);
+            GUI.SetNextControlName($"BestApparel.{GetType().Name}.Search");
+            r.x += 28;
+            r.width = searchWidth;
+            var str = Widgets.TextField(r, SearchString, 15);
+            SearchString = str;
+        }
+    }
+
+    protected abstract float DoWindowContentsInner(ref Rect inRect);
+
+    protected abstract void OnResetClick();
+
+    public override void PreClose()
+    {
+        Parent.DataProcessor.Rebuild();
+    }
+
+    private float RenderBottom(ref Rect inRect, Action onResetClick)
+    {
+        const float btnHeight = 24;
+        const int btnWidth = 120;
+        var btnRect = new Rect(0, windowRect.height - Margin * 2 - btnHeight, btnWidth, btnHeight);
+        if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Resort".Translate()))
+        {
+            Parent.DataProcessor.Rebuild();
         }
 
-        public override void DoWindowContents(Rect inRect)
+        btnRect.x += btnWidth + 10;
+        btnRect.width = inRect.width - btnRect.x;
+        Text.Anchor = TextAnchor.MiddleLeft;
+        GUI.color = BestApparel.ColorWhiteA20;
+        Widgets.Label(btnRect, "BestApparel.Btn.Resort.Additional".Translate());
+        Text.Anchor = TextAnchor.UpperLeft;
+        GUI.color = Color.white;
+
+        btnRect = new Rect(windowRect.width - Margin * 2 - btnWidth, windowRect.height - Margin * 2 - btnHeight, btnWidth, btnHeight);
+        if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Defaults".Translate()))
         {
-            var scrolledRect = new Rect(0, 0, inRect.width - 16, _lastFrameScrollHeight);
-            _lastFrameScrollHeight = 0;
-            inRect.height -= 40; // bottom buttons
-
-            Widgets.BeginScrollView(inRect, ref _mainScrollPosition, scrolledRect);
-            _lastFrameScrollHeight += DoWindowContentsInner(ref inRect);
-            Widgets.EndScrollView();
-
-            if (UseBottomButtons)
-            {
-                _lastFrameScrollHeight += RenderBottom(ref inRect, OnResetClick);
-            }
-
-            if (UseSearch)
-            {
-                const int searchWidth = 100;
-                var r = new Rect(windowRect.width - Margin * 2 - 48 - searchWidth, 0, 24, 24);
-                GUI.DrawTexture(r, TexButton.Search);
-                GUI.SetNextControlName($"BestApparel.{GetType().Name}.Search");
-                r.x += 28;
-                r.width = searchWidth;
-                var str = Widgets.TextField(r, SearchString, 15);
-                SearchString = str;
-            }
+            onResetClick();
+            Parent.DataProcessor.Rebuild();
         }
 
-        protected abstract float DoWindowContentsInner(ref Rect inRect);
-
-        protected abstract void OnResetClick();
-
-        public override void PreClose()
-        {
-            DataProcessor.CollectData();
-        }
-
-        private float RenderBottom(ref Rect inRect, Action onResetClick)
-        {
-            const float btnHeight = 24;
-            const int btnWidth = 120;
-            var btnRect = new Rect(0, windowRect.height - Margin * 2 - btnHeight, btnWidth, btnHeight);
-            if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Resort".Translate()))
-            {
-                DataProcessor.CollectData();
-            }
-
-            btnRect.x += btnWidth + 10;
-            btnRect.width = inRect.width - btnRect.x;
-            Text.Anchor = TextAnchor.MiddleLeft;
-            GUI.color = BestApparel.COLOR_WHITE_A20;
-            Widgets.Label(btnRect, "BestApparel.Btn.Resort.Additional".Translate());
-            Text.Anchor = TextAnchor.UpperLeft;
-            GUI.color = Color.white;
-
-            btnRect = new Rect(windowRect.width - Margin * 2 - btnWidth, windowRect.height - Margin * 2 - btnHeight, btnWidth, btnHeight);
-            if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Defaults".Translate()))
-            {
-                onResetClick();
-                DataProcessor.CollectData();
-            }
-
-            return btnHeight;
-        }
+        return btnHeight;
     }
 }

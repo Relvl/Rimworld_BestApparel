@@ -5,46 +5,60 @@
     <BestApparel.Melee>Melee weapon</BestApparel.Melee>
 
     <BestApparel.Control.UseAllThings>All things</BestApparel.Control.UseAllThings>
-    <BestApparel.Control.UseAllThings.Tooltip>Do search things in the whole game
-    </BestApparel.Control.UseAllThings.Tooltip>
+    <BestApparel.Control.UseAllThings.Tooltip>Do search things in the whole game</BestApparel.Control.UseAllThings.Tooltip>
     <BestApparel.Control.UseCraftableThings>Craftable things</BestApparel.Control.UseCraftableThings>
-    <BestApparel.Control.UseCraftableThings.Tooltip>Do search things only in available workbenches bills
-    </BestApparel.Control.UseCraftableThings.Tooltip>
-
-    <BestApparel.Profiles>Profiles...</BestApparel.Profiles>
+    <BestApparel.Control.UseCraftableThings.Tooltip>Do search things only in available workbenches bills</BestApparel.Control.UseCraftableThings.Tooltip>
 
     <BestApparel.Btn.Filter>Filter...</BestApparel.Btn.Filter>
-    <BestApparel.Btn.Where>Where...</BestApparel.Btn.Where>
     <BestApparel.Btn.Layers>Layers...</BestApparel.Btn.Layers>
-    <BestApparel.Btn.Slots>Slots...</BestApparel.Btn.Slots>
     <BestApparel.Btn.Sorting>Sorting...</BestApparel.Btn.Sorting>
-    <BestApparel.Btn.Ignored>Ignored...</BestApparel.Btn.Ignored>
     <BestApparel.Btn.Columns>Columns...</BestApparel.Btn.Columns>
 
     <BestApparel.Btn.Resort>Resort</BestApparel.Btn.Resort>
     <BestApparel.Btn.Resort.Additional>Closing this window also resorts the results.</BestApparel.Btn.Resort.Additional>
+
     <BestApparel.Btn.Defaults>Defaults</BestApparel.Btn.Defaults>
 
-    <BestApparel.Label.LayerList>Apparel layers:</BestApparel.Label.LayerList>
-    <BestApparel.Label.LayerList.Tooltip>Apparel body layer filter:
+    <BestApparel.FilterType.Layer>Apparel layers:</BestApparel.FilterType.Layer>
+    <BestApparel.FilterType.Layer.Tooltip>Apparel body layer filter:
         If have any 'ON' state - the thing should contain ALL of it.
         If have any 'OFF' state - the thing should NOT contain it.
-    </BestApparel.Label.LayerList.Tooltip>
-    <BestApparel.Label.BodyPartList>Body parts:</BestApparel.Label.BodyPartList>
-    <BestApparel.Label.BodyPartList.Tooltip>Apparel body layer filter:
-        If have any 'ON' state - the thing should contain ANY of it.
+    </BestApparel.FilterType.Layer.Tooltip>
+
+    <BestApparel.FilterType.BodyPart>Body parts:</BestApparel.FilterType.BodyPart>
+    <BestApparel.FilterType.BodyPart.Tooltip>Apparel body layer filter:
+        If have any 'ON' state - the thing should contain ALL of it.
         If have any 'OFF' state - the thing should NOT contain it.
-    </BestApparel.Label.BodyPartList.Tooltip>
+    </BestApparel.FilterType.BodyPart.Tooltip>
+
+    <BestApparel.FilterType.Category>Category:</BestApparel.FilterType.Category>
+    <BestApparel.FilterType.Category.Tooltip>Thing categoty filter:
+        If have any 'ON' state - the thing should contain ALL of it.
+        If have any 'OFF' state - the thing should NOT contain it.
+    </BestApparel.FilterType.Category.Tooltip>
+
+    <BestApparel.FilterType.Stuff>Material:</BestApparel.FilterType.Stuff>
+    <BestApparel.FilterType.Stuff.Tooltip>Filter by the material from which it can be made:
+        If have any 'ON' state - only things that can be made from it will be displayed.
+        If have any 'OFF' state - only things that can NOT be made from it will be displayed.
+    </BestApparel.FilterType.Stuff.Tooltip>
+
+    <BestApparel.FilterType.WeaponClass>Weapon class:</BestApparel.FilterType.WeaponClass>
+    <BestApparel.FilterType.WeaponClass>
+        If have any 'ON' state - the thing should contain ALL of it.
+        If have any 'OFF' state - the thing should NOT contain it.
+    </BestApparel.FilterType.WeaponClass>
+
     <BestApparel.Label.Columns>Visible columns:</BestApparel.Label.Columns>
+    <BestApparel.Label.Columns.Tooltip>Which columns should be displayed in the table</BestApparel.Label.Columns.Tooltip>
+
     <BestApparel.Label.Sorting>Sorting priorities:</BestApparel.Label.Sorting>
     <BestApparel.Label.Sorting.Tooltip>Only those stats that are selected in the columns window are displayed here.
         The slider indicates how high priority (or valuable) this stat is.
         Stats that have a higher value in smaller values should be inverted.
-        -10 totally excludes value from sorting.
+        Value '-10' totally excludes stat from sorting.
     </BestApparel.Label.Sorting.Tooltip>
-    <BestApparel.Label.WeaponTypes>Weapon types:</BestApparel.Label.WeaponTypes>
-    <BestApparel.Label.ThingCategories>Categories:</BestApparel.Label.ThingCategories>
-    
+
     <BestApparel.Label.RangePercent>Range percent: {0}%, Weight factor: {1}</BestApparel.Label.RangePercent>
 
 </LanguageData>

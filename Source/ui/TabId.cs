@@ -1,9 +1,8 @@
-namespace BestApparel.ui
+namespace BestApparel.ui;
+
+public enum TabId
 {
-    public enum TabId
-    {
-        APPAREL,
-        RANGED,
-        MELEE
-    }
+    Apparel,
+    Ranged,
+    Melee
 }

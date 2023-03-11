@@ -1,38 +1,25 @@
 using System;
 using System.Globalization;
+using RimWorld;
 using Verse;
 
-namespace BestApparel.stat_processor
+namespace BestApparel.stat_processor;
+
+public class FuncStatProcessor : AStatProcessor
 {
-    public class FuncStatProcessor : AStatProcessor
+    private static readonly StatDef DefaultStat = new();
+
+    private readonly Func<Thing, float> _func;
+    private readonly string _name;
+
+    public FuncStatProcessor(Func<Thing, float> func, string name) : base(DefaultStat)
     {
-        private readonly Func<Thing, float> _func;
-        private readonly string _name;
-
-        public FuncStatProcessor(Func<Thing, float> func, string name) : base(DEFAULT)
-        {
-            _func = func;
-            _name = name;
-        }
-
-        public override string GetDefName()
-        {
-            return _name;
-        }
-
-        public override string GetDefLabel()
-        {
-            return _name.Translate();
-        }
-
-        public override float GetStatValue(Thing thing)
-        {
-            return _func(thing);
-        }
-
-        public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false)
-        {
-            return GetStatValue(thing).ToString(CultureInfo.CurrentCulture);
-        }
+        _func = func;
+        _name = name;
     }
+
+    public override string GetDefName() => _name;
+    public override string GetDefLabel() => _name.Translate();
+    public override float GetStatValue(Thing thing) => _func(thing);
+    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) => GetStatValue(thing).ToString(CultureInfo.CurrentCulture);
 }

@@ -2,32 +2,31 @@ using System.Collections.Generic;
 using BestApparel.stat_processor;
 using Verse;
 
-namespace BestApparel.data
+namespace BestApparel.data;
+
+public class CellData
 {
-    public class CellData
+    public readonly string DefName;
+    public readonly string Value;
+    public readonly bool IsEmpty;
+    public readonly float WeightFactor;
+    public readonly string DefLabel;
+    public readonly List<string> Tooltips = new();
+
+    public float NormalizedWeight { get; set; }
+
+    public CellData(AStatProcessor processor, Thing defaultThing, float weightFactor, float normalizedWeight)
     {
-        public readonly string DefName;
-        public readonly float ValueRaw;
-        public readonly string Value;
-        public readonly bool IsEmpty;
-        public readonly float WeightFactor;
-        public readonly string DefLabel;
-        public readonly List<string> Tooltips = new List<string>();
+        WeightFactor = weightFactor;
+        NormalizedWeight = normalizedWeight;
 
-        public float NormalizedWeight { get; set; }
-
-        public CellData(AStatProcessor processor, Thing defaultThing, float weightFactor)
+        DefName = processor.GetDefName();
+        IsEmpty = processor.IsValueDefault(defaultThing);
+        Value = IsEmpty ? "---" : processor.GetStatValueFormatted(defaultThing, true);
+        DefLabel = processor.GetDefLabel();
+        if (!IsEmpty)
         {
-            WeightFactor = weightFactor;
-            DefName = processor.GetDefName();
-            ValueRaw = processor.GetStatValue(defaultThing);
-            IsEmpty = processor.IsValueDefault(defaultThing);
-            Value = IsEmpty ? "---" : processor.GetStatValueFormatted(defaultThing, true);
-            DefLabel = processor.GetDefLabel();
-            if (!IsEmpty)
-            {
-                Tooltips.Add($"{processor.GetDefLabel()}: {Value}");
-            }
+            Tooltips.Add($"{processor.GetDefLabel()}: {Value}");
         }
     }
 }
