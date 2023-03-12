@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using BestApparel.data.impl;
 using BestApparel.stat_processor;
 using BestApparel.ui;
 using RimWorld;
@@ -12,6 +13,8 @@ namespace BestApparel.data;
 public class DataProcessor
 {
     private static ReadOnlyDictionary<TabId, T> MakeTabIdDictionary<T>(Func<T> provider) => new(Enum.GetValues(typeof(TabId)).Cast<TabId>().ToDictionary(t => t, _ => provider()));
+
+    private readonly List<ThingContainerApparel> _allApparels = new();
 
     private readonly ReadOnlyDictionary<TabId, List<AThingContainer>> _thingContainers = MakeTabIdDictionary(() => new List<AThingContainer>());
     private readonly ReadOnlyDictionary<TabId, List<AStatProcessor>> _statProcessors = MakeTabIdDictionary(() => new List<AStatProcessor>());
@@ -24,6 +27,7 @@ public class DataProcessor
 
     private void Clear()
     {
+        _allApparels.Clear();
         foreach (var (_, collection) in _thingContainers) collection.Clear();
         foreach (var (_, collection) in _statProcessors) collection.Clear();
         foreach (var (_, collection) in _stuffs) collection.Clear();
@@ -54,7 +58,7 @@ public class DataProcessor
 
         // Collect defs for filters 
         totalThingContaners.ForEach(FillDefs);
-        
+
         foreach (var (_, list) in _categories) FinalizeDefs(list);
         foreach (var (_, list) in _stuffs) FinalizeDefs(list);
         FinalizeDefs(_apparelLayers);
@@ -66,6 +70,8 @@ public class DataProcessor
         foreach (var grouping in groupedContainers)
         {
             var tabId = grouping.Key;
+
+            if (tabId == TabId.Apparel) _allApparels.AddRange(grouping.Cast<ThingContainerApparel>());
 
             _statProcessors[tabId]
                 .AddRange(
@@ -162,4 +168,7 @@ public class DataProcessor
     public IReadOnlyList<AThingContainer> GetTable(TabId tabId) => _thingContainers[tabId];
 
     public IEnumerable<AStatProcessor> GetStatProcessors(TabId tabId) => _statProcessors[tabId];
+
+    public IReadOnlyList<ThingContainerApparel> GetAllApparels() => _allApparels;
+    public IReadOnlyList<BodyPartGroupDef> GetApparelBodyParts() => _apparelBodyParts;
 }

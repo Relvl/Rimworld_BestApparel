@@ -95,6 +95,13 @@ public class MainTabWindow : RimWorld.MainTabWindow
             (BestApparel.Config.UseAllThings ? "BestApparel.Control.UseAllThings.Tooltip" : "BestApparel.Control.UseCraftableThings.Tooltip").Translate()
         );
 
+        var fittingButtonRect = new Rect(inRect.width - btnWidth - 10, 0, btnWidth, 24);
+        if (Widgets.ButtonText(fittingButtonRect, "BestApparel.Button.Fitting".Translate()))
+        {
+            Find.WindowStack.TryRemove(typeof(FittingWindow));
+            Find.WindowStack.Add(new FittingWindow(this));
+        }
+
         Text.Anchor = TextAnchor.UpperLeft;
         GUI.color = Color.white;
     }

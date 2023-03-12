@@ -12,6 +12,8 @@ public class FilterWindow : AUtilityWindow
 
     protected override float DoWindowContentsInner(ref Rect inRect)
     {
+        // todo def.apparel.developmentalStageFilter
+        
         float heightCounter = 0;
         const int rowHeight = 20;
         foreach (var (defs, label, feature) in Parent.DataProcessor.GetFilterData(BestApparel.Config.SelectedTab))

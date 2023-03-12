@@ -299,6 +299,7 @@
         <Compile Include="data\impl\ThingContainerApparel.cs" />
         <Compile Include="data\impl\ThingContainerMelee.cs" />
         <Compile Include="data\impl\ThingContainerRanged.cs" />
+        <Compile Include="Extensions.cs" />
         <Compile Include="FeatureEnableDisable.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="stat_processor\AStatProcessor.cs" />
@@ -311,6 +312,7 @@
         <Compile Include="ui\utility\AUtilityWindow.cs" />
         <Compile Include="ui\utility\ColumnsWindow.cs" />
         <Compile Include="ui\utility\FilterWindow.cs" />
+        <Compile Include="ui\utility\FittingWindow.cs" />
         <Compile Include="ui\utility\SortWindow.cs" />
         <Compile Include="ui\utility\ThingInfoWindow.cs" />
     </ItemGroup>
