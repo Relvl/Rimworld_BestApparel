@@ -42,7 +42,9 @@ public static class TranslationCache
 
     private static TaggedString Get(string key, params object[] args)
     {
+#pragma warning disable CS0618
         if (!Translation.ContainsKey(key)) Translation[key] = key.Translate(args);
+#pragma warning restore CS0618
         return Translation[key];
     }
 

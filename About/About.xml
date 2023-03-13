@@ -1,29 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-	<name>BestApparel</name>
-	<author>Johnson1893</author>
-	<packageId>io.github.Relvl.Rimworld.BestApparel</packageId>
-	<supportedVersions>
-		<li>1.4</li>
-	</supportedVersions>
-	<description>
-		<![CDATA[
+    <name>BestApparel</name>
+    <author>Johnson1893</author>
+    <packageId>io.github.Relvl.Rimworld.BestApparel</packageId>
+    <url>https://github.com/Relvl/Rimworld_BestApparel</url>
+    <supportedVersions>
+        <li>1.4</li>
+    </supportedVersions>
+    <description>
+        <![CDATA[
 A mod that will help you find the best apparel for your pawns!
 The mod adds an interface that allows you to find the apparel by the specified layers, slots and stats.
 Allows you to sort the found apparel by a more accurate list of comparisons.
 ]]>
-	</description>
-	<modDependencies>
-	</modDependencies>
-	<loadBefore>
-	</loadBefore>
-	<loadAfter>
-		<li>brrainz.harmony</li>
-		<li>Ludeon.RimWorld</li>
-		<li>Ludeon.RimWorld.Royalty</li>
-		<li>Ludeon.RimWorld.Ideology</li>
-		<li>Ludeon.RimWorld.Biotech</li>
-	</loadAfter>
-	<incompatibleWith>
-	</incompatibleWith>
+    </description>
+    <modDependencies>
+    </modDependencies>
+    <loadAfter>
+        <li>brrainz.harmony</li>
+        <li>Ludeon.RimWorld</li>
+        <li>Ludeon.RimWorld.Royalty</li>
+        <li>Ludeon.RimWorld.Ideology</li>
+        <li>Ludeon.RimWorld.Biotech</li>
+        <li>ceteam.combatextended</li>
+        <li>skyarkhangel.HSK</li>
+    </loadAfter>
+    <loadBefore>
+        <li>trinity.RuntimeGCupdated</li>
+    </loadBefore>
+    <incompatibleWith>
+    </incompatibleWith>
 </ModMetaData>
