@@ -299,6 +299,7 @@
         <Compile Include="data\impl\ThingContainerApparel.cs" />
         <Compile Include="data\impl\ThingContainerMelee.cs" />
         <Compile Include="data\impl\ThingContainerRanged.cs" />
+        <Compile Include="data\IReloadObserver.cs" />
         <Compile Include="Extensions.cs" />
         <Compile Include="FeatureEnableDisable.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

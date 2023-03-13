@@ -25,6 +25,8 @@ public class DataProcessor
     private readonly List<BodyPartGroupDef> _apparelBodyParts = new();
     private readonly List<WeaponClassDef> _rangedClasses = new();
 
+    public List<IReloadObserver> ReloadObservers { get; set; } = new();
+
     private void Clear()
     {
         _allApparels.Clear();
@@ -112,6 +114,8 @@ public class DataProcessor
 
             _thingContainers[tabId].AddRange(list.OrderByDescending(l => l.CachedSortingWeight).ThenBy(l => l.Def.label));
         }
+
+        ReloadObservers.ForEach(it => it.OnDataProcessorReloaded());
 
         Config.ModInstance.WriteSettings();
     }

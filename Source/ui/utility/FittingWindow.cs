@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BestApparel.data;
 using BestApparel.data.impl;
 using RimWorld;
 using UnityEngine;
@@ -7,7 +8,7 @@ using Verse;
 
 namespace BestApparel.ui.utility;
 
-public class FittingWindow : Window
+public class FittingWindow : Window, IReloadObserver
 {
     public override Vector2 InitialSize => new(650, 500);
 
@@ -39,7 +40,16 @@ public class FittingWindow : Window
         base.PreOpen();
         _worn.ReplaceWith(_parent.DataProcessor.GetAllApparels().Where(it => BestApparel.Config.FittingWorn.Contains(it.Def.defName)));
         DoSomethingChanged();
+        _parent.DataProcessor.ReloadObservers.Add(this);
     }
+
+    public override void PreClose()
+    {
+        _parent.DataProcessor.ReloadObservers.Remove(this);
+        Config.ModInstance.WriteSettings();
+    }
+
+    public void OnDataProcessorReloaded() => DoSomethingChanged();
 
     private void DoSomethingChanged(bool changed = true)
     {
