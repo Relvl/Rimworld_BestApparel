@@ -28,6 +28,11 @@ Actually i don't think there is any incompatible mod... ;o
 + mod: Combat Extended
 + vanilla ofc, but who cares? xD
 
+### Known issues
+
++ When the Combat Extended mode is active, errors may be displayed in the console when sorting the results, if there are items in the results do not support CE. It doesn't break
+  anything, but I can't get rid of it.
+
 ### Translations
 
 + English
@@ -44,7 +49,6 @@ files.
 ### TODO
 
 + Ignore/Pin column window element, edit those items window
-+ Weapon support
 + Few preset profiles
 + Stuff list and select better stuff for things
 + UI for configs
