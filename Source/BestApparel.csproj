@@ -306,6 +306,8 @@
         <Compile Include="stat_processor\CommonStatProcessor.cs" />
         <Compile Include="stat_processor\BaseStatProcessor.cs" />
         <Compile Include="stat_processor\FuncStatProcessor.cs" />
+        <Compile Include="TranslationCache.cs" />
+        <Compile Include="ui\ColonistFloatMenuOption.cs" />
         <Compile Include="ui\TabId.cs" />
         <Compile Include="ui\MainTabWindow.cs" />
         <Compile Include="ui\UIUtils.cs" />

@@ -14,6 +14,7 @@ public abstract class AThingContainer
 
     public readonly ThingDef Def;
     public readonly Thing DefaultThing;
+    public readonly string DefaultTooltip;
 
     public CellData[] CachedCells { get; private set; } = { };
 
@@ -32,6 +33,8 @@ public abstract class AThingContainer
         {
             DefaultThing = ThingMaker.MakeThing(thingDef);
         }
+
+        DefaultTooltip = $"{DefaultThing.LabelNoParenthesisCap.AsTipTitle()}{GenLabel.LabelExtras(DefaultThing, 1, true, true)}\n\n{DefaultThing.DescriptionDetailed}";
     }
 
     public abstract bool CheckForFilters();
@@ -55,11 +58,6 @@ public abstract class AThingContainer
 
                     var cell = new CellData(pair.Key, DefaultThing, sorting[pair.Key.GetDefName()] + Config.MaxSortingWeight, normal);
 
-                    if (Prefs.DevMode)
-                    {
-                        cell.Tooltips.Add($"StatDefName: {cell.DefName} (min: {valueMin}, this: {value} ({cell.NormalizedWeight}), max: {valueMax})");
-                    }
-
                     cell.Tooltips.Add("BestApparel.Label.RangePercent".Translate(Math.Round(cell.NormalizedWeight * 100f, 1), cell.WeightFactor));
 
                     return cell;
@@ -72,4 +70,13 @@ public abstract class AThingContainer
     }
 
     public override int GetHashCode() => Def.GetHashCode();
+
+    public bool IsSearchAccept(string search)
+    {
+        if (string.IsNullOrEmpty(search)) return true;
+        var s = search.ToLower();
+        if (Def.defName.ToLower().Contains(s)) return true;
+        if (Def.label.ToLower().Contains(s)) return true;
+        return false;
+    }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace BestApparel;
 
@@ -15,5 +16,13 @@ public static class Extensions
             collection.Remove(element);
             i--;
         }
+    }
+
+    public static Rect TranslateToGUI(this Rect rect) => new(GUIUtility.GUIToScreenPoint(rect.position), rect.size);
+
+    public static void ReplaceWith<T>(this List<T> col, IEnumerable<T> newCol)
+    {
+        col.Clear();
+        col.AddRange(newCol);
     }
 }

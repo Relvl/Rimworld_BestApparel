@@ -9,15 +9,23 @@
     <BestApparel.Control.UseCraftableThings>Craftable things</BestApparel.Control.UseCraftableThings>
     <BestApparel.Control.UseCraftableThings.Tooltip>Do search things only in available workbenches bills</BestApparel.Control.UseCraftableThings.Tooltip>
 
-    <BestApparel.Btn.Filter>Filter...</BestApparel.Btn.Filter>
-    <BestApparel.Btn.Layers>Layers...</BestApparel.Btn.Layers>
-    <BestApparel.Btn.Sorting>Sorting...</BestApparel.Btn.Sorting>
-    <BestApparel.Btn.Columns>Columns...</BestApparel.Btn.Columns>
-
     <BestApparel.Btn.Resort>Resort</BestApparel.Btn.Resort>
-    <BestApparel.Btn.Resort.Additional>Closing this window also resorts the results.</BestApparel.Btn.Resort.Additional>
-
+    <BestApparel.Btn.Resort.Tooltip>Closing this window also resorts the results.</BestApparel.Btn.Resort.Tooltip>
     <BestApparel.Btn.Defaults>Defaults</BestApparel.Btn.Defaults>
+    <BestApparel.Btn.Filter>Filter...</BestApparel.Btn.Filter>
+    <BestApparel.Btn.Columns>Columns...</BestApparel.Btn.Columns>
+    <BestApparel.Btn.Sorting>Sort...</BestApparel.Btn.Sorting>
+    <BestApparel.Btn.Fitting>Fitting Room</BestApparel.Btn.Fitting>
+
+    <BestApparel.Label.Columns>Visible columns:</BestApparel.Label.Columns>
+    <BestApparel.Label.Columns.Tooltip>Which columns should be displayed in the table</BestApparel.Label.Columns.Tooltip>
+
+    <BestApparel.Label.Sorting>Sorting priorities:</BestApparel.Label.Sorting>
+    <BestApparel.Label.Sorting.Tooltip>Only those stats that are selected in the columns window are displayed here.
+        The slider indicates how high priority (or valuable) this stat is.
+        Stats that have a higher value in smaller values should be inverted.
+        Value '-10' totally excludes stat from sorting.
+    </BestApparel.Label.Sorting.Tooltip>
 
     <BestApparel.FilterType.Layer>Apparel layers:</BestApparel.FilterType.Layer>
     <BestApparel.FilterType.Layer.Tooltip>Apparel body layer filter:
@@ -49,16 +57,14 @@
         If have any 'OFF' state - the thing should NOT contain it.
     </BestApparel.FilterType.WeaponClass>
 
-    <BestApparel.Label.Columns>Visible columns:</BestApparel.Label.Columns>
-    <BestApparel.Label.Columns.Tooltip>Which columns should be displayed in the table</BestApparel.Label.Columns.Tooltip>
-
-    <BestApparel.Label.Sorting>Sorting priorities:</BestApparel.Label.Sorting>
-    <BestApparel.Label.Sorting.Tooltip>Only those stats that are selected in the columns window are displayed here.
-        The slider indicates how high priority (or valuable) this stat is.
-        Stats that have a higher value in smaller values should be inverted.
-        Value '-10' totally excludes stat from sorting.
-    </BestApparel.Label.Sorting.Tooltip>
-
-    <BestApparel.Label.RangePercent>Range percent: {0}%, Weight factor: {1}</BestApparel.Label.RangePercent>
+    <BestApparel.WindowTitle.Fitting>Fitting room</BestApparel.WindowTitle.Fitting>
+    <BestApparel.Label.SelectApparel>Select something from the right -></BestApparel.Label.SelectApparel>
+    <BestApparel.Fitting.Button.Remove>Remove thing from all slots</BestApparel.Fitting.Button.Remove>
+    <BestApparel.Fitting.Button.RemoveAll>clear slot</BestApparel.Fitting.Button.RemoveAll>
+    <BestApparel.Fitting.Button.RemoveAll.Tooltip>Remove all items from this slots and all slots that item covers</BestApparel.Fitting.Button.RemoveAll.Tooltip>
+    <BestApparel.Fitting.Button.Clear>Clear</BestApparel.Fitting.Button.Clear>
+    <BestApparel.Fitting.Button.FromPawn>From pawn...</BestApparel.Fitting.Button.FromPawn>
+    <BestApparel.Button.Fitting.AddToSlot>+</BestApparel.Button.Fitting.AddToSlot>
+    <BestApparel.Button.Fitting.AddToSlot.Tooltip>Add item to left panel</BestApparel.Button.Fitting.AddToSlot.Tooltip>
 
 </LanguageData>

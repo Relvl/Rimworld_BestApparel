@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <BestApparel.Apparel>Экипировка</BestApparel.Apparel>
+    <BestApparel.Ranged>Стрелковое</BestApparel.Ranged>
+    <BestApparel.Melee>Ближний бой</BestApparel.Melee>
+
+    <BestApparel.Control.UseAllThings>Показать всё</BestApparel.Control.UseAllThings>
+    <BestApparel.Control.UseAllThings.Tooltip>Показывает все зарегистрированные предметы</BestApparel.Control.UseAllThings.Tooltip>
+    <BestApparel.Control.UseCraftableThings>Крафтовое</BestApparel.Control.UseCraftableThings>
+    <BestApparel.Control.UseCraftableThings.Tooltip>Показывает только то, что можно скрафтить на текущей карте</BestApparel.Control.UseCraftableThings.Tooltip>
+
+    <BestApparel.Btn.Resort>Применить</BestApparel.Btn.Resort>
+    <BestApparel.Btn.Resort.Tooltip>Закрытие этого окна так же применяет настройки.</BestApparel.Btn.Resort.Tooltip>
+    <BestApparel.Btn.Defaults>По-умолчанию</BestApparel.Btn.Defaults>
+    <BestApparel.Btn.Filter>Фильтр...</BestApparel.Btn.Filter>
+    <BestApparel.Btn.Columns>Колонки...</BestApparel.Btn.Columns>
+    <BestApparel.Btn.Sorting>Сортировка...</BestApparel.Btn.Sorting>
+    <BestApparel.Btn.Fitting>Примерочная</BestApparel.Btn.Fitting>
+
+    <BestApparel.Label.Columns>Видимые колонки:</BestApparel.Label.Columns>
+    <BestApparel.Label.Columns.Tooltip>Какие колонки должны быть оторажены в таблице</BestApparel.Label.Columns.Tooltip>
+
+    <BestApparel.Label.Sorting>Приоритеты сортировки:</BestApparel.Label.Sorting>
+    <BestApparel.Label.Sorting.Tooltip>Показаны только те статы, которые выбраны в окне "Колонки".
+        Ползунок показывает, насколько высок приоритет (или ценность) этого стата.
+        Статы, которые полезнее в меньших значениях следует инвертировать.
+        Значение "-10" полностью исключает стат из сортировки.
+    </BestApparel.Label.Sorting.Tooltip>
+
+    <BestApparel.FilterType.Layer>Слои экипировки:</BestApparel.FilterType.Layer>
+    <BestApparel.FilterType.Layer.Tooltip>Фильтр слоёв экипировки:
+        Если хотя бы одно состояние "ВКЛ" - вещь должна покрывать все включенные слои.
+        Если хотя бы одно состояние "ВЫКЛ" - вещь не должна покрывать ни один из выключенных слоёв.
+    </BestApparel.FilterType.Layer.Tooltip>
+
+    <BestApparel.FilterType.BodyPart>Части тела:</BestApparel.FilterType.BodyPart>
+    <BestApparel.FilterType.BodyPart.Tooltip>Фильтр экипировки по частям тела:
+        Если хотя бы одно состояние "ВКЛ" - вещь должна покрывать все включенные части тела.
+        Если хотя бы одно состояние "ВЫКЛ" - вещь не должна покрывать ни одну из выключенных частей тела.
+    </BestApparel.FilterType.BodyPart.Tooltip>
+
+    <BestApparel.FilterType.Category>Категория:</BestApparel.FilterType.Category>
+    <BestApparel.FilterType.Category.Tooltip>Фильтр категории предмета:
+        Если хотя бы одно состояние "ВКЛ" - вещь должна быть из всех включенных категорий.
+        Если хотя бы одно состояние "ВЫКЛ" - вещь не должна быть ни в одной из выключенных категорий.
+    </BestApparel.FilterType.Category.Tooltip>
+
+    <BestApparel.FilterType.Stuff>Материал:</BestApparel.FilterType.Stuff>
+    <BestApparel.FilterType.Stuff.Tooltip>Фильтр материалов, из которых может быть сделана вещь:
+        Если хотя бы одно состояние "ВКЛ" - вещь может быть создана с использованием любого из включенных материалов.
+        Если хотя бы одно состояние "ВЫКЛ" - вещь не может быть создана ни из одного из выключенных материалов.
+    </BestApparel.FilterType.Stuff.Tooltip>
+
+    <BestApparel.FilterType.WeaponClass>Класс оружия:</BestApparel.FilterType.WeaponClass>
+    <BestApparel.FilterType.WeaponClass>
+        Если хотя бы одно состояние "ВКЛ" - вещь должна принадлежать ко всем включенным классам.
+        Если хотя бы одно состояние "ВЫКЛ" - вещь не должна принадлежать ни одному из выключенных классов.
+    </BestApparel.FilterType.WeaponClass>
+
+    <BestApparel.WindowTitle.Fitting>Примерочная</BestApparel.WindowTitle.Fitting>
+    <BestApparel.Label.SelectApparel>Выберите что-нибудь справа -></BestApparel.Label.SelectApparel>
+    <BestApparel.Fitting.Button.Remove>Удалить вещь из всех затронутых слотов</BestApparel.Fitting.Button.Remove>
+    <BestApparel.Fitting.Button.RemoveAll>очистить</BestApparel.Fitting.Button.RemoveAll>
+    <BestApparel.Fitting.Button.RemoveAll.Tooltip>Удалить все вещи из слота, и из всех слотов, которые она покрывает</BestApparel.Fitting.Button.RemoveAll.Tooltip>
+    <BestApparel.Fitting.Button.Clear>Очистить</BestApparel.Fitting.Button.Clear>
+    <BestApparel.Fitting.Button.FromPawn>От пешки...</BestApparel.Fitting.Button.FromPawn>
+    <BestApparel.Button.Fitting.AddToSlot>+</BestApparel.Button.Fitting.AddToSlot>
+    <BestApparel.Button.Fitting.AddToSlot.Tooltip>Добавить вещь в левую панель во все покрываемые слоты</BestApparel.Button.Fitting.AddToSlot.Tooltip>
+
+</LanguageData>

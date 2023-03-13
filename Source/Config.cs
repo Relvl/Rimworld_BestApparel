@@ -32,6 +32,7 @@ public class Config : ModSettings
     public ApparelConfig Apparel = new();
     public RangedConfig Ranged = new();
     public MeleeConfig Melee = new();
+    public List<string> FittingWorn = new();
 
     public void RestoreDefaultFilters()
     {
@@ -121,6 +122,9 @@ public class Config : ModSettings
         Ranged ??= new RangedConfig();
         Scribe_Deep.Look(ref Melee, "Melee");
         Melee ??= new MeleeConfig();
+
+        Scribe_Collections.Look(ref FittingWorn, "FittingWorn");
+        FittingWorn ??= new List<string>();
     }
 
     public class ApparelConfig : IExposable

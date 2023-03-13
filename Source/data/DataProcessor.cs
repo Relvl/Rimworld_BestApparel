@@ -136,20 +136,20 @@ public class DataProcessor
         }
     }
 
-    public IEnumerable<(IEnumerable<Def>, string, FeatureEnableDisable)> GetFilterData(TabId tabId)
+    public IEnumerable<(IEnumerable<Def>, TranslationCache.E, FeatureEnableDisable)> GetFilterData(TabId tabId)
     {
         switch (tabId)
         {
             case TabId.Apparel:
-                yield return (_apparelLayers, "BestApparel.FilterType.Layer", BestApparel.Config.Apparel.Layer);
-                yield return (_apparelBodyParts, "BestApparel.FilterType.BodyPart", BestApparel.Config.Apparel.BodyPart);
-                yield return (_categories[TabId.Apparel], "BestApparel.FilterType.Category", BestApparel.Config.Apparel.Category);
-                yield return (_stuffs[TabId.Apparel], "BestApparel.FilterType.Stuff", BestApparel.Config.Apparel.Stuff);
+                yield return (_apparelLayers, TranslationCache.FilterLayers, BestApparel.Config.Apparel.Layer);
+                yield return (_apparelBodyParts, TranslationCache.FilterBodyParts, BestApparel.Config.Apparel.BodyPart);
+                yield return (_categories[TabId.Apparel], TranslationCache.FilterCategory, BestApparel.Config.Apparel.Category);
+                yield return (_stuffs[TabId.Apparel], TranslationCache.FilterStuff, BestApparel.Config.Apparel.Stuff);
                 break;
             case TabId.Ranged:
-                yield return (_rangedClasses, "BestApparel.FilterType.Category", BestApparel.Config.Ranged.Category);
-                yield return (_categories[TabId.Ranged], "BestApparel.FilterType.WeaponClass", BestApparel.Config.Ranged.WeaponClass);
-                yield return (_stuffs[TabId.Apparel], "BestApparel.FilterType.Stuff", BestApparel.Config.Ranged.Stuff);
+                yield return (_rangedClasses, TranslationCache.FilterCategory, BestApparel.Config.Ranged.Category);
+                yield return (_categories[TabId.Ranged], TranslationCache.FilterWeaponClass, BestApparel.Config.Ranged.WeaponClass);
+                yield return (_stuffs[TabId.Apparel], TranslationCache.FilterStuff, BestApparel.Config.Ranged.Stuff);
                 break;
         }
     }
@@ -171,4 +171,6 @@ public class DataProcessor
 
     public IReadOnlyList<ThingContainerApparel> GetAllApparels() => _allApparels;
     public IReadOnlyList<BodyPartGroupDef> GetApparelBodyParts() => _apparelBodyParts;
+
+    public ThingContainerApparel GetApparelOfDef(Apparel apparel) => _allApparels.FirstOrDefault(a => a.Def.defName == apparel.def.defName);
 }

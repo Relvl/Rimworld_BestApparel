@@ -23,23 +23,18 @@ public static class UIUtils
         GUI.color = Color.white;
     }
 
-    public static void DrawButtonsRow(ref Rect inRect, int btnWidth, int btnHeight, int margin, params (string, Action)[] buttons)
+    public static void DrawButtonsRow(ref Rect inRect, int btnWidth, int btnHeight, int margin, params (TranslationCache.E, Action)[] buttons)
     {
         var r = new Rect(0, inRect.y, 0, 0);
         foreach (var (label, action) in buttons)
         {
-            DrawButtonRightOffset(ref r, label, action, btnWidth, btnHeight);
+            r.width = label.Size.x + 16;
+            r.height = btnHeight;
+            if (Widgets.ButtonText(r, label.Text)) action();
+            r.x += r.width + 10;
         }
 
         inRect.yMin += btnHeight + margin;
-    }
-
-    public static void DrawButtonRightOffset(ref Rect r, string label, Action onClick, int btnWidth = 85, int btnHeight = 24)
-    {
-        r.width = btnWidth;
-        r.height = btnHeight;
-        if (Widgets.ButtonText(r, label.Translate())) onClick();
-        r.x += btnWidth + 10;
     }
 
     public static void RenderCheckboxLeft(ref Rect inRect, string label, bool state, Action<bool> onStateChanged, float maxWidth = 0)
@@ -57,7 +52,7 @@ public static class UIUtils
         Text.Anchor = TextAnchor.UpperLeft;
     }
 
-    public static float RenderUtilityGrid<T>(ref Rect inRect, string label, int columnCount, int rowHeight, List<T> elements, Action<T, Rect> action)
+    public static float RenderUtilityGrid<T>(ref Rect inRect, TranslationCache.E label, int columnCount, int rowHeight, List<T> elements, Action<T, Rect> action)
     {
         var inRectStartsAt = inRect.yMin;
         if (elements.Count == 0) return inRect.yMin - inRectStartsAt;
@@ -95,16 +90,14 @@ public static class UIUtils
         return inRect.yMin - inRectStartsAt;
     }
 
-    public static void RenderUtilityHeader(ref Rect inRect, string label)
+    public static void RenderUtilityHeader(ref Rect inRect, TranslationCache.E label)
     {
         Text.Anchor = TextAnchor.UpperLeft;
         Text.Font = GameFont.Small;
 
-        var labelTranslated = label.Translate();
-        var labelWidth = Text.CalcSize(labelTranslated.RawText);
-        var labelRect = new Rect(inRect.x, inRect.y, labelWidth.x, 20);
-        Widgets.Label(labelRect, labelTranslated);
-        TooltipHandler.TipRegion(labelRect, $"{label}.Tooltip".Translate());
+        var labelRect = new Rect(inRect.x, inRect.y, label.Size.x, 20);
+        Widgets.Label(labelRect, label.Text);
+        TooltipHandler.TipRegion(labelRect, label.Tooltip);
 
         inRect.yMin += 36;
     }

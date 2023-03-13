@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BestApparel.data;
 using BestApparel.ui.utility;
-using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -26,6 +25,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
     {
         // super
         doCloseX = true;
+        closeOnClickedOutside = false;
         DataProcessor = new DataProcessor();
     }
 
@@ -40,6 +40,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
         Find.WindowStack.TryRemove(typeof(FilterWindow));
         Find.WindowStack.TryRemove(typeof(ColumnsWindow));
         Find.WindowStack.TryRemove(typeof(ThingInfoWindow));
+        Find.WindowStack.TryRemove(typeof(FittingWindow));
     }
 
     public override void DoWindowContents(Rect inRect)
@@ -54,9 +55,9 @@ public class MainTabWindow : RimWorld.MainTabWindow
             inRect,
             new List<TabRecord>
             {
-                new("BestApparel.Apparel".Translate(), () => BestApparel.Config.SelectedTab = TabId.Apparel, BestApparel.Config.SelectedTab == TabId.Apparel),
-                new("BestApparel.Ranged".Translate(), () => BestApparel.Config.SelectedTab = TabId.Ranged, BestApparel.Config.SelectedTab == TabId.Ranged),
-                new("BestApparel.Melee".Translate(), () => BestApparel.Config.SelectedTab = TabId.Melee, BestApparel.Config.SelectedTab == TabId.Melee),
+                new(TranslationCache.Apparel.Text, () => BestApparel.Config.SelectedTab = TabId.Apparel, BestApparel.Config.SelectedTab == TabId.Apparel),
+                new(TranslationCache.Ranged.Text, () => BestApparel.Config.SelectedTab = TabId.Ranged, BestApparel.Config.SelectedTab == TabId.Ranged),
+                new(TranslationCache.Melee.Text, () => BestApparel.Config.SelectedTab = TabId.Melee, BestApparel.Config.SelectedTab == TabId.Melee),
             }
         );
 
@@ -67,9 +68,9 @@ public class MainTabWindow : RimWorld.MainTabWindow
             85,
             24,
             10,
-            ("BestApparel.Btn.Columns", OnColumnsClick),
-            ("BestApparel.Btn.Filter", OnFilterClick),
-            ("BestApparel.Btn.Sorting", OnSortingClick)
+            (TranslationCache.BtnColumns, OnColumnsClick),
+            (TranslationCache.BtnFilter, OnFilterClick),
+            (TranslationCache.BtnSorting, OnSortingClick)
         );
         UIUtils.DrawLineAtTop(ref inRect, true, 1);
 
@@ -82,7 +83,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
         var collectTypeRect = new Rect(windowRect.width - Margin * 2 - 10 - collectTypeWidth - btnWidth - 10, 8, collectTypeWidth, 24);
         UIUtils.RenderCheckboxLeft(
             ref collectTypeRect,
-            (BestApparel.Config.UseAllThings ? "BestApparel.Control.UseAllThings" : "BestApparel.Control.UseCraftableThings").Translate(),
+            (BestApparel.Config.UseAllThings ? TranslationCache.ControlUseAllThings : TranslationCache.ControlUseCraftableThings).Text,
             BestApparel.Config.UseAllThings,
             state =>
             {
@@ -90,13 +91,11 @@ public class MainTabWindow : RimWorld.MainTabWindow
                 DataProcessor.Rebuild();
             }
         );
-        TooltipHandler.TipRegion(
-            collectTypeRect,
-            (BestApparel.Config.UseAllThings ? "BestApparel.Control.UseAllThings.Tooltip" : "BestApparel.Control.UseCraftableThings.Tooltip").Translate()
-        );
+        TooltipHandler.TipRegion(collectTypeRect, (BestApparel.Config.UseAllThings ? TranslationCache.ControlUseAllThings : TranslationCache.ControlUseCraftableThings).Tooltip);
 
-        var fittingButtonRect = new Rect(inRect.width - btnWidth - 10, 0, btnWidth, 24);
-        if (Widgets.ButtonText(fittingButtonRect, "BestApparel.Button.Fitting".Translate()))
+        var fittingButtonWidth = TranslationCache.BtnFitting.Size.x + 24;
+        var fittingButtonRect = new Rect(inRect.width - fittingButtonWidth - 10, 4, fittingButtonWidth, TranslationCache.BtnFitting.Size.y + 10);
+        if (Widgets.ButtonText(fittingButtonRect, TranslationCache.BtnFitting.Text))
         {
             Find.WindowStack.TryRemove(typeof(FittingWindow));
             Find.WindowStack.Add(new FittingWindow(this));
@@ -179,12 +178,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
                 TooltipHandler.TipRegion(cellRect, $"Total sorting weight: {container.CachedSortingWeight}");
             }
 
-            // todo захватить иконку в тултип
-            var tip = container.DefaultThing.LabelNoParenthesisCap.AsTipTitle() + //
-                      GenLabel.LabelExtras(container.DefaultThing, 1, true, true) +
-                      "\n\n" +
-                      container.DefaultThing.DescriptionDetailed;
-            TooltipHandler.TipRegion(cellRect, tip);
+            TooltipHandler.TipRegion(cellRect, container.DefaultTooltip);
 
             // Columns
             cellRect.x += cellRect.width + CellPadding;

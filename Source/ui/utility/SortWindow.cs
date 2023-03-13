@@ -19,7 +19,7 @@ public class SortWindow : AUtilityWindow
 
         heightCounter += UIUtils.RenderUtilityGrid( //
             ref inRect,
-            "BestApparel.Label.Sorting",
+            TranslationCache.LabelSorting,
             2,
             30,
             defs,

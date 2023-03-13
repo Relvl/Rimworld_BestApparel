@@ -52,7 +52,7 @@ public abstract class AUtilityWindow : Window
             const int searchWidth = 100;
             var r = new Rect(windowRect.width - Margin * 2 - 48 - searchWidth, 0, 24, 24);
             GUI.DrawTexture(r, TexButton.Search);
-            GUI.SetNextControlName($"BestApparel.{GetType().Name}.Search");
+            GUI.SetNextControlName($"UI.BestApparel.{GetType().Name}.Search");
             r.x += 28;
             r.width = searchWidth;
             var str = Widgets.TextField(r, SearchString, 15);
@@ -74,7 +74,7 @@ public abstract class AUtilityWindow : Window
         const float btnHeight = 24;
         const int btnWidth = 120;
         var btnRect = new Rect(0, windowRect.height - Margin * 2 - btnHeight, btnWidth, btnHeight);
-        if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Resort".Translate()))
+        if (Widgets.ButtonText(btnRect, TranslationCache.BtnResort.Text))
         {
             Parent.DataProcessor.Rebuild();
         }
@@ -83,12 +83,12 @@ public abstract class AUtilityWindow : Window
         btnRect.width = inRect.width - btnRect.x;
         Text.Anchor = TextAnchor.MiddleLeft;
         GUI.color = BestApparel.ColorWhiteA20;
-        Widgets.Label(btnRect, "BestApparel.Btn.Resort.Additional".Translate());
+        Widgets.Label(btnRect, TranslationCache.BtnResort.Tooltip);
         Text.Anchor = TextAnchor.UpperLeft;
         GUI.color = Color.white;
 
         btnRect = new Rect(windowRect.width - Margin * 2 - btnWidth, windowRect.height - Margin * 2 - btnHeight, btnWidth, btnHeight);
-        if (Widgets.ButtonText(btnRect, "BestApparel.Btn.Defaults".Translate()))
+        if (Widgets.ButtonText(btnRect, TranslationCache.BtnDefaults.Text))
         {
             onResetClick();
             Parent.DataProcessor.Rebuild();

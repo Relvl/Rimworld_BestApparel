@@ -24,7 +24,7 @@ public class ColumnsWindow : AUtilityWindow
 
         heightCounter += UIUtils.RenderUtilityGrid(
             ref inRect,
-            "BestApparel.Label.Columns",
+            TranslationCache.LabelColumns,
             2,
             20,
             defs,
