@@ -45,6 +45,8 @@ files.
 
     Feel free to use this mod in any public modpacks.
     Feel free to use any part of this mod for any purpose.
+    Fell free to add translations, just ping me in the Discord Johnson1893#1084
+    Feel free to suggest ideas, corrections, or merge requests
 
 ### TODO
 
