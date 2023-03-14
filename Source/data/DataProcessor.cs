@@ -85,7 +85,7 @@ public class DataProcessor
             }
         }
 
-        foreach (var (tabId, stats) in tmpStats) _stats[tabId].AddRange(stats);
+        foreach (var (tabId, stats) in tmpStats) _stats[tabId].AddRange(stats.OrderBy(s => s.GetDefLabel()));
 
         Rebuild();
     }
