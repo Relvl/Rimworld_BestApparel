@@ -32,6 +32,7 @@ public class FittingWindow : Window, IReloadObserver
     {
         resizeable = true;
         draggable = true;
+        doCloseX = true;
         _parent = parent;
     }
 
