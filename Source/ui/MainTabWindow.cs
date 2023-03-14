@@ -148,88 +148,93 @@ public class MainTabWindow : RimWorld.MainTabWindow
         for (var idx = 0; idx < thingContainers.Count; idx++)
         {
             var container = thingContainers[idx];
-            var elementRect = new Rect(0, CellHeight * idx, inRect.width, CellHeight);
+            var elementWidth = CellHeight * 2 + CellPadding * 3 + NameCellWidth + container.CachedCells.Length * (CellWidth + CellPadding);
+            var elementRect = new Rect(0, CellHeight * idx, elementWidth, CellHeight);
 
-            var cellRect = new Rect(elementRect.x, elementRect.y, CellHeight, CellHeight);
-
-            // i
-            Widgets.InfoCardButtonCentered(cellRect, container.DefaultThing);
-
-            // back row click = open info window
-            if (Prefs.DevMode && Widgets.ButtonInvisible(elementRect))
+            var isInViewRange = _scrollPosition.y < elementRect.y + elementRect.height * 2 && _scrollPosition.y + inRect.height > elementRect.yMax - elementRect.height;
+            if (isInViewRange)
             {
-                Find.WindowStack.TryRemove(typeof(ThingInfoWindow));
-                Find.WindowStack.Add(new ThingInfoWindow(this, container.DefaultThing));
-            }
+                var cellRect = new Rect(elementRect.x, elementRect.y, CellHeight, CellHeight);
 
-            // Icon
-            cellRect.x += CellHeight + CellPadding;
-            Widgets.ThingIcon(cellRect, container.DefaultThing);
+                // i
+                Widgets.InfoCardButtonCentered(cellRect, container.DefaultThing);
 
-            // Label
-            Text.Font = GameFont.Tiny;
-            cellRect.x += CellHeight + CellPadding;
-            cellRect.width = NameCellWidth;
-            Widgets.Label(cellRect, container.DefaultThing.def.label);
-            Text.Font = GameFont.Small;
-
-            if (Prefs.DevMode)
-            {
-                TooltipHandler.TipRegion(cellRect, $"Total sorting weight: {container.CachedSortingWeight}");
-            }
-
-            TooltipHandler.TipRegion(cellRect, container.DefaultTooltip);
-
-            // Columns
-            cellRect.x += cellRect.width + CellPadding;
-            cellRect.width = CellWidth;
-
-            for (var cellIdx = 0; cellIdx < container.CachedCells.Length; cellIdx++)
-            {
-                var cell = container.CachedCells[cellIdx];
-
-                if (_lastFrameRow == cellIdx)
+                // back row click = open info window
+                if (Prefs.DevMode && Widgets.ButtonInvisible(elementRect))
                 {
-                    GUI.DrawTexture(cellRect, TexUI.HighlightTex);
+                    Find.WindowStack.TryRemove(typeof(ThingInfoWindow));
+                    Find.WindowStack.Add(new ThingInfoWindow(this, container.DefaultThing));
                 }
 
-                if (Mouse.IsOver(cellRect))
+                // Icon
+                cellRect.x += CellHeight + CellPadding;
+                Widgets.ThingIcon(cellRect, container.DefaultThing);
+
+                // Label
+                Text.Font = GameFont.Tiny;
+                cellRect.x += CellHeight + CellPadding;
+                cellRect.width = NameCellWidth;
+                Widgets.Label(cellRect, container.DefaultThing.def.label);
+                Text.Font = GameFont.Small;
+
+                if (Prefs.DevMode)
                 {
-                    _lastFrameRow = cellIdx;
-                    mouseOverAnyCell = true;
+                    TooltipHandler.TipRegion(cellRect, $"Total sorting weight: {container.CachedSortingWeight}");
                 }
 
-                if (cell.IsEmpty)
+                TooltipHandler.TipRegion(cellRect, container.DefaultTooltip);
+
+                // Columns
+                cellRect.x += NameCellWidth + CellPadding;
+                cellRect.width = CellWidth;
+
+                for (var cellIdx = 0; cellIdx < container.CachedCells.Length; cellIdx++)
                 {
-                    GUI.color = BestApparel.ColorWhiteA20;
-                    Widgets.Label(cellRect, cell.Value);
-                    GUI.color = Color.white;
-                }
-                else
-                {
-                    Widgets.Label(cellRect, cell.Value);
-                    foreach (var tooltip in cell.Tooltips)
+                    var cell = container.CachedCells[cellIdx];
+
+                    if (_lastFrameRow == cellIdx)
                     {
-                        TooltipHandler.TipRegion(cellRect, tooltip);
+                        GUI.DrawTexture(cellRect, TexUI.HighlightTex);
                     }
+
+                    if (Mouse.IsOver(cellRect))
+                    {
+                        _lastFrameRow = cellIdx;
+                        mouseOverAnyCell = true;
+                    }
+
+                    if (cell.IsEmpty)
+                    {
+                        GUI.color = BestApparel.ColorWhiteA20;
+                        Widgets.Label(cellRect, cell.Value);
+                        GUI.color = Color.white;
+                    }
+                    else
+                    {
+                        Widgets.Label(cellRect, cell.Value);
+                        foreach (var tooltip in cell.Tooltips)
+                        {
+                            TooltipHandler.TipRegion(cellRect, tooltip);
+                        }
+                    }
+
+                    // offset to the right
+                    cellRect.x += /*todo config? auto-calc?*/ CellWidth + CellPadding - 1;
                 }
 
-                // offset to the right
-                cellRect.x += /*todo config? auto-calc?*/ cellRect.width + CellPadding - 1;
+                // bg and mouseover
+                if (Mouse.IsOver(elementRect))
+                {
+                    GUI.DrawTexture(elementRect, TexUI.HighlightTex);
+                }
+
+                if (idx < thingContainers.Count - 1)
+                {
+                    UIUtils.DrawLineFull(BestApparel.ColorWhiteA20, CellHeight * (idx + 1), inRect.width);
+                }
             }
 
-            // bg and mouseover
-            if (Mouse.IsOver(elementRect))
-            {
-                GUI.DrawTexture(elementRect, TexUI.HighlightTex);
-            }
-
-            if (idx < thingContainers.Count - 1)
-            {
-                UIUtils.DrawLineFull(BestApparel.ColorWhiteA20, CellHeight * (idx + 1), inRect.width);
-            }
-
-            _lastFrameTableSize = new Vector2(cellRect.x + 16, elementRect.y + elementRect.height + 16);
+            _lastFrameTableSize = new Vector2(elementWidth, elementRect.y + elementRect.height + 16);
         }
 
         if (!mouseOverAnyCell)
@@ -238,7 +243,6 @@ public class MainTabWindow : RimWorld.MainTabWindow
         }
 
         Text.Anchor = TextAnchor.UpperLeft;
-
 
         Widgets.EndScrollView();
     }
