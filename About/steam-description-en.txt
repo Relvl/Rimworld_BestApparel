@@ -1,0 +1,52 @@
+A mod that adds a window for comparing items by various stats and filters.
+
+For apparels/clothes/armor, it allows you to filter by layers and body parts.
+
+Allows you to specify which stats to display and how to compare them.
+
+The mod can be absolutely safely added and removed in existing saves.
+
+[hr][/hr]
+[h1]Purpose[/h1]
+
+Most likely you don't need this mod if you play in vanilla style (with a minimum number of mods). It is needed by dudes who are greased with much mods that add a bunch of different armor and weapons, in which complementary stats are defined. This mod does not add any changes to the game style, items or mechanics. All it does is to quickly find the desired item according to the desired stats.
+
+[hr][/hr]
+[h1]Incompatible[/h1]
+
+Not yet found... ;P
+
+Actually i don't think there is any incompatible mod... ;o
+
+[hr][/hr]
+[h1]Compatible[/h1]
+
+modpack: HardcoreSK
+mod: Combat Extended
+vanilla ofc, but who cares? xD
+
+[hr][/hr]
+[h1]Known issues[/h1]
+
+When the Combat Extended mode is active, errors may be displayed in the console when sorting the results, if there are items in the results do not support CE. It doesn't break anything, but I can't get rid of it.
+
+[hr][/hr]
+[h1]Translations[/h1]
+[list]
+	[*]English
+	[*]Russian
+[/list]
+
+If you want to add/correct translation - please contact me in the Discord: Johnson1893#1084 and send me a translation files.
+
+[hr][/hr]
+[h1]Legal[/h1]
+
+[code]
+Feel free to use this mod in any public modpacks.
+Feel free to use any part of this mod for any purpose.
+Fell free to add translations, just ping me in the Discord Johnson1893#1084
+Feel free to suggest ideas, corrections, or merge requests
+[/code]
+
+[url=https://github.com/Relvl/Rimworld_BestApparel]Github[/url]
