@@ -22,4 +22,6 @@ public class FuncStatProcessor : AStatProcessor
     public override string GetDefLabel() => _name.Translate();
     public override float GetStatValue(Thing thing) => _func(thing);
     public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) => GetStatValue(thing).ToString(CultureInfo.CurrentCulture);
+    
+    public override int GetHashCode() => _name.GetHashCode();
 }

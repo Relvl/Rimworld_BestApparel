@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using BestApparel.data.impl;
 using BestApparel.stat_processor;
@@ -14,130 +15,117 @@ public class DataProcessor
 {
     private static ReadOnlyDictionary<TabId, T> MakeTabIdDictionary<T>(Func<T> provider) => new(Enum.GetValues(typeof(TabId)).Cast<TabId>().ToDictionary(t => t, _ => provider()));
 
-    private readonly List<ThingContainerApparel> _allApparels = new();
+    private readonly ReadOnlyDictionary<TabId, HashSet<AThingContainer>> _containers = MakeTabIdDictionary(() => new HashSet<AThingContainer>());
+    private readonly ReadOnlyDictionary<TabId, List<AThingContainer>> _filteredContainers = MakeTabIdDictionary(() => new List<AThingContainer>());
 
-    private readonly ReadOnlyDictionary<TabId, List<AThingContainer>> _thingContainers = MakeTabIdDictionary(() => new List<AThingContainer>());
-    private readonly ReadOnlyDictionary<TabId, List<AStatProcessor>> _statProcessors = MakeTabIdDictionary(() => new List<AStatProcessor>());
-    private readonly ReadOnlyDictionary<TabId, List<StuffCategoryDef>> _stuffs = MakeTabIdDictionary(() => new List<StuffCategoryDef>());
-    private readonly ReadOnlyDictionary<TabId, List<ThingCategoryDef>> _categories = MakeTabIdDictionary(() => new List<ThingCategoryDef>());
+    private readonly ReadOnlyDictionary<TabId, List<AStatProcessor>> _stats = MakeTabIdDictionary(() => new List<AStatProcessor>());
 
-    private readonly List<ApparelLayerDef> _apparelLayers = new();
-    private readonly List<BodyPartGroupDef> _apparelBodyParts = new();
-    private readonly List<WeaponClassDef> _rangedClasses = new();
+    private readonly ReadOnlyDictionary<TabId, HashSet<StuffCategoryDef>> _stuffs = MakeTabIdDictionary(() => new HashSet<StuffCategoryDef>());
+    private readonly ReadOnlyDictionary<TabId, HashSet<ThingCategoryDef>> _categories = MakeTabIdDictionary(() => new HashSet<ThingCategoryDef>());
+    private readonly ReadOnlyDictionary<TabId, HashSet<WeaponClassDef>> _weaponClasses = MakeTabIdDictionary(() => new HashSet<WeaponClassDef>());
 
-    public List<IReloadObserver> ReloadObservers { get; set; } = new();
+    private readonly HashSet<ApparelLayerDef> _apparelLayers = new();
+    private readonly HashSet<BodyPartGroupDef> _apparelBodyParts = new();
 
-    private void Clear()
+    public List<IReloadObserver> ReloadObservers { get; } = new();
+
+    private static IEnumerable<ThingDef> GetAllAvailableThingDefs()
     {
-        _allApparels.Clear();
-        foreach (var (_, collection) in _thingContainers) collection.Clear();
-        foreach (var (_, collection) in _statProcessors) collection.Clear();
+        if (BestApparel.Config.UseAllThings)
+        {
+            foreach (var thingDef in DefDatabase<ThingDef>.AllDefs)
+            {
+                yield return thingDef;
+            }
+        }
+        else
+        {
+            foreach (var workTable in Find.CurrentMap.listerBuildings.allBuildingsColonist.OfType<Building_WorkTable>())
+            {
+                foreach (var recipeDef in workTable.def.AllRecipes)
+                {
+                    var thingDef = recipeDef.ProducedThingDef;
+                    if (thingDef is null) continue;
+                    if (!recipeDef.AvailableNow) continue; // todo much calculations, check it all
+                    yield return thingDef;
+                }
+            }
+        }
+    }
+
+    public void OnMainWindowPreOpen()
+    {
+        // Clear pre-build
+        foreach (var (_, collection) in _containers) collection.Clear();
+        foreach (var (_, collection) in _stats) collection.Clear();
         foreach (var (_, collection) in _stuffs) collection.Clear();
         foreach (var (_, collection) in _categories) collection.Clear();
+        foreach (var (_, collection) in _weaponClasses) collection.Clear();
         _apparelLayers.Clear();
         _apparelBodyParts.Clear();
-        _rangedClasses.Clear();
+
+        var tmpStats = MakeTabIdDictionary(() => new HashSet<AStatProcessor>());
+        var factory = new ContainerFactory();
+
+        // Collect data
+        foreach (var container in GetAllAvailableThingDefs().Select(it => factory.Produce(it)).Where(it => it != null))
+        {
+            _containers[container.GetTabId()].Add(container);
+
+            if (container.Def.thingCategories != null) _categories[container.GetTabId()].AddRange(container.Def.thingCategories);
+            if (container.Def.stuffProps?.categories != null) _stuffs[container.GetTabId()].AddRange(container.Def.stuffProps?.categories);
+            if (container.Def.apparel?.layers != null) _apparelLayers.AddRange(container.Def.apparel.layers);
+            if (container.Def.apparel?.bodyPartGroups != null) _apparelBodyParts.AddRange(container.Def.apparel.bodyPartGroups);
+            if (container.Def.weaponClasses != null) _weaponClasses[container.GetTabId()].AddRange(container.Def.weaponClasses);
+
+            foreach (var stat in container.CollectStats())
+            {
+                if (tmpStats[container.GetTabId()].Any(s => s.GetDefName() == stat.GetDefName())) continue;
+                tmpStats[container.GetTabId()].Add(stat);
+            }
+        }
+
+        foreach (var (tabId, stats) in tmpStats) _stats[tabId].AddRange(stats);
+
+        Rebuild();
     }
 
     public void Rebuild()
     {
-        Clear();
+        foreach (var (_, collection) in _filteredContainers) collection.Clear();
 
-        var factory = new ContainerFactory();
-
-        var totalThingDefs = BestApparel.Config.UseAllThings
-            ? DefDatabase<ThingDef>.AllDefs
-            : Find.CurrentMap.listerBuildings.allBuildingsColonist.OfType<Building_WorkTable>()
-                .SelectMany(it => it.def.AllRecipes)
-                .Where(it => it.AvailableNow && it.ProducedThingDef != null)
-                .Select(it => it.ProducedThingDef);
-        var totalThingContaners = totalThingDefs //
-            .GroupBy(it => it.defName)
-            .Select(it => it.First())
-            .Select(factory.Produce)
-            .Where(it => it != null)
-            .ToList();
-
-        // Collect defs for filters 
-        totalThingContaners.ForEach(FillDefs);
-
-        foreach (var (_, list) in _categories) FinalizeDefs(list);
-        foreach (var (_, list) in _stuffs) FinalizeDefs(list);
-        FinalizeDefs(_apparelLayers);
-        FinalizeDefs(_apparelBodyParts);
-        FinalizeDefs(_rangedClasses);
-
-        var groupedContainers = totalThingContaners.GroupBy(it => it.GetTabId()).ToList();
-        var filtered = MakeTabIdDictionary(() => new List<AThingContainer>());
-        foreach (var grouping in groupedContainers)
+        foreach (var (tabId, containers) in _containers)
         {
-            var tabId = grouping.Key;
-
-            if (tabId == TabId.Apparel) _allApparels.AddRange(grouping.Cast<ThingContainerApparel>());
-
-            _statProcessors[tabId]
-                .AddRange(
-                    grouping //
-                        .SelectMany(it => it.CollectStats())
-                        .OrderByDescending(it => it.GetDefLabel())
-                        .GroupBy(it => it.GetDefName())
-                        .Select(it => it.First())
-                );
-
-            // Filter actual rows
-            filtered[tabId].AddRange(grouping.Where(it => it.CheckForFilters()));
-        }
-
-
-        foreach (var (tabId, list) in filtered)
-        {
-            // Collect minmax 
+            var filtered = containers.Where(container => container.CheckForFilters()).ToList();
             var columns = BestApparel.Config.GetColumnsFor(tabId);
-            var columnsProcessors = _statProcessors[tabId].Where(proc => columns.Contains(proc.GetDefName()));
 
-            var columnMinMax = columnsProcessors //
-                // Processor to list of actual filtered containers' values
-                .ToDictionary( //
-                    it => it,
-                    it => list.Select(c => it.GetStatValue(c.DefaultThing))
-                )
-                // Processor to (min, max) values
-                .ToDictionary( //
-                    it => it.Key,
-                    it => (it.Value.Min(), it.Value.Max())
-                );
-
-            foreach (var container in list)
+            var statMinmax = new Dictionary<AStatProcessor, ( /*min*/float, /*max*/float)>();
+            foreach (var stat in _stats[tabId].Where(s => columns.Contains(s.GetDefName())))
             {
-                container.CacheCells(columnMinMax);
+                var minmax = statMinmax.ContainsKey(stat) ? statMinmax[stat] : (0, 0);
+
+                foreach (var statValue in filtered.Select(container => stat.GetStatValue(container.DefaultThing)))
+                {
+                    if (statValue > minmax.Item2) minmax.Item2 = statValue;
+                    if (statValue < minmax.Item1) minmax.Item1 = statValue;
+                }
+
+                statMinmax[stat] = minmax;
             }
 
-            _thingContainers[tabId].AddRange(list.OrderByDescending(l => l.CachedSortingWeight).ThenBy(l => l.Def.label));
+            filtered.ForEach(container => container.CacheCells(statMinmax));
+
+            _filteredContainers[tabId]
+                .AddRange(
+                    filtered //
+                        .OrderByDescending(l => l.CachedSortingWeight)
+                        .ThenBy(container => container.Def.label)
+                );
         }
 
         ReloadObservers.ForEach(it => it.OnDataProcessorReloaded());
 
         Config.ModInstance.WriteSettings();
-    }
-
-    private void FillDefs(AThingContainer container)
-    {
-        if (container.Def.thingCategories != null) _categories[container.GetTabId()].AddRange(container.Def.thingCategories);
-        if (container.Def.stuffProps?.categories != null) _stuffs[container.GetTabId()].AddRange(container.Def.stuffProps.categories);
-
-        switch (container.GetTabId())
-        {
-            case TabId.Apparel:
-                if (container.Def.apparel.layers != null) _apparelLayers.AddRange(container.Def.apparel.layers);
-                if (container.Def.apparel.bodyPartGroups != null) _apparelBodyParts.AddRange(container.Def.apparel.bodyPartGroups);
-                break;
-            case TabId.Ranged:
-                if (container.Def.weaponClasses != null) _rangedClasses.AddRange(container.Def.weaponClasses);
-                break;
-            case TabId.Melee:
-
-                break;
-        }
     }
 
     public IEnumerable<(IEnumerable<Def>, TranslationCache.E, FeatureEnableDisable)> GetFilterData(TabId tabId)
@@ -151,30 +139,21 @@ public class DataProcessor
                 yield return (_stuffs[TabId.Apparel], TranslationCache.FilterStuff, BestApparel.Config.Apparel.Stuff);
                 break;
             case TabId.Ranged:
-                yield return (_rangedClasses, TranslationCache.FilterCategory, BestApparel.Config.Ranged.Category);
+                yield return (_weaponClasses[TabId.Ranged], TranslationCache.FilterCategory, BestApparel.Config.Ranged.Category);
+                yield return (_categories[TabId.Ranged], TranslationCache.FilterWeaponClass, BestApparel.Config.Ranged.WeaponClass);
+                yield return (_stuffs[TabId.Apparel], TranslationCache.FilterStuff, BestApparel.Config.Ranged.Stuff);
+                break;
+            case TabId.Melee:
+                yield return (_weaponClasses[TabId.Ranged], TranslationCache.FilterCategory, BestApparel.Config.Ranged.Category);
                 yield return (_categories[TabId.Ranged], TranslationCache.FilterWeaponClass, BestApparel.Config.Ranged.WeaponClass);
                 yield return (_stuffs[TabId.Apparel], TranslationCache.FilterStuff, BestApparel.Config.Ranged.Stuff);
                 break;
         }
     }
 
-    private static void FinalizeDefs<T>(List<T> collection) where T : Def
-    {
-        var final = collection //
-            .GroupBy(it => it.defName)
-            .Select(it => it.First())
-            .OrderBy(it => it.label)
-            .ToList();
-        collection.Clear();
-        collection.AddRange(final);
-    }
-
-    public IReadOnlyList<AThingContainer> GetTable(TabId tabId) => _thingContainers[tabId];
-
-    public IEnumerable<AStatProcessor> GetStatProcessors(TabId tabId) => _statProcessors[tabId];
-
-    public IReadOnlyList<ThingContainerApparel> GetAllApparels() => _allApparels;
-    public IReadOnlyList<BodyPartGroupDef> GetApparelBodyParts() => _apparelBodyParts;
-
-    public ThingContainerApparel GetApparelOfDef(Apparel apparel) => _allApparels.FirstOrDefault(a => a.Def.defName == apparel.def.defName);
+    public IReadOnlyList<AThingContainer> GetTable(TabId tabId) => _filteredContainers[tabId];
+    public IEnumerable<AStatProcessor> GetStatProcessors(TabId tabId) => _stats[tabId];
+    public IEnumerable<ThingContainerApparel> GetAllApparels() => _containers[TabId.Apparel].Cast<ThingContainerApparel>();
+    public IEnumerable<BodyPartGroupDef> GetApparelBodyParts() => _apparelBodyParts;
+    public ThingContainerApparel GetApparelOfDef(Apparel apparel) => GetAllApparels().FirstOrDefault(a => a.Def.defName == apparel.def.defName);
 }

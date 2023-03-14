@@ -12,4 +12,6 @@ public class BaseStatProcessor : AStatProcessor
     public override float GetStatValue(Thing thing) => thing.GetStatValue(Def);
 
     public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) => GetStatValueFormatted(Def, GetStatValue(thing), forceUnformatted);
+    
+    public override int GetHashCode() => Def.GetHashCode();
 }

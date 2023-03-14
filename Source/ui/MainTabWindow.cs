@@ -32,7 +32,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
     public override void PreOpen()
     {
         base.PreOpen();
-        DataProcessor.Rebuild();
+        DataProcessor.OnMainWindowPreOpen();
     }
 
     public override void PreClose()
