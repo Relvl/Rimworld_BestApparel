@@ -88,7 +88,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
             state =>
             {
                 BestApparel.Config.UseAllThings = state;
-                DataProcessor.Rebuild();
+                DataProcessor.OnMainWindowPreOpen();
             }
         );
         TooltipHandler.TipRegion(collectTypeRect, (BestApparel.Config.UseAllThings ? TranslationCache.ControlUseAllThings : TranslationCache.ControlUseCraftableThings).Tooltip);
