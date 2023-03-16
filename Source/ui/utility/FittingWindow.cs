@@ -145,7 +145,7 @@ public class FittingWindow : Window, IReloadObserver
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
 
-            var apparels = _worn.Where(it => it.Def.apparel.bodyPartGroups.Contains(bodyPart)).ToArray();
+            var apparels = _worn.Where(it => it.Def.apparel?.bodyPartGroups?.Contains(bodyPart) ?? false).ToArray();
 
             cellRect.height = BpCellHeight + (apparels.Length > 0 ? apparels.Length * 26 : 18);
 
