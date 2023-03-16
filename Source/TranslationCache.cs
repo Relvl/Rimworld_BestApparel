@@ -41,6 +41,8 @@ public static class TranslationCache
     public static readonly E FittingBtnAddToSlot = new("BestApparel.Button.Fitting.AddToSlot");
 
     public static readonly E StatMeleeAvgDamage = new("BestApparel.Stat.MeleeAvgDamage");
+    public static readonly E StatMeleePenetrationSharp = new("BestApparel.Stat.CE_DescSharpPenetration");
+    public static readonly E StatMeleePenetrationBlunt = new("BestApparel.Stat.CE_DescBluntPenetration");
 
     private static TaggedString Get(string key, params object[] args)
     {

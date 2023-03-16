@@ -68,5 +68,7 @@
     <BestApparel.Button.Fitting.AddToSlot.Tooltip>Добавить вещь в левую панель во все покрываемые слоты</BestApparel.Button.Fitting.AddToSlot.Tooltip>
 
     <BestApparel.Stat.MeleeAvgDamage>Усредненный урон</BestApparel.Stat.MeleeAvgDamage>
+    <BestApparel.Stat.CE_DescSharpPenetration>Бронепробитие (мм БКГ)</BestApparel.Stat.CE_DescSharpPenetration>
+    <BestApparel.Stat.CE_DescBluntPenetration>Бронепробитие (МПа)</BestApparel.Stat.CE_DescBluntPenetration>
 
 </LanguageData>

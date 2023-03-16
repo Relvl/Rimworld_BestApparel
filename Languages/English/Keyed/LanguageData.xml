@@ -68,5 +68,7 @@
     <BestApparel.Button.Fitting.AddToSlot.Tooltip>Add item to left panel</BestApparel.Button.Fitting.AddToSlot.Tooltip>
 
     <BestApparel.Stat.MeleeAvgDamage>Average damage</BestApparel.Stat.MeleeAvgDamage>
+    <BestApparel.Stat.CE_DescSharpPenetration>Penetration: Sharp</BestApparel.Stat.CE_DescSharpPenetration>
+    <BestApparel.Stat.CE_DescBluntPenetration>Penetration: Blunt</BestApparel.Stat.CE_DescBluntPenetration>
 
 </LanguageData>
