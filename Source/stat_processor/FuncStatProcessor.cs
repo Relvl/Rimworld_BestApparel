@@ -7,8 +7,6 @@ namespace BestApparel.stat_processor;
 
 public class FuncStatProcessor : AStatProcessor
 {
-    private static readonly StatDef DefaultStat = new();
-
     private readonly Func<Thing, float> _func;
     private readonly string _name;
 

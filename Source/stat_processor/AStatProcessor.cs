@@ -7,6 +7,7 @@ namespace BestApparel.stat_processor;
 
 public abstract class AStatProcessor
 {
+    protected static readonly StatDef DefaultStat = new();
     protected readonly StatDef Def;
 
     protected AStatProcessor(StatDef def)
@@ -28,5 +29,5 @@ public abstract class AStatProcessor
 
     public virtual bool IsValueDefault(Thing thing) => Math.Abs(GetStatValue(thing) - GetStatDef().defaultBaseValue) < Config.DefaultTolerance;
 
-    public override int GetHashCode() => Def.GetHashCode();
+    public override int GetHashCode() => GetDefName().GetHashCode();
 }

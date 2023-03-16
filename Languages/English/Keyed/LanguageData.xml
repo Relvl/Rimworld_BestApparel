@@ -67,4 +67,6 @@
     <BestApparel.Button.Fitting.AddToSlot>+</BestApparel.Button.Fitting.AddToSlot>
     <BestApparel.Button.Fitting.AddToSlot.Tooltip>Add item to left panel</BestApparel.Button.Fitting.AddToSlot.Tooltip>
 
+    <BestApparel.Stat.MeleeAvgDamage>Average damage</BestApparel.Stat.MeleeAvgDamage>
+
 </LanguageData>

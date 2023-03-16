@@ -40,6 +40,8 @@ public static class TranslationCache
     public static readonly E FittingBtnFromPawn = new("BestApparel.Fitting.Button.FromPawn");
     public static readonly E FittingBtnAddToSlot = new("BestApparel.Button.Fitting.AddToSlot");
 
+    public static readonly E StatMeleeAvgDamage = new("BestApparel.Stat.MeleeAvgDamage");
+
     private static TaggedString Get(string key, params object[] args)
     {
 #pragma warning disable CS0618

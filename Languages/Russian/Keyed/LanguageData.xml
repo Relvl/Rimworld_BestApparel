@@ -67,4 +67,6 @@
     <BestApparel.Button.Fitting.AddToSlot>+</BestApparel.Button.Fitting.AddToSlot>
     <BestApparel.Button.Fitting.AddToSlot.Tooltip>Добавить вещь в левую панель во все покрываемые слоты</BestApparel.Button.Fitting.AddToSlot.Tooltip>
 
+    <BestApparel.Stat.MeleeAvgDamage>Усредненный урон</BestApparel.Stat.MeleeAvgDamage>
+
 </LanguageData>
