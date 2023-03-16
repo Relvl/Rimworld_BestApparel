@@ -107,7 +107,7 @@ public class FittingWindow : Window, IReloadObserver
                                 pawn,
                                 () =>
                                 {
-                                    _worn.ReplaceWith(pawn.apparel.WornApparel.Select(_parent.DataProcessor.GetApparelOfDef));
+                                    _worn.ReplaceWith(pawn.apparel.WornApparel.Select(_parent.DataProcessor.GetApparelOfDef).Where(it => it != null));
                                     DoSomethingChanged();
                                 }
                             )
