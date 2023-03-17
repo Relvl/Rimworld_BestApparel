@@ -58,6 +58,12 @@
     </BestApparel.FilterType.WeaponClass>
 
     <BestApparel.WindowTitle.Fitting>Fitting room</BestApparel.WindowTitle.Fitting>
+    <BestApparel.WindowTitle.Fitting.Tooltip>This window allows you to fit things on a pawn.
+        The left panel shows all the parts of the pawn's body, each part can be covered with several layers.
+        The right panel shows all the things that you can create, or all the things at all. If a part of the body and a layer are occupied, the item will not be displayed.
+        If you select a body part on the left, then only those things that can be placed on the selected body part will be displayed on the right. Yellow - free slot, gray - occupied slot.
+        Sorting in the right panel affected by columns and sorting rules selected in the main window.
+    </BestApparel.WindowTitle.Fitting.Tooltip>
     <BestApparel.Label.SelectApparel>Select something from the right -></BestApparel.Label.SelectApparel>
     <BestApparel.Fitting.Button.Remove>Remove thing from all slots</BestApparel.Fitting.Button.Remove>
     <BestApparel.Fitting.Button.RemoveAll>clear slot</BestApparel.Fitting.Button.RemoveAll>
@@ -66,6 +72,9 @@
     <BestApparel.Fitting.Button.FromPawn>From pawn...</BestApparel.Fitting.Button.FromPawn>
     <BestApparel.Button.Fitting.AddToSlot>+</BestApparel.Button.Fitting.AddToSlot>
     <BestApparel.Button.Fitting.AddToSlot.Tooltip>Add item to left panel</BestApparel.Button.Fitting.AddToSlot.Tooltip>
+    <BestApparel.Tip.Fitting.SlotOccupied.Tooltip>Adding this item will remove something else</BestApparel.Tip.Fitting.SlotOccupied.Tooltip>
+    <BestApparel.Fitting.Label.Sown>Shown: {0}</BestApparel.Fitting.Label.Sown>
+    <BestApparel.Fitting.Label.Sown.Part>(body part: {0})</BestApparel.Fitting.Label.Sown.Part>
 
     <BestApparel.Stat.MeleeAvgDamage>Average damage</BestApparel.Stat.MeleeAvgDamage>
     <BestApparel.Stat.CE_DescSharpPenetration>Penetration: Sharp</BestApparel.Stat.CE_DescSharpPenetration>

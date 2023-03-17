@@ -58,6 +58,12 @@
     </BestApparel.FilterType.WeaponClass>
 
     <BestApparel.WindowTitle.Fitting>Примерочная</BestApparel.WindowTitle.Fitting>
+    <BestApparel.WindowTitle.Fitting.Tooltip>Это окно позволяет примерить вещи на пешку.
+        В левой панели указаны все части тела пешки, каждая часть может быть покрыта несколькими слоями.
+        В правой панели указаны все вещи, которые вы можете создать, либо вообще все вещи. Если часть тела и слой заняты - вещь не будет отображена.
+        Если слева выбрать часть тела - то справа будут отображены только те вещи, которые можно поместить на выбранную часть тела. Желтые - свободный слот, серые - занятый слот.
+        Сортировка в правой панели учитывает выбранные в главном окне колонки и правила сортировки.
+    </BestApparel.WindowTitle.Fitting.Tooltip>
     <BestApparel.Label.SelectApparel>Выберите что-нибудь справа -></BestApparel.Label.SelectApparel>
     <BestApparel.Fitting.Button.Remove>Удалить вещь из всех затронутых слотов</BestApparel.Fitting.Button.Remove>
     <BestApparel.Fitting.Button.RemoveAll>очистить</BestApparel.Fitting.Button.RemoveAll>
@@ -66,6 +72,9 @@
     <BestApparel.Fitting.Button.FromPawn>От пешки...</BestApparel.Fitting.Button.FromPawn>
     <BestApparel.Button.Fitting.AddToSlot>+</BestApparel.Button.Fitting.AddToSlot>
     <BestApparel.Button.Fitting.AddToSlot.Tooltip>Добавить вещь в левую панель во все покрываемые слоты</BestApparel.Button.Fitting.AddToSlot.Tooltip>
+    <BestApparel.Tip.Fitting.SlotOccupied.Tooltip>Добавление этого предмета удалит что-то ещё</BestApparel.Tip.Fitting.SlotOccupied.Tooltip>
+    <BestApparel.Fitting.Label.Sown>Отображено: {0}</BestApparel.Fitting.Label.Sown>
+    <BestApparel.Fitting.Label.Sown.Part>(часть тела: {0})</BestApparel.Fitting.Label.Sown.Part>
 
     <BestApparel.Stat.MeleeAvgDamage>Усредненный урон</BestApparel.Stat.MeleeAvgDamage>
     <BestApparel.Stat.CE_DescSharpPenetration>Бронепробитие (мм БКГ)</BestApparel.Stat.CE_DescSharpPenetration>

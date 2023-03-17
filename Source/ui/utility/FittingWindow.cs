@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.data;
@@ -5,6 +6,7 @@ using BestApparel.data.impl;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace BestApparel.ui.utility;
 
@@ -15,12 +17,13 @@ public class FittingWindow : Window, IReloadObserver
     private readonly MainTabWindow _parent;
     private Vector2 _scrollLeft = Vector2.zero;
     private Vector2 _scrollRight = Vector2.zero;
-    private BodyPartGroupDef _selectedBodyPart;
 
     private readonly List<ThingContainerApparel> _worn = new();
+    private readonly List<ThingContainerApparel> _apparelsFiltered = new();
+    private readonly List<string> _pawnInitialWorn = new();
     private float _lastFrameListHeight;
     private string _search = "";
-    private readonly List<ThingContainerApparel> _apparelsFiltered = new();
+    private BodyPartGroupDef _selectedBodyPart;
 
     private const int CellPadding = 3;
     private const int BpCellHeight = 20;
@@ -78,19 +81,30 @@ public class FittingWindow : Window, IReloadObserver
         Text.Font = GameFont.Medium;
         GUI.color = Color.green;
         Widgets.Label(inRect, TranslationCache.FittingWindowTitle.Text);
+
+        // Title info icon
+        GUI.color = BestApparel.ColorWhiteA50;
+        var infoRect = new Rect(TranslationCache.FittingWindowTitle.Size.x + 8, inRect.y + 8, 16, 16);
+        MouseoverSounds.DoRegion(infoRect);
+        Widgets.ButtonImage(infoRect, TexButton.Info, GUI.color);
+        GUI.DrawTexture(infoRect, TexButton.Info);
+        TooltipHandler.TipRegion(infoRect, TranslationCache.FittingWindowTitle.Tooltip);
+        UIHighlighter.HighlightOpportunity(infoRect, "InfoCard");
+
         inRect.yMin += 46;
 
         // =================================================
-        var panesHeight = inRect.height - 70;
+        var panesHeight = inRect.height - IconSize - CellPadding;
 
-        var leftPaneRect = new Rect(0, inRect.yMin, 300, panesHeight);
+        var leftPaneRect = new Rect(0, inRect.yMin, Math.Max(300, inRect.width / 2 - 30), panesHeight);
 
         RenderLeftPane(leftPaneRect);
 
-        var btnRect = new Rect(0, inRect.yMax - 36, 100, IconSize);
+        var btnRect = new Rect(0, inRect.yMax - IconSize, 100, IconSize);
         if (Widgets.ButtonText(btnRect, TranslationCache.FittingBtnClear.Text))
         {
             _worn.Clear();
+            _pawnInitialWorn.Clear();
             DoSomethingChanged();
         }
 
@@ -107,7 +121,12 @@ public class FittingWindow : Window, IReloadObserver
                                 pawn,
                                 () =>
                                 {
-                                    _worn.ReplaceWith(pawn.apparel.WornApparel.Select(_parent.DataProcessor.GetApparelOfDef).Where(it => it != null));
+                                    var newWorn = pawn.apparel.WornApparel //
+                                        .Select(_parent.DataProcessor.GetApparelOfDef)
+                                        .Where(it => it != null)
+                                        .ToList();
+                                    _worn.ReplaceWith(newWorn);
+                                    _pawnInitialWorn.ReplaceWith(newWorn.Select(it => it.Def.defName));
                                     DoSomethingChanged();
                                 }
                             )
@@ -214,7 +233,7 @@ public class FittingWindow : Window, IReloadObserver
 
             if (Widgets.ButtonInvisible(cellRect))
             {
-                _selectedBodyPart = _selectedBodyPart == null ? bodyPart : null;
+                _selectedBodyPart = _selectedBodyPart == null || _selectedBodyPart != bodyPart ? bodyPart : null;
                 DoSomethingChanged();
             }
 
@@ -231,18 +250,15 @@ public class FittingWindow : Window, IReloadObserver
 
     private void RenderRightPane(Rect paneRect)
     {
-        var searchRect = new Rect(paneRect.x, paneRect.y, IconSize, IconSize);
-        GUI.DrawTexture(searchRect, TexButton.Search);
-        GUI.SetNextControlName("UI.BestApparel.Fitting.Search");
-        searchRect.x += IconSize + CellPadding;
-        searchRect.width = paneRect.width - searchRect.width * 2 - CellPadding * 2;
-        var newSearch = Widgets.TextField(searchRect, _search, 15);
-        var changed = _search != newSearch;
-        searchRect.xMin += searchRect.width + CellPadding;
-        searchRect.width = IconSize;
-        if (Widgets.ButtonImage(searchRect.ContractedBy(4), TexButton.CloseXSmall)) newSearch = "";
-        _search = newSearch;
-        DoSomethingChanged(changed);
+        paneRect.height -= IconSize + CellPadding;
+
+        Text.Font = GameFont.Tiny;
+        GUI.color = BestApparel.ColorWhiteA50;
+        var shownType = BestApparel.Config.UseAllThings ? TranslationCache.ControlUseAllThings.Text : TranslationCache.ControlUseCraftableThings.Text;
+        if (_selectedBodyPart != null) shownType += " " + "BestApparel.Fitting.Label.Sown.Part".Translate(_selectedBodyPart.label);
+        Widgets.Label(paneRect, "BestApparel.Fitting.Label.Sown".Translate(shownType));
+        Text.Font = GameFont.Small;
+        GUI.color = Color.white;
 
         paneRect.yMin += IconSize + CellPadding;
 
@@ -254,8 +270,6 @@ public class FittingWindow : Window, IReloadObserver
         var scrolledHeight = (APCellHeight + CellPadding) * apparelsFiltered.Count + CellPadding * 2;
         var cellRightOffset = scrolledHeight > paneRect.height ? ScrollSize : 0;
         var scrollInnerRect = new Rect(0, 0, paneRect.width - CellPadding * 2 - cellRightOffset, scrolledHeight);
-
-        Widgets.Label(new Rect(300, paneRect.height + 200, 100, 20), $"scrolly: {_scrollRight.y}");
 
         Widgets.BeginScrollView(paneRect, ref _scrollRight, scrollInnerRect);
         var cellRect = new Rect(CellPadding, CellPadding, scrollInnerRect.width, APCellHeight);
@@ -281,6 +295,20 @@ public class FittingWindow : Window, IReloadObserver
 
                 TooltipHandler.TipRegion(btnRect, TranslationCache.FittingBtnAddToSlot.Tooltip);
 
+                if (_selectedBodyPart != null)
+                {
+                    var somethingBlocking = _worn.Any(w => !ApparelUtility.CanWearTogether(w.Def, apparel.Def, BodyDefOf.Human));
+                    if (somethingBlocking)
+                    {
+                        GUI.color = Color.grey;
+                        TooltipHandler.TipRegion(cellRect, TranslationCache.FittingTipSlotOccupied.Tooltip);
+                    }
+                    else
+                    {
+                        GUI.color = Color.yellow;
+                    }
+                }
+
                 // Body part name
                 Text.Font = GameFont.Tiny;
                 Text.Anchor = TextAnchor.MiddleLeft;
@@ -301,6 +329,20 @@ public class FittingWindow : Window, IReloadObserver
         Text.Font = GameFont.Small;
         Text.Anchor = TextAnchor.UpperLeft;
         Widgets.EndScrollView();
+
+        // search box
+        var searchRect = new Rect(paneRect.x, paneRect.yMax + CellPadding, IconSize, IconSize);
+        GUI.DrawTexture(searchRect, TexButton.Search);
+        GUI.SetNextControlName("UI.BestApparel.Fitting.Search");
+        searchRect.x += IconSize + CellPadding;
+        searchRect.width = paneRect.width - searchRect.width * 2 - CellPadding * 2;
+        var newSearch = Widgets.TextField(searchRect, _search, 15);
+        var changed = _search != newSearch;
+        searchRect.xMin += searchRect.width + CellPadding;
+        searchRect.width = IconSize;
+        if (Widgets.ButtonImage(searchRect.ContractedBy(4), TexButton.CloseXSmall)) newSearch = "";
+        _search = newSearch;
+        DoSomethingChanged(changed);
     }
 
     private void OnRemoveAllClick(BodyPartGroupDef bodyPartGroupDef)
@@ -309,10 +351,10 @@ public class FittingWindow : Window, IReloadObserver
         DoSomethingChanged();
     }
 
-    private void AddWorn(ThingContainerApparel apparel)
+    private void AddWorn(ThingContainerApparel newApparel)
     {
-        _worn.RemoveIf(containerApparel => !ApparelUtility.CanWearTogether(containerApparel.Def, apparel.Def, BodyDefOf.Human));
-        _worn.Add(apparel);
+        _worn.RemoveIf(it => !ApparelUtility.CanWearTogether(it.Def, newApparel.Def, BodyDefOf.Human));
+        _worn.Add(newApparel);
         _selectedBodyPart = null;
         DoSomethingChanged();
     }
