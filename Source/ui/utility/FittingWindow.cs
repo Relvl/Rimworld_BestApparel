@@ -186,7 +186,6 @@ public class FittingWindow : Window, IReloadObserver
                             }
                         );
                         sb.AppendLine("\n");
-                        sb.AppendLine(TranslationCache.FittingLetterAdd.Text);
                     }
 
                     tipAdded = false;
@@ -195,7 +194,7 @@ public class FittingWindow : Window, IReloadObserver
                         if (!tipAdded)
                         {
                             tipAdded = true;
-                            sb.AppendLine(TranslationCache.FittingLetterRemove.Text);
+                            sb.AppendLine(TranslationCache.FittingLetterAdd.Text);
                         }
 
                         sb.AppendLine("+ " + added.def.label.Colorize(Color.green));
