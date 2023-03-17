@@ -166,9 +166,9 @@ public class FittingWindow : Window, IReloadObserver
                     if (_pawnInitialName != "") title += $" ({_pawnInitialName})";
                     var sb = new StringBuilder();
 
+                    var tipAdded = false;
                     if (_pawnInitialWorn.Count > 0)
                     {
-                        var tipAdded = false;
                         _pawnInitialWorn.ForEach(
                             w =>
                             {
@@ -189,7 +189,17 @@ public class FittingWindow : Window, IReloadObserver
                         sb.AppendLine(TranslationCache.FittingLetterAdd.Text);
                     }
 
-                    _worn.ForEach(w => sb.AppendLine("+ " + w.def.label.Colorize(Color.green)));
+                    tipAdded = false;
+                    foreach (var added in _worn.Where(w => !_pawnInitialWorn.Contains(w.def.defName)))
+                    {
+                        if (!tipAdded)
+                        {
+                            tipAdded = true;
+                            sb.AppendLine(TranslationCache.FittingLetterRemove.Text);
+                        }
+
+                        sb.AppendLine("+ " + added.def.label.Colorize(Color.green));
+                    }
 
                     Find.LetterStack.ReceiveLetter(title, sb.ToString().TrimEndNewlines(), LetterDefOf.PositiveEvent);
                 }
