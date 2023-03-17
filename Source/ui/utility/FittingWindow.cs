@@ -44,7 +44,17 @@ public class FittingWindow : Window, IReloadObserver
     public override void PreOpen()
     {
         base.PreOpen();
-        // load worn from config
+        _worn.ReplaceWith(
+            BestApparel.Config.FittingWorn.Select(
+                    w =>
+                    {
+                        var thingDef = DefDatabase<ThingDef>.GetNamed(w);
+                        return thingDef.MadeFromStuff ? ThingMaker.MakeThing(thingDef, GenStuff.DefaultStuffFor(thingDef)) : ThingMaker.MakeThing(thingDef);
+                    }
+                )
+                .Cast<Apparel>()
+                .Where(it => it != null)
+        );
         DoSomethingChanged();
         _parent.DataProcessor.ReloadObservers.Add(this);
     }
