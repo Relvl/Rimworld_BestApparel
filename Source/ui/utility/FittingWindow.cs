@@ -52,6 +52,7 @@ public class FittingWindow : Window, IReloadObserver
     public override void PreClose()
     {
         _parent.DataProcessor.ReloadObservers.Remove(this);
+        _worn.Clear();
         Config.ModInstance.WriteSettings();
     }
 
@@ -131,10 +132,16 @@ public class FittingWindow : Window, IReloadObserver
                                     pawn,
                                     () =>
                                     {
+                                        // var newWorn = pawn.apparel.WornApparel //
+                                        //     .Select(_parent.DataProcessor.GetApparelOfDef)
+                                        //     .Where(it => it != null)
+                                        //     .ToList();
+
                                         var newWorn = pawn.apparel.WornApparel //
-                                            .Select(_parent.DataProcessor.GetApparelOfDef)
-                                            .Where(it => it != null)
+                                            .Where(a => a != null)
+                                            .Select(a => new ThingContainerApparel(a.def))
                                             .ToList();
+
                                         _worn.ReplaceWith(newWorn);
                                         _pawnInitialWorn.ReplaceWith(newWorn.Select(it => it.Def.defName));
                                         _pawnInitialName = pawn.NameFullColored;
@@ -203,8 +210,6 @@ public class FittingWindow : Window, IReloadObserver
 
     private void RenderLeftPane(Rect paneRect)
     {
-        var bodyParts = _parent.DataProcessor.GetApparelBodyParts().ToList();
-
         Widgets.DrawMenuSection(paneRect);
         paneRect = paneRect.ContractedBy(1);
 
@@ -213,14 +218,14 @@ public class FittingWindow : Window, IReloadObserver
 
         Widgets.BeginScrollView(paneRect, ref _scrollLeft, scrollInnerRect);
         var cellRect = new Rect(CellPadding, CellPadding, scrollInnerRect.width, BpCellHeight);
-        for (var bpIdx = 0; bpIdx < bodyParts.Count; bpIdx++)
+        foreach (var bodyPart in _parent.DataProcessor.ApparelBodyParts)
         {
-            var bodyPart = bodyParts[bpIdx];
             GUI.color = Color.white;
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
 
-            var apparels = _worn.Where(it => it.Def.apparel?.bodyPartGroups?.Contains(bodyPart) ?? false).ToArray();
+            var part = bodyPart;
+            var apparels = _worn.Where(it => it.Def.apparel?.bodyPartGroups?.Contains(part) ?? false).ToArray();
 
             cellRect.height = BpCellHeight + (apparels.Length > 0 ? apparels.Length * 26 : 18);
 
@@ -230,7 +235,6 @@ public class FittingWindow : Window, IReloadObserver
 
             // body part name
             Text.Font = GameFont.Tiny;
-            // todo! font if have any or not
             var typeLabelRect = new Rect(cellRect.x + CellPadding, cellRect.y + CellPadding, cellRect.width, 16);
             Widgets.Label(typeLabelRect, bodyPart.label);
 

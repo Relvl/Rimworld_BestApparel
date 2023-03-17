@@ -13,6 +13,20 @@ namespace BestApparel.data;
 
 public class DataProcessor
 {
+    public readonly IReadOnlyList<BodyPartGroupDef> ApparelBodyParts = DefDatabase<ThingDef>.AllDefs //
+        .Where(d => d.IsApparel && d.apparel.bodyPartGroups != null)
+        .SelectMany(d => d.apparel.bodyPartGroups)
+        .GroupBy(d => d.defName)
+        .Select(d => d.First())
+        .ToList();
+
+    public readonly IReadOnlyList<ApparelLayerDef> ApparelLayers = DefDatabase<ThingDef>.AllDefs //
+        .Where(d => d.IsApparel && d.apparel.layers != null)
+        .SelectMany(d => d.apparel.layers)
+        .GroupBy(d => d.defName)
+        .Select(d => d.First())
+        .ToList();
+
     private static ReadOnlyDictionary<TabId, T> MakeTabIdDictionary<T>(Func<T> provider) => new(Enum.GetValues(typeof(TabId)).Cast<TabId>().ToDictionary(t => t, _ => provider()));
 
     private readonly ReadOnlyDictionary<TabId, HashSet<AThingContainer>> _containers = MakeTabIdDictionary(() => new HashSet<AThingContainer>());
@@ -23,9 +37,6 @@ public class DataProcessor
     private readonly ReadOnlyDictionary<TabId, HashSet<StuffCategoryDef>> _stuffs = MakeTabIdDictionary(() => new HashSet<StuffCategoryDef>());
     private readonly ReadOnlyDictionary<TabId, HashSet<ThingCategoryDef>> _categories = MakeTabIdDictionary(() => new HashSet<ThingCategoryDef>());
     private readonly ReadOnlyDictionary<TabId, HashSet<WeaponClassDef>> _weaponClasses = MakeTabIdDictionary(() => new HashSet<WeaponClassDef>());
-
-    private readonly HashSet<ApparelLayerDef> _apparelLayers = new();
-    private readonly HashSet<BodyPartGroupDef> _apparelBodyParts = new();
 
     public List<IReloadObserver> ReloadObservers { get; } = new();
 
@@ -61,8 +72,6 @@ public class DataProcessor
         foreach (var (_, collection) in _stuffs) collection.Clear();
         foreach (var (_, collection) in _categories) collection.Clear();
         foreach (var (_, collection) in _weaponClasses) collection.Clear();
-        _apparelLayers.Clear();
-        _apparelBodyParts.Clear();
 
         var tmpStats = MakeTabIdDictionary(() => new HashSet<AStatProcessor>());
         var factory = new ContainerFactory();
@@ -72,10 +81,9 @@ public class DataProcessor
         {
             _containers[container.GetTabId()].Add(container);
 
+            // todo! это на самом деле тоже надо из DefDatabase брать целиком...
             if (container.Def.thingCategories != null) _categories[container.GetTabId()].AddRange(container.Def.thingCategories);
             if (container.Def.stuffProps?.categories != null) _stuffs[container.GetTabId()].AddRange(container.Def.stuffProps?.categories);
-            if (container.Def.apparel?.layers != null) _apparelLayers.AddRange(container.Def.apparel.layers);
-            if (container.Def.apparel?.bodyPartGroups != null) _apparelBodyParts.AddRange(container.Def.apparel.bodyPartGroups);
             if (container.Def.weaponClasses != null) _weaponClasses[container.GetTabId()].AddRange(container.Def.weaponClasses);
 
             foreach (var stat in container.CollectStats())
@@ -133,8 +141,8 @@ public class DataProcessor
         switch (tabId)
         {
             case TabId.Apparel:
-                yield return (_apparelLayers, TranslationCache.FilterLayers, BestApparel.Config.Apparel.Layer);
-                yield return (_apparelBodyParts, TranslationCache.FilterBodyParts, BestApparel.Config.Apparel.BodyPart);
+                yield return (ApparelLayers, TranslationCache.FilterLayers, BestApparel.Config.Apparel.Layer);
+                yield return (ApparelBodyParts, TranslationCache.FilterBodyParts, BestApparel.Config.Apparel.BodyPart);
                 yield return (_categories[TabId.Apparel], TranslationCache.FilterCategory, BestApparel.Config.Apparel.Category);
                 yield return (_stuffs[TabId.Apparel], TranslationCache.FilterStuff, BestApparel.Config.Apparel.Stuff);
                 break;
@@ -154,6 +162,5 @@ public class DataProcessor
     public IReadOnlyList<AThingContainer> GetTable(TabId tabId) => _filteredContainers[tabId];
     public IEnumerable<AStatProcessor> GetStatProcessors(TabId tabId) => _stats[tabId];
     public IEnumerable<ThingContainerApparel> GetAllApparels() => _containers[TabId.Apparel].Cast<ThingContainerApparel>();
-    public IEnumerable<BodyPartGroupDef> GetApparelBodyParts() => _apparelBodyParts;
     public ThingContainerApparel GetApparelOfDef(Apparel apparel) => GetAllApparels().FirstOrDefault(a => a.Def.defName == apparel.def.defName);
 }
