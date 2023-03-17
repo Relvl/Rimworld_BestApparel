@@ -18,8 +18,6 @@ public static class Extensions
         }
     }
 
-    public static Rect TranslateToGUI(this Rect rect) => new(GUIUtility.GUIToScreenPoint(rect.position), rect.size);
-
     public static void ReplaceWith<T>(this List<T> col, IEnumerable<T> newCol)
     {
         col.Clear();

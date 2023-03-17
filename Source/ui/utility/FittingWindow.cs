@@ -19,7 +19,7 @@ public class FittingWindow : Window, IReloadObserver
     private Vector2 _scrollLeft = Vector2.zero;
     private Vector2 _scrollRight = Vector2.zero;
 
-    private readonly List<ThingContainerApparel> _worn = new();
+    private readonly List<Apparel> _worn = new();
     private readonly List<ThingContainerApparel> _apparelsFiltered = new();
     private readonly List<string> _pawnInitialWorn = new();
     private float _lastFrameListHeight;
@@ -44,7 +44,7 @@ public class FittingWindow : Window, IReloadObserver
     public override void PreOpen()
     {
         base.PreOpen();
-        _worn.ReplaceWith(_parent.DataProcessor.GetAllApparels().Where(it => BestApparel.Config.FittingWorn.Contains(it.Def.defName)));
+        // load worn from config
         DoSomethingChanged();
         _parent.DataProcessor.ReloadObservers.Add(this);
     }
@@ -52,7 +52,6 @@ public class FittingWindow : Window, IReloadObserver
     public override void PreClose()
     {
         _parent.DataProcessor.ReloadObservers.Remove(this);
-        _worn.Clear();
         Config.ModInstance.WriteSettings();
     }
 
@@ -68,14 +67,14 @@ public class FittingWindow : Window, IReloadObserver
                     {
                         if (!it.IsSearchAccept(_search)) return false;
                         if (_selectedBodyPart != null) return it.Def.apparel.bodyPartGroups.Contains(_selectedBodyPart);
-                        if (_worn.Any(worn => !ApparelUtility.CanWearTogether(worn.Def, it.Def, BodyDefOf.Human))) return false;
+                        if (_worn.Any(worn => !ApparelUtility.CanWearTogether(worn.def, it.Def, BodyDefOf.Human))) return false;
                         return true;
                     }
                 )
                 .OrderByDescending(it => it.CachedSortingWeight)
                 .ThenBy(it => it.Def.label)
         );
-        BestApparel.Config.FittingWorn.ReplaceWith(_worn.Select(it => it.Def.defName));
+        BestApparel.Config.FittingWorn.ReplaceWith(_worn.Select(it => it.def.defName));
     }
 
     public override void DoWindowContents(Rect inRect)
@@ -132,18 +131,8 @@ public class FittingWindow : Window, IReloadObserver
                                     pawn,
                                     () =>
                                     {
-                                        // var newWorn = pawn.apparel.WornApparel //
-                                        //     .Select(_parent.DataProcessor.GetApparelOfDef)
-                                        //     .Where(it => it != null)
-                                        //     .ToList();
-
-                                        var newWorn = pawn.apparel.WornApparel //
-                                            .Where(a => a != null)
-                                            .Select(a => new ThingContainerApparel(a.def))
-                                            .ToList();
-
-                                        _worn.ReplaceWith(newWorn);
-                                        _pawnInitialWorn.ReplaceWith(newWorn.Select(it => it.Def.defName));
+                                        _worn.ReplaceWith(pawn.apparel.WornApparel);
+                                        _pawnInitialWorn.ReplaceWith(pawn.apparel.WornApparel.Select(it => it.def.defName));
                                         _pawnInitialName = pawn.NameFullColored;
                                         DoSomethingChanged();
                                     }
@@ -156,7 +145,7 @@ public class FittingWindow : Window, IReloadObserver
             }
         );
 
-        if (_worn.Count(w => w != null) > 0)
+        if (_worn.Any())
         {
             AddBottomButton(
                 ref btnRect,
@@ -173,9 +162,9 @@ public class FittingWindow : Window, IReloadObserver
                         _pawnInitialWorn.ForEach(
                             w =>
                             {
-                                if (_worn.Any(apparel => apparel.Def.defName == w)) return;
-                                var apparel = _parent.DataProcessor.GetAllApparels().FirstOrDefault(a => a.Def.defName == w);
-                                if (apparel is null) return;
+                                if (_worn.Any(apparel => apparel.def.defName == w)) return;
+                                var apparelDef = DefDatabase<ThingDef>.GetNamed(w);
+                                if (apparelDef is null) return;
                                 if (!tipAdded)
                                 {
                                     tipAdded = true;
@@ -183,14 +172,14 @@ public class FittingWindow : Window, IReloadObserver
                                     sb.AppendLine(TranslationCache.FittingLetterRemove.Text);
                                 }
 
-                                sb.AppendLine("- " + apparel.Def.label.Colorize(Color.grey));
+                                sb.AppendLine("- " + apparelDef.label.Colorize(Color.grey));
                             }
                         );
                         sb.AppendLine("\n");
                         sb.AppendLine(TranslationCache.FittingLetterAdd.Text);
                     }
 
-                    _worn.ForEach(w => sb.AppendLine("+ " + w.Def.label.Colorize(Color.green)));
+                    _worn.ForEach(w => sb.AppendLine("+ " + w.def.label.Colorize(Color.green)));
 
                     Find.LetterStack.ReceiveLetter(title, sb.ToString().TrimEndNewlines(), LetterDefOf.PositiveEvent);
                 }
@@ -225,7 +214,7 @@ public class FittingWindow : Window, IReloadObserver
             Text.Anchor = TextAnchor.UpperLeft;
 
             var part = bodyPart;
-            var apparels = _worn.Where(it => it.Def.apparel?.bodyPartGroups?.Contains(part) ?? false).ToArray();
+            var apparels = _worn.Where(it => it.def.apparel?.bodyPartGroups?.Contains(part) ?? false).ToArray();
 
             cellRect.height = BpCellHeight + (apparels.Length > 0 ? apparels.Length * 26 : 18);
 
@@ -265,19 +254,22 @@ public class FittingWindow : Window, IReloadObserver
                 {
                     var apparel = apparels[thingIdx];
                     var offset = 16 + thingIdx * 26;
-                    Widgets.ThingIcon(new Rect(cellRect.x + CellPadding, cellRect.y + CellPadding + offset, IconSize, IconSize), apparel.DefaultThing);
+                    Widgets.ThingIcon(new Rect(cellRect.x + CellPadding, cellRect.y + CellPadding + offset, IconSize, IconSize), apparel);
 
                     Text.Anchor = TextAnchor.MiddleLeft;
                     var labelRect = new Rect(cellRect.x + IconSize + CellPadding * 2, cellRect.y + CellPadding + offset, scrollInnerRect.width, IconSize);
-                    Widgets.Label(labelRect, apparel.Def.label);
-                    TooltipHandler.TipRegion(labelRect, apparel.DefaultTooltip);
+                    Widgets.Label(labelRect, apparel.def.label);
+                    TooltipHandler.TipRegion(
+                        labelRect,
+                        $"{apparel.LabelNoParenthesisCap.AsTipTitle()}{GenLabel.LabelExtras(apparel, 1, true, true)}\n\n{apparel.DescriptionDetailed}"
+                    );
 
                     var removeRect = new Rect(cellRect.xMax - CellPadding + cellRightOffset - ScrollSize - IconSize, cellRect.y + CellPadding + offset, IconSize, IconSize);
                     GUI.color = Color.red;
                     if (Mouse.IsOver(removeRect)) GUI.color = Color.yellow;
                     if (Widgets.ButtonText(removeRect, "-"))
                     {
-                        _worn.RemoveIf(containerApparel => containerApparel == apparel);
+                        _worn.RemoveIf(w => w.def.defName == apparel.def.defName);
                         DoSomethingChanged();
                     }
 
@@ -351,13 +343,13 @@ public class FittingWindow : Window, IReloadObserver
 
                 // Button [+]
                 var btnRect = new Rect(cellRect.xMax - CellPadding + cellRightOffset - ScrollSize - IconSize, cellRect.y + CellPadding, IconSize, IconSize);
-                if (Widgets.ButtonText(btnRect, TranslationCache.FittingBtnAddToSlot.Text)) AddWorn(apparel);
+                if (Widgets.ButtonText(btnRect, TranslationCache.FittingBtnAddToSlot.Text)) AddWorn(apparel.DefaultThing as Apparel);
 
                 TooltipHandler.TipRegion(btnRect, TranslationCache.FittingBtnAddToSlot.Tooltip);
 
                 if (_selectedBodyPart != null)
                 {
-                    var somethingBlocking = _worn.Any(w => !ApparelUtility.CanWearTogether(w.Def, apparel.Def, BodyDefOf.Human));
+                    var somethingBlocking = _worn.Any(w => !ApparelUtility.CanWearTogether(w.def, apparel.Def, BodyDefOf.Human));
                     if (somethingBlocking)
                     {
                         GUI.color = Color.grey;
@@ -407,13 +399,13 @@ public class FittingWindow : Window, IReloadObserver
 
     private void OnRemoveAllClick(BodyPartGroupDef bodyPartGroupDef)
     {
-        _worn.RemoveIf(apparel => apparel.Def.apparel.bodyPartGroups.Contains(bodyPartGroupDef));
+        _worn.RemoveIf(apparel => apparel.def.apparel.bodyPartGroups.Contains(bodyPartGroupDef));
         DoSomethingChanged();
     }
 
-    private void AddWorn(ThingContainerApparel newApparel)
+    private void AddWorn(Apparel newApparel)
     {
-        _worn.RemoveIf(it => !ApparelUtility.CanWearTogether(it.Def, newApparel.Def, BodyDefOf.Human));
+        _worn.RemoveIf(it => !ApparelUtility.CanWearTogether(it.def, newApparel.def, BodyDefOf.Human));
         _worn.Add(newApparel);
         _selectedBodyPart = null;
         DoSomethingChanged();

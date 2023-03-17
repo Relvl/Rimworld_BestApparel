@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using BestApparel.data.impl;
 using BestApparel.stat_processor;
@@ -51,6 +50,7 @@ public class DataProcessor
         }
         else
         {
+            var returnedThingDefs = new List<string>();
             foreach (var workTable in Find.CurrentMap.listerBuildings.allBuildingsColonist.OfType<Building_WorkTable>())
             {
                 foreach (var recipeDef in workTable.def.AllRecipes)
@@ -58,6 +58,8 @@ public class DataProcessor
                     var thingDef = recipeDef.ProducedThingDef;
                     if (thingDef is null) continue;
                     if (!recipeDef.AvailableNow) continue; // todo much calculations, check it all
+                    if (returnedThingDefs.Contains(thingDef.defName)) continue;
+                    returnedThingDefs.Add(thingDef.defName);
                     yield return thingDef;
                 }
             }
@@ -162,5 +164,4 @@ public class DataProcessor
     public IReadOnlyList<AThingContainer> GetTable(TabId tabId) => _filteredContainers[tabId];
     public IEnumerable<AStatProcessor> GetStatProcessors(TabId tabId) => _stats[tabId];
     public IEnumerable<ThingContainerApparel> GetAllApparels() => _containers[TabId.Apparel].Cast<ThingContainerApparel>();
-    public ThingContainerApparel GetApparelOfDef(Apparel apparel) => GetAllApparels().FirstOrDefault(a => a.Def.defName == apparel.def.defName);
 }
