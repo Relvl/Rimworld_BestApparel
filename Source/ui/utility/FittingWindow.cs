@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using BestApparel.data;
 using BestApparel.data.impl;
 using RimWorld;
@@ -24,6 +25,7 @@ public class FittingWindow : Window, IReloadObserver
     private float _lastFrameListHeight;
     private string _search = "";
     private BodyPartGroupDef _selectedBodyPart;
+    private string _pawnInitialName = "";
 
     private const int CellPadding = 3;
     private const int BpCellHeight = 20;
@@ -97,52 +99,106 @@ public class FittingWindow : Window, IReloadObserver
         var panesHeight = inRect.height - IconSize - CellPadding;
 
         var leftPaneRect = new Rect(0, inRect.yMin, Math.Max(300, inRect.width / 2 - 30), panesHeight);
-
         RenderLeftPane(leftPaneRect);
-
-        var btnRect = new Rect(0, inRect.yMax - IconSize, 100, IconSize);
-        if (Widgets.ButtonText(btnRect, TranslationCache.FittingBtnClear.Text))
-        {
-            _worn.Clear();
-            _pawnInitialWorn.Clear();
-            DoSomethingChanged();
-        }
-
-        btnRect.x += btnRect.width + CellPadding;
-
-        if (Widgets.ButtonText(btnRect, TranslationCache.FittingBtnFromPawn.Text))
-        {
-            Find.WindowStack.Add(
-                new FloatMenu(
-                    Find.CurrentMap.mapPawns.AllPawnsSpawned //
-                        .Where(it => it.IsColonist)
-                        .Select(
-                            pawn => new ColonistFloatMenuOption( //
-                                pawn,
-                                () =>
-                                {
-                                    var newWorn = pawn.apparel.WornApparel //
-                                        .Select(_parent.DataProcessor.GetApparelOfDef)
-                                        .Where(it => it != null)
-                                        .ToList();
-                                    _worn.ReplaceWith(newWorn);
-                                    _pawnInitialWorn.ReplaceWith(newWorn.Select(it => it.Def.defName));
-                                    DoSomethingChanged();
-                                }
-                            )
-                        )
-                        .Cast<FloatMenuOption>()
-                        .ToList()
-                )
-            );
-        }
-
-        TooltipHandler.TipRegion(btnRect, TranslationCache.FittingBtnFromPawn.Tooltip);
 
         var rightPaneRect = new Rect(leftPaneRect.xMax + CellPadding, inRect.yMin, inRect.width - leftPaneRect.width - CellPadding * 2, panesHeight);
         RenderRightPane(rightPaneRect);
 
+        var btnRect = new Rect(0, inRect.yMax - IconSize, 100, IconSize);
+        AddBottomButton(
+            ref btnRect,
+            TranslationCache.FittingBtnClear,
+            () =>
+            {
+                _worn.Clear();
+                _pawnInitialWorn.Clear();
+                _pawnInitialName = "";
+                DoSomethingChanged();
+            }
+        );
+
+        AddBottomButton(
+            ref btnRect,
+            TranslationCache.FittingBtnFromPawn,
+            () =>
+            {
+                Find.WindowStack.Add(
+                    new FloatMenu(
+                        Find.CurrentMap.mapPawns.AllPawnsSpawned //
+                            .Where(it => it.IsColonist)
+                            .Select(
+                                pawn => new ColonistFloatMenuOption( //
+                                    pawn,
+                                    () =>
+                                    {
+                                        var newWorn = pawn.apparel.WornApparel //
+                                            .Select(_parent.DataProcessor.GetApparelOfDef)
+                                            .Where(it => it != null)
+                                            .ToList();
+                                        _worn.ReplaceWith(newWorn);
+                                        _pawnInitialWorn.ReplaceWith(newWorn.Select(it => it.Def.defName));
+                                        _pawnInitialName = pawn.NameFullColored;
+                                        DoSomethingChanged();
+                                    }
+                                )
+                            )
+                            .Cast<FloatMenuOption>()
+                            .ToList()
+                    )
+                );
+            }
+        );
+
+        if (_worn.Count(w => w != null) > 0)
+        {
+            AddBottomButton(
+                ref btnRect,
+                TranslationCache.FittingBtnPin,
+                () =>
+                {
+                    var title = TranslationCache.FittingLetterTotals.Text;
+                    if (_pawnInitialName != "") title += $" ({_pawnInitialName})";
+                    var sb = new StringBuilder();
+
+                    if (_pawnInitialWorn.Count > 0)
+                    {
+                        var tipAdded = false;
+                        _pawnInitialWorn.ForEach(
+                            w =>
+                            {
+                                if (_worn.Any(apparel => apparel.Def.defName == w)) return;
+                                var apparel = _parent.DataProcessor.GetAllApparels().FirstOrDefault(a => a.Def.defName == w);
+                                if (apparel is null) return;
+                                if (!tipAdded)
+                                {
+                                    tipAdded = true;
+                                    sb.AppendLine("\n");
+                                    sb.AppendLine(TranslationCache.FittingLetterRemove.Text);
+                                }
+
+                                sb.AppendLine("- " + apparel.Def.label.Colorize(Color.grey));
+                            }
+                        );
+                        sb.AppendLine("\n");
+                        sb.AppendLine(TranslationCache.FittingLetterAdd.Text);
+                    }
+
+                    _worn.ForEach(w => sb.AppendLine("+ " + w.Def.label.Colorize(Color.green)));
+
+                    Find.LetterStack.ReceiveLetter(title, sb.ToString().TrimEndNewlines(), LetterDefOf.PositiveEvent);
+                }
+            );
+        }
+
         // =================================================
+    }
+
+    private static void AddBottomButton(ref Rect btnRect, TranslationCache.E text, Action action)
+    {
+        btnRect.width = text.Size.x + 16;
+        if (Widgets.ButtonText(btnRect, text.Text)) action();
+        if (text.Tooltip.Length > 0) TooltipHandler.TipRegion(btnRect, text.Tooltip);
+        btnRect.x += btnRect.width + CellPadding;
     }
 
     private void RenderLeftPane(Rect paneRect)

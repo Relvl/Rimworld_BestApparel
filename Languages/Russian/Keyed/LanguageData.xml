@@ -75,6 +75,11 @@
     <BestApparel.Tip.Fitting.SlotOccupied.Tooltip>Добавление этого предмета удалит что-то ещё</BestApparel.Tip.Fitting.SlotOccupied.Tooltip>
     <BestApparel.Fitting.Label.Sown>Отображено: {0}</BestApparel.Fitting.Label.Sown>
     <BestApparel.Fitting.Label.Sown.Part>(часть тела: {0})</BestApparel.Fitting.Label.Sown.Part>
+    <BestApparel.Fitting.Button.Pin>Закрепить отчет</BestApparel.Fitting.Button.Pin>
+    <BestApparel.Fitting.Button.Pin.Tooltip>Закрепить все выбранные предметы в виде сообщения</BestApparel.Fitting.Button.Pin.Tooltip>
+    <BestApparel.Fitting.Letter.Totals>Примерочная</BestApparel.Fitting.Letter.Totals>
+    <BestApparel.Fitting.Letter.Totals.Remove>Убрать экипировку:</BestApparel.Fitting.Letter.Totals.Remove>
+    <BestApparel.Fitting.Letter.Totals.Add>Добавить экипировку:</BestApparel.Fitting.Letter.Totals.Add>
 
     <BestApparel.Stat.MeleeAvgDamage>Усредненный урон</BestApparel.Stat.MeleeAvgDamage>
     <BestApparel.Stat.CE_DescSharpPenetration>Бронепробитие (мм БКГ)</BestApparel.Stat.CE_DescSharpPenetration>

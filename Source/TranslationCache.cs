@@ -40,6 +40,11 @@ public static class TranslationCache
     public static readonly E FittingBtnFromPawn = new("BestApparel.Fitting.Button.FromPawn");
     public static readonly E FittingBtnAddToSlot = new("BestApparel.Button.Fitting.AddToSlot");
     public static readonly E FittingTipSlotOccupied = new("BestApparel.Tip.Fitting.SlotOccupied");
+    public static readonly E FittingBtnPin = new("BestApparel.Fitting.Button.Pin");
+
+    public static readonly E FittingLetterTotals = new("BestApparel.Fitting.Letter.Totals");
+    public static readonly E FittingLetterRemove = new("BestApparel.Fitting.Letter.Totals.Remove");
+    public static readonly E FittingLetterAdd = new("BestApparel.Fitting.Letter.Totals.Add");
 
     public static readonly E StatMeleeAvgDamage = new("BestApparel.Stat.MeleeAvgDamage");
     public static readonly E StatMeleePenetrationSharp = new("BestApparel.Stat.CE_DescSharpPenetration");

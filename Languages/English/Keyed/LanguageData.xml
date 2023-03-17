@@ -75,6 +75,11 @@
     <BestApparel.Tip.Fitting.SlotOccupied.Tooltip>Adding this item will remove something else</BestApparel.Tip.Fitting.SlotOccupied.Tooltip>
     <BestApparel.Fitting.Label.Sown>Shown: {0}</BestApparel.Fitting.Label.Sown>
     <BestApparel.Fitting.Label.Sown.Part>(body part: {0})</BestApparel.Fitting.Label.Sown.Part>
+    <BestApparel.Fitting.Button.Pin>Pin totals</BestApparel.Fitting.Button.Pin>
+    <BestApparel.Fitting.Button.Pin.Tooltip>Pin selected items as letter</BestApparel.Fitting.Button.Pin.Tooltip>
+    <BestApparel.Fitting.Letter.Totals>Fitting</BestApparel.Fitting.Letter.Totals>
+    <BestApparel.Fitting.Letter.Totals.Remove>Remove equipment:</BestApparel.Fitting.Letter.Totals.Remove>
+    <BestApparel.Fitting.Letter.Totals.Add>Add equipment:</BestApparel.Fitting.Letter.Totals.Add>
 
     <BestApparel.Stat.MeleeAvgDamage>Average damage</BestApparel.Stat.MeleeAvgDamage>
     <BestApparel.Stat.CE_DescSharpPenetration>Penetration: Sharp</BestApparel.Stat.CE_DescSharpPenetration>
