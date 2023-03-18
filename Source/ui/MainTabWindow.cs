@@ -39,7 +39,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
     {
         Find.WindowStack.TryRemove(typeof(FilterWindow));
         Find.WindowStack.TryRemove(typeof(ColumnsWindow));
-        Find.WindowStack.TryRemove(typeof(ThingInfoWindow));
+        Find.WindowStack.TryRemove(typeof(SortWindow));
         Find.WindowStack.TryRemove(typeof(FittingWindow));
     }
 
@@ -159,13 +159,6 @@ public class MainTabWindow : RimWorld.MainTabWindow
                 // i
                 Widgets.InfoCardButtonCentered(cellRect, container.DefaultThing);
 
-                // back row click = open info window
-                if (Prefs.DevMode && Widgets.ButtonInvisible(elementRect))
-                {
-                    Find.WindowStack.TryRemove(typeof(ThingInfoWindow));
-                    Find.WindowStack.Add(new ThingInfoWindow(this, container.DefaultThing));
-                }
-
                 // Icon
                 cellRect.x += CellHeight + CellPadding;
                 Widgets.ThingIcon(cellRect, container.DefaultThing);
@@ -179,7 +172,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
 
                 if (Prefs.DevMode)
                 {
-                    TooltipHandler.TipRegion(cellRect, $"Total sorting weight: {container.CachedSortingWeight}");
+                    TooltipHandler.TipRegion(cellRect, $"Dev: Total sorting weight: {container.CachedSortingWeight}");
                 }
 
                 TooltipHandler.TipRegion(cellRect, container.DefaultTooltip);

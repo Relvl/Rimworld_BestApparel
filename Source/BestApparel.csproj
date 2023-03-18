@@ -90,7 +90,6 @@
         <Compile Include="ui\utility\FilterWindow.cs" />
         <Compile Include="ui\utility\FittingWindow.cs" />
         <Compile Include="ui\utility\SortWindow.cs" />
-        <Compile Include="ui\utility\ThingInfoWindow.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="..\.gitignore">
