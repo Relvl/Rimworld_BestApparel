@@ -2,7 +2,6 @@ using System.Linq;
 using BestApparel.data;
 using BestApparel.stat_processor;
 using CombatExtended;
-using RimWorld;
 using UnityEngine;
 using Verse;
 using MainTabWindow = BestApparel.ui.MainTabWindow;
@@ -25,11 +24,11 @@ public class CeRangedAmmoType : AStatProcessor
 
     public override float GetStatValue(Thing thing)
     {
-        var CompAmmoUser = thing.TryGetComp<CompAmmoUser>();
-        if (CompAmmoUser is null || !AmmoUtility.IsAmmoSystemActive(CompAmmoUser.Props.ammoSet)) return 0;
-        var link = CompAmmoUser.CurrentAmmo.AmmoSetDefs.SelectMany(s => s.ammoTypes).FirstOrDefault(l => l.ammo == CompAmmoUser.CurrentAmmo);
-        if (link is null) return 0;
+        var ammoUser = thing.TryGetComp<CompAmmoUser>();
+        var link = CellDataCeRangedDamage.GetLink(ammoUser);
+        if (link is null) return thing.def.Verbs.FirstOrDefault()?.defaultProjectile?.projectile?.GetDamageAmount(thing) ?? -1;
         float damageLabel = link.projectile.projectile.GetDamageAmount(thing);
+
         if (link.projectile.projectile is ProjectilePropertiesCE projProps)
         {
             if (!projProps.secondaryDamage.NullOrEmpty())
@@ -55,21 +54,22 @@ public class CeRangedAmmoType : AStatProcessor
         Widgets.Label(cellRect, cell.Value);
         foreach (var tooltip in cell.Tooltips) TooltipHandler.TipRegion(cellRect, tooltip);
 
-        if (cell is CellDataCeRangedDamage cellCe)
+        if (cell is CellDataCeRangedDamage cellCe && cellCe.AmmoUser?.Props?.ammoSet?.ammoTypes is { Count: > 1 })
         {
-            cellRect.xMin += 38;
+            cellRect.xMin += 34;
+            cellRect = cellRect.ContractedBy(2);
 
-            if (Widgets.ButtonText(cellRect, cellCe.CompAmmoUser.CurrentAmmo.ammoClass.LabelCapShort ?? cellCe.CompAmmoUser.CurrentAmmo.ammoClass.LabelCap))
+            if (Widgets.ButtonText(cellRect, cellCe.AmmoUser.CurrentAmmo.ammoClass.LabelCapShort ?? cellCe.AmmoUser.CurrentAmmo.ammoClass.LabelCap))
             {
                 Find.WindowStack.Add(
                     new FloatMenu(
-                        cellCe.CompAmmoUser.Props.ammoSet.ammoTypes //
+                        cellCe.AmmoUser.Props.ammoSet.ammoTypes //
                             .Select(
                                 ammoLink => new FloatMenuOption(
                                     cellCe.GetAmmoAndDamage(ammoLink),
                                     () =>
                                     {
-                                        cellCe.CompAmmoUser.CurrentAmmo = ammoLink.ammo;
+                                        cellCe.AmmoUser.CurrentAmmo = ammoLink.ammo;
                                         window.DataProcessor.Rebuild();
                                     }
                                 )
@@ -84,28 +84,29 @@ public class CeRangedAmmoType : AStatProcessor
 
 public class CellDataCeRangedDamage : CellData
 {
-    public readonly CompAmmoUser CompAmmoUser;
+    public readonly CompAmmoUser AmmoUser;
 
     public CellDataCeRangedDamage(AStatProcessor processor, Thing thing)
     {
         Processor = processor;
         Thing = thing;
         DefLabel = processor.GetDefLabel();
+        ValueRaw = thing.def.Verbs.FirstOrDefault()?.defaultProjectile?.projectile?.GetDamageAmount(thing) ?? 0;
 
-        CompAmmoUser = thing.TryGetComp<CompAmmoUser>();
-        if (CompAmmoUser == null || !AmmoUtility.IsAmmoSystemActive(CompAmmoUser.Props.ammoSet)) return;
-        var link = CompAmmoUser.CurrentAmmo.AmmoSetDefs.SelectMany(s => s.ammoTypes).FirstOrDefault(l => l.ammo == CompAmmoUser.CurrentAmmo);
-        if (link == null) return;
+        AmmoUser = thing.TryGetComp<CompAmmoUser>();
+        var link = GetLink(AmmoUser);
+        if (link != null)
+        {
+            ValueRaw = GetDamage(link);
+            Tooltips.Add(link.projectile.GetProjectileReadout(thing));
+            Tooltips.Add($"Caliber: {AmmoUser.Props.ammoSet.LabelCap}");
+        }
 
-        ValueRaw = GetDamage(link);
         Value = ValueRaw.ToStringByStyle(ToStringStyle.Integer);
         IsEmpty = ValueRaw != 0;
-
-        Tooltips.Add(link.projectile.GetProjectileReadout(thing));
-        Tooltips.Add($"Caliber: {CompAmmoUser.Props.ammoSet.LabelCap}");
     }
 
-    public float GetDamage(AmmoLink link)
+    private float GetDamage(AmmoLink link)
     {
         if (link == null) return 0;
         float damageLabel = link.projectile.projectile.GetDamageAmount(Thing);
@@ -127,4 +128,18 @@ public class CellDataCeRangedDamage : CellData
     }
 
     public string GetAmmoAndDamage(AmmoLink link) => $"{link.ammo.LabelCap} - {GetDamage(link)} dmg";
+
+    public static AmmoLink GetLink(CompAmmoUser ammoUser)
+    {
+        if (ammoUser?.Props?.ammoSet != null && AmmoUtility.IsAmmoSystemActive(ammoUser.Props.ammoSet))
+        {
+            var link = ammoUser.CurrentAmmo.AmmoSetDefs.SelectMany(s => s.ammoTypes).FirstOrDefault(l => l.ammo == ammoUser.CurrentAmmo);
+            if (link?.projectile?.projectile != null)
+            {
+                return link;
+            }
+        }
+
+        return null;
+    }
 }

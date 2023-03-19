@@ -10,13 +10,14 @@ public class ContainerFactory
     {
         try
         {
+            if (thingDef.destroyOnDrop) return null;
+
             if (thingDef.IsApparel)
             {
                 return new ThingContainerApparel(thingDef);
             }
 
-            // todo thingCategories["Grenades"] 
-            if ( /*thingDef.IsRangedWeapon ||*/ (thingDef.IsWeapon && thingDef.weaponTags != null && thingDef.weaponTags.Contains("Gun")))
+            if (thingDef.IsRangedWeapon)
             {
                 return new ThingContainerRanged(thingDef);
             }
@@ -28,7 +29,7 @@ public class ContainerFactory
         }
         catch (Exception e)
         {
-            Log.Warning($"Can not procuce container for ThingDef '{thingDef.defName}' -> NRE {e.Message}");
+            Log.Warning($"Can not produce container for ThingDef '{thingDef.defName}' -> NRE {e.Message}");
         }
 
         return null;

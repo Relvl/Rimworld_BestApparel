@@ -172,7 +172,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
 
                 if (Prefs.DevMode)
                 {
-                    TooltipHandler.TipRegion(cellRect, $"Dev: Total sorting weight: {container.CachedSortingWeight}");
+                    TooltipHandler.TipRegion(cellRect, $"Dev: \nDefName: {container.Def.defName}\nTotal sorting weight: {container.CachedSortingWeight}");
                 }
 
                 TooltipHandler.TipRegion(cellRect, container.DefaultTooltip);

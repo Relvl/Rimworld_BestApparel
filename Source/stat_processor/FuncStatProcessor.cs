@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using RimWorld;
 using Verse;
 
 namespace BestApparel.stat_processor;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BestApparel.compatibility;
 using BestApparel.stat_processor;
 using BestApparel.ui;
@@ -38,11 +39,11 @@ public class ThingContainerRanged : AThingContainer
 
         if (Config.IsCeLoaded)
         {
-            // foreach (var verb in Def.Verbs)
-            //     if (verb.verbClass.FullName == "CombatExtended.Verb_ShootCE")
-            //         yield return new FuncStatProcessor(thing => verb.range, "Ability_Range.label");
-
             foreach (var processor in CombatExtendedCompat.GetRangedStats(Def)) yield return processor;
+        }
+        else
+        {
+            yield return new FuncStatProcessor(thing => thing.def.Verbs.FirstOrDefault()?.defaultProjectile?.projectile?.GetDamageAmount(thing) ?? 0, "Ranged_Damage");
         }
     }
 }

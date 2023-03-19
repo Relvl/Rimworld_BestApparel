@@ -106,7 +106,8 @@ public class DataProcessor
 
         foreach (var (tabId, containers) in _containers)
         {
-            var filtered = containers.Where(container => container.CheckForFilters()).ToList();
+            if (containers == null) continue;
+            var filtered = containers?.Where(container => container?.CheckForFilters() ?? false).ToList();
             var columns = BestApparel.Config.GetColumnsFor(tabId);
 
             var statMinmax = new Dictionary<AStatProcessor, ( /*min*/float, /*max*/float)>();

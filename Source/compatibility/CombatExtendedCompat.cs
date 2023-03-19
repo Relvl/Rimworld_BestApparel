@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using BestApparel.compatibility.stat_processor;
 using BestApparel.stat_processor;
 using CombatExtended;
-using RimWorld;
 using Verse;
 
 namespace BestApparel.compatibility;
