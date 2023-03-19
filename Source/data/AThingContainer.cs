@@ -56,7 +56,9 @@ public abstract class AThingContainer
                     var sorting = BestApparel.Config.GetSortingFor(GetTabId());
                     if (!sorting.ContainsKey(pair.Key.GetDefName())) sorting[pair.Key.GetDefName()] = 0;
 
-                    var cell = new CellData(pair.Key, DefaultThing, sorting[pair.Key.GetDefName()] + Config.MaxSortingWeight, normal);
+                    var cell = pair.Key.MakeCell(DefaultThing);
+                    cell.WeightFactor = sorting[pair.Key.GetDefName()] + Config.MaxSortingWeight;
+                    cell.NormalizedWeight = normal;
 
                     cell.Tooltips.Add("BestApparel.Label.RangePercent".Translate(Math.Round(cell.NormalizedWeight * 100f, 1), cell.WeightFactor));
 

@@ -12,7 +12,6 @@ public class MainTabWindow : RimWorld.MainTabWindow
 {
     private const int CellPadding = 2;
     private const int NameCellWidth = 200;
-    private const int CellWidth = 70;
     private const int CellHeight = 24;
     private const int HeaderHeight = 36;
 
@@ -107,33 +106,35 @@ public class MainTabWindow : RimWorld.MainTabWindow
 
     private void RenderTabContent(Rect inRect, IReadOnlyList<AThingContainer> thingContainers)
     {
-        var firstContainer = thingContainers.FirstOrDefault();
-        if (firstContainer != null)
+        if (!thingContainers.Any()) return;
+
+        // Header
+        var firstContainer = thingContainers.First();
+        GUI.color = BestApparel.ColorWhiteA50;
+        Text.Anchor = TextAnchor.MiddleCenter;
+        Text.Font = GameFont.Tiny;
+        var headerRect = new Rect(inRect.x + CellHeight * 2 + NameCellWidth + CellPadding * 3 - _scrollPosition.x, inRect.y, 0, HeaderHeight);
+        foreach (var cell in firstContainer.CachedCells)
         {
-            GUI.color = BestApparel.ColorWhiteA50;
-            Text.Anchor = TextAnchor.MiddleCenter;
-            Text.Font = GameFont.Tiny;
-            var headerRect = new Rect(inRect.x + CellHeight * 2 + NameCellWidth + CellPadding * 3 - _scrollPosition.x, inRect.y, CellWidth, HeaderHeight);
-            foreach (var cell in firstContainer.CachedCells)
-            {
-                headerRect.width = CellWidth;
-                Widgets.Label(headerRect, cell.DefLabel);
-                TooltipHandler.TipRegion(headerRect, cell.DefLabel);
-                headerRect.x += CellWidth + CellPadding - 2;
-                headerRect.width = 1;
-                GUI.DrawTexture(headerRect, BaseContent.WhiteTex);
-                headerRect.x += headerRect.width;
-            }
-
-            inRect.yMin += HeaderHeight;
-
-            headerRect.x = inRect.x;
-            headerRect.y = inRect.y;
-            headerRect.width = inRect.width - 16;
-            headerRect.height = 1;
+            headerRect.width = cell.Processor.CellWidth;
+            Widgets.Label(headerRect, cell.DefLabel);
+            TooltipHandler.TipRegion(headerRect, cell.DefLabel);
+            headerRect.x += headerRect.width + CellPadding - 2;
+            headerRect.width = 1;
             GUI.DrawTexture(headerRect, BaseContent.WhiteTex);
-            inRect.yMin += headerRect.height;
+            headerRect.x += headerRect.width;
         }
+
+        inRect.yMin += HeaderHeight;
+
+        headerRect.x = inRect.x;
+        headerRect.y = inRect.y;
+        headerRect.width = inRect.width - 16;
+        headerRect.height = 1;
+        GUI.DrawTexture(headerRect, BaseContent.WhiteTex);
+        inRect.yMin += headerRect.height;
+
+        // Table
 
         GUI.color = Color.white;
         Text.Font = GameFont.Small;
@@ -148,13 +149,12 @@ public class MainTabWindow : RimWorld.MainTabWindow
         for (var idx = 0; idx < thingContainers.Count; idx++)
         {
             var container = thingContainers[idx];
-            var elementWidth = CellHeight * 2 + CellPadding * 3 + NameCellWidth + container.CachedCells.Length * (CellWidth + CellPadding);
-            var elementRect = new Rect(0, CellHeight * idx, elementWidth, CellHeight);
 
-            var isInViewRange = _scrollPosition.y < elementRect.y + elementRect.height * 2 && _scrollPosition.y + inRect.height > elementRect.yMax - elementRect.height;
+            var rowRect = new Rect(0, CellHeight * idx, 0, CellHeight);
+            var isInViewRange = _scrollPosition.y < CellHeight * idx + CellHeight * 2 && _scrollPosition.y + inRect.height > CellHeight * idx;
             if (isInViewRange)
             {
-                var cellRect = new Rect(elementRect.x, elementRect.y, CellHeight, CellHeight);
+                var cellRect = new Rect(0, CellHeight * idx, CellHeight, CellHeight);
 
                 // i
                 Widgets.InfoCardButtonCentered(cellRect, container.DefaultThing);
@@ -179,16 +179,14 @@ public class MainTabWindow : RimWorld.MainTabWindow
 
                 // Columns
                 cellRect.x += NameCellWidth + CellPadding;
-                cellRect.width = CellWidth;
 
                 for (var cellIdx = 0; cellIdx < container.CachedCells.Length; cellIdx++)
                 {
                     var cell = container.CachedCells[cellIdx];
 
-                    if (_lastFrameRow == cellIdx)
-                    {
-                        GUI.DrawTexture(cellRect, TexUI.HighlightTex);
-                    }
+                    cellRect.width = cell.Processor.CellWidth;
+
+                    if (_lastFrameRow == cellIdx) GUI.DrawTexture(cellRect, TexUI.HighlightTex);
 
                     if (Mouse.IsOver(cellRect))
                     {
@@ -196,30 +194,15 @@ public class MainTabWindow : RimWorld.MainTabWindow
                         mouseOverAnyCell = true;
                     }
 
-                    if (cell.IsEmpty)
-                    {
-                        GUI.color = BestApparel.ColorWhiteA20;
-                        Widgets.Label(cellRect, cell.Value);
-                        GUI.color = Color.white;
-                    }
-                    else
-                    {
-                        Widgets.Label(cellRect, cell.Value);
-                        foreach (var tooltip in cell.Tooltips)
-                        {
-                            TooltipHandler.TipRegion(cellRect, tooltip);
-                        }
-                    }
+                    cell.Processor.RenderCell(cellRect, cell, this);
 
                     // offset to the right
-                    cellRect.x += /*todo config? auto-calc?*/ CellWidth + CellPadding - 1;
+                    cellRect.x += /*todo config? auto-calc?*/ cellRect.width + CellPadding - 1;
                 }
 
                 // bg and mouseover
-                if (Mouse.IsOver(elementRect))
-                {
-                    GUI.DrawTexture(elementRect, TexUI.HighlightTex);
-                }
+                rowRect.width = cellRect.x + cellRect.width;
+                if (Mouse.IsOver(rowRect)) GUI.DrawTexture(rowRect, TexUI.HighlightTex);
 
                 if (idx < thingContainers.Count - 1)
                 {
@@ -227,7 +210,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
                 }
             }
 
-            _lastFrameTableSize = new Vector2(elementWidth, elementRect.y + elementRect.height + 16);
+            _lastFrameTableSize = new Vector2(rowRect.width, rowRect.y + rowRect.height + 16);
         }
 
         if (!mouseOverAnyCell)

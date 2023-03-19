@@ -6,24 +6,28 @@ namespace BestApparel.data;
 
 public class CellData
 {
-    public readonly string DefName;
-    public readonly float ValueRaw;
-    public readonly string Value;
-    public readonly bool IsEmpty;
-    public readonly float WeightFactor;
-    public readonly string DefLabel;
     public readonly List<string> Tooltips = new();
-    public readonly float NormalizedWeight;
 
-    public CellData(AStatProcessor processor, Thing defaultThing, float weightFactor, float normalizedWeight)
+    public AStatProcessor Processor;
+    public Thing Thing;
+    public bool IsEmpty = true;
+    public string DefLabel = "";
+    public float ValueRaw;
+    public string Value = "---";
+    public float WeightFactor = 1;
+    public float NormalizedWeight = 0;
+
+    protected CellData()
     {
-        WeightFactor = weightFactor;
-        NormalizedWeight = normalizedWeight;
+    }
 
-        DefName = processor.GetDefName();
-        IsEmpty = processor.IsValueDefault(defaultThing);
-        ValueRaw = processor.GetStatValue(defaultThing);
-        Value = IsEmpty ? "---" : processor.GetStatValueFormatted(defaultThing, true);
+    public CellData(AStatProcessor processor, Thing thing)
+    {
+        Processor = processor;
+        Thing = thing;
+        IsEmpty = processor.IsValueDefault(thing);
+        ValueRaw = processor.GetStatValue(thing);
+        Value = IsEmpty ? "---" : processor.GetStatValueFormatted(thing, true);
         DefLabel = processor.GetDefLabel();
 
         if (!IsEmpty)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BestApparel.compatibility;
 using BestApparel.stat_processor;
 using BestApparel.ui;
 using RimWorld;
@@ -37,15 +38,11 @@ public class ThingContainerRanged : AThingContainer
 
         if (Config.IsCeLoaded)
         {
-            foreach (var verb in Def.Verbs)
-            {
-                if (verb.verbClass.FullName == "CombatExtended.Verb_ShootCE")
-                {
-                    yield return new FuncStatProcessor(_ => verb.range, "Ability_Range.label");
-                }
-            }
+            // foreach (var verb in Def.Verbs)
+            //     if (verb.verbClass.FullName == "CombatExtended.Verb_ShootCE")
+            //         yield return new FuncStatProcessor(thing => verb.range, "Ability_Range.label");
 
-            yield return new CommonStatProcessor(StatDef.Named("MagazineCapacity"));
+            foreach (var processor in CombatExtendedCompat.GetRangedStats(Def)) yield return processor;
         }
     }
 }
