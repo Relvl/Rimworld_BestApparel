@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace BestApparel.ui;
 
@@ -23,18 +26,28 @@ public static class UIUtils
         GUI.color = Color.white;
     }
 
-    public static void DrawButtonsRow(ref Rect inRect, int btnWidth, int btnHeight, int margin, params (TranslationCache.E, Action)[] buttons)
+    public static void DrawButtonsRowLTR(ref Rect inRect, params (TranslationCache.E, Action)[] buttons)
     {
-        var r = new Rect(0, inRect.y, 0, 0);
+        var r = new Rect(0, inRect.y, 0, 24);
         foreach (var (label, action) in buttons)
         {
             r.width = label.Size.x + 16;
-            r.height = btnHeight;
             if (Widgets.ButtonText(r, label.Text)) action();
             r.x += r.width + 10;
         }
+    }
 
-        inRect.yMin += btnHeight + margin;
+    public static void DrawButtonsRowRight(ref Rect inRect, params (TranslationCache.E, Action, bool)[] buttons)
+    {
+        var r = new Rect(inRect.xMax, inRect.y, 0, 24);
+        foreach (var (label, action, show) in buttons)
+        {
+            if (!show) continue;
+            r.width = label.Size.x + 16;
+            r.x -= r.width + 10;
+            if (Widgets.ButtonText(r, label.Text)) action();
+            if (label.Tooltip != "") TooltipHandler.TipRegion(r, label.Tooltip);
+        }
     }
 
     public static void RenderCheckboxLeft(ref Rect inRect, string label, bool state, Action<bool> onStateChanged, float maxWidth = 0)

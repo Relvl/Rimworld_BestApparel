@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.data;
 using BestApparel.ui.utility;
+using CombatExtended;
+using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace BestApparel.ui;
 
@@ -62,15 +66,19 @@ public class MainTabWindow : RimWorld.MainTabWindow
 
         inRect.yMin += 10f;
 
-        UIUtils.DrawButtonsRow(
+        UIUtils.DrawButtonsRowLTR(
             ref inRect,
-            85,
-            24,
-            10,
             (TranslationCache.BtnColumns, OnColumnsClick),
             (TranslationCache.BtnFilter, OnFilterClick),
             (TranslationCache.BtnSorting, OnSortingClick)
         );
+
+        UIUtils.DrawButtonsRowRight(
+            ref inRect, //
+            (TranslationCache.BtnRangedRestoreAmmo, OnRangedRestoreAmmoClick, BestApparel.Config.SelectedTab == TabId.Ranged)
+        );
+
+        inRect.yMin += 34;
         UIUtils.DrawLineAtTop(ref inRect, true, 1);
 
         RenderTabContent(inRect, DataProcessor.GetTable(BestApparel.Config.SelectedTab));
@@ -235,13 +243,26 @@ public class MainTabWindow : RimWorld.MainTabWindow
         Find.WindowStack.Add(new SortWindow(this));
     }
 
-    private void OnIgnoredClick()
-    {
-    }
-
     private void OnColumnsClick()
     {
         Find.WindowStack.TryRemove(typeof(ColumnsWindow));
         Find.WindowStack.Add(new ColumnsWindow(this));
+    }
+
+    private void OnRangedRestoreAmmoClick()
+    {
+        SoundDefOf.Tick_High.PlayOneShotOnCamera();
+        foreach (var container in DataProcessor.GetContainers(TabId.Ranged))
+        {
+            var thing = container.DefaultThing;
+            if (!BestApparel.Config.RangedAmmo.ContainsKey(thing.def.defName)) continue;
+            BestApparel.Config.RangedAmmo.Remove(thing.def.defName);
+            var ammoDefToLoad = thing.def.Verbs?.FirstOrDefault(it => it is VerbPropertiesCE)?.defaultProjectile?.defName;
+            if (ammoDefToLoad.NullOrEmpty()) continue;
+            var ammoUser = thing.TryGetComp<CompAmmoUser>();
+            var link = ammoUser?.Props.ammoSet.ammoTypes.FirstOrDefault(l => l.projectile.defName == ammoDefToLoad);
+            if (link is null) continue;
+            ammoUser.CurrentAmmo = link.ammo;
+        }
     }
 }

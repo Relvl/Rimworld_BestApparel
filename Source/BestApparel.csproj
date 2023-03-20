@@ -63,8 +63,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="compatibility\stat_processor\CeMeleeDamageStatProcessor.cs" />
-        <Compile Include="compatibility\stat_processor\CeMeleePenetration.cs" />
-        <Compile Include="compatibility\stat_processor\CeRangedAmmoType.cs" />
+        <Compile Include="compatibility\stat_processor\CeMeleePenetrationStatProcessor.cs" />
+        <Compile Include="compatibility\stat_processor\CeRangedDamageStatProcessor.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="data\CellData.cs" />
         <Compile Include="data\DataProcessor.cs" />

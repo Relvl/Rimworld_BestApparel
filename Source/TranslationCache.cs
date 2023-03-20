@@ -32,7 +32,7 @@ public static class TranslationCache
     public static readonly E FilterStuff = new("BestApparel.FilterType.Stuff");
     public static readonly E FilterWeaponClass = new("BestApparel.FilterType.WeaponClass");
 
-    public static readonly E FittingWindowTitle = new("BestApparel.WindowTitle.Fitting", GameFont.Medium);
+    public static readonly E FittingWindowTitle = new("BestApparel.WindowTitle.Fitting", true, GameFont.Medium);
     public static readonly E FittingLabelSelectApparel = new("BestApparel.Label.SelectApparel");
     public static readonly E FittingBtnRemove = new("BestApparel.Fitting.Button.Remove");
     public static readonly E FittingBtnRemoveAll = new("BestApparel.Fitting.Button.RemoveAll");
@@ -49,6 +49,8 @@ public static class TranslationCache
     public static readonly E StatMeleeAvgDamage = new("BestApparel.Stat.MeleeAvgDamage");
     public static readonly E StatMeleePenetrationSharp = new("BestApparel.Stat.CE_DescSharpPenetration");
     public static readonly E StatMeleePenetrationBlunt = new("BestApparel.Stat.CE_DescBluntPenetration");
+
+    public static readonly E BtnRangedRestoreAmmo = new("BestApparel.Btn.Ranged.RestoreAmmo");
 
     private static TaggedString Get(string key, params object[] args)
     {
@@ -71,13 +73,14 @@ public static class TranslationCache
         public readonly Vector2 Size;
         public readonly TaggedString Tooltip;
 
-        public E(string key, GameFont font = GameFont.Small)
+        public E(string key, bool hasTooltip = true, GameFont font = GameFont.Small)
         {
             Verse.Text.Font = font;
             _key = key;
             Text = Get(key);
             Size = GetSize(key);
-            Tooltip = Get($"{key}.Tooltip");
+            if (hasTooltip) Tooltip = Get($"{key}.Tooltip");
+            else Tooltip = "";
         }
     }
 }

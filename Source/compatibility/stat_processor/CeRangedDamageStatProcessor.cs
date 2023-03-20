@@ -1,6 +1,7 @@
 using System.Linq;
 using BestApparel.data;
 using BestApparel.stat_processor;
+using BestApparel.ui;
 using CombatExtended;
 using UnityEngine;
 using Verse;
@@ -8,11 +9,11 @@ using MainTabWindow = BestApparel.ui.MainTabWindow;
 
 namespace BestApparel.compatibility.stat_processor;
 
-public class CeRangedAmmoType : AStatProcessor
+public class CeRangedDamageStatProcessor : AStatProcessor
 {
     public override float CellWidth => 120;
 
-    public CeRangedAmmoType() : base(DefaultStat)
+    public CeRangedDamageStatProcessor() : base(DefaultStat)
     {
     }
 
@@ -69,6 +70,12 @@ public class CeRangedAmmoType : AStatProcessor
                                     cellCe.GetAmmoAndDamage(ammoLink),
                                     () =>
                                     {
+                                        var defaultProjectile = cell.Thing.def.Verbs.FirstOrDefault(it => it is VerbPropertiesCE)?.defaultProjectile;
+                                        if (ammoLink.projectile.defName == defaultProjectile?.defName)
+                                            BestApparel.Config.RangedAmmo.Remove(cell.Thing.def.defName);
+                                        else
+                                            BestApparel.Config.RangedAmmo[cell.Thing.def.defName] = ammoLink.projectile.defName;
+
                                         cellCe.AmmoUser.CurrentAmmo = ammoLink.ammo;
                                         window.DataProcessor.Rebuild();
                                     }
@@ -79,6 +86,29 @@ public class CeRangedAmmoType : AStatProcessor
                 );
             }
         }
+    }
+
+    public static void TryToLoadAmmo(Thing thing)
+    {
+        if (!BestApparel.Config.RangedAmmo.ContainsKey(thing.def.defName)) return;
+        var ammoDefToLoad = BestApparel.Config.RangedAmmo[thing.def.defName];
+        if (ammoDefToLoad.NullOrEmpty()) return;
+        var ammoUser = thing.TryGetComp<CompAmmoUser>();
+        var link = ammoUser?.Props.ammoSet.ammoTypes.FirstOrDefault(l => l.projectile.defName == ammoDefToLoad);
+        if (link is null) return;
+        ammoUser.CurrentAmmo = link.ammo;
+    }
+
+    private static void TryRestoreAmmo(Thing thing)
+    {
+        if (!BestApparel.Config.RangedAmmo.ContainsKey(thing.def.defName)) return;
+        BestApparel.Config.RangedAmmo.Remove(thing.def.defName);
+        var ammoDefToLoad = thing.def.Verbs?.FirstOrDefault(it => it is VerbPropertiesCE)?.defaultProjectile?.defName;
+        if (ammoDefToLoad.NullOrEmpty()) return;
+        var ammoUser = thing.TryGetComp<CompAmmoUser>();
+        var link = ammoUser?.Props.ammoSet.ammoTypes.FirstOrDefault(l => l.projectile.defName == ammoDefToLoad);
+        if (link is null) return;
+        ammoUser.CurrentAmmo = link.ammo;
     }
 }
 

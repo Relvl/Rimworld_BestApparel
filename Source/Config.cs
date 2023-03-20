@@ -32,7 +32,9 @@ public class Config : ModSettings
     public ApparelConfig Apparel = new();
     public RangedConfig Ranged = new();
     public MeleeConfig Melee = new();
+
     public List<string> FittingWorn = new();
+    public Dictionary<string, string> RangedAmmo = new();
 
     public void RestoreDefaultFilters()
     {
@@ -125,6 +127,9 @@ public class Config : ModSettings
 
         Scribe_Collections.Look(ref FittingWorn, "FittingWorn");
         FittingWorn ??= new List<string>();
+
+        Scribe_Collections.Look(ref RangedAmmo, "RangedSelectedAmmo");
+        RangedAmmo ??= new Dictionary<string, string>();
     }
 
     public class ApparelConfig : IExposable

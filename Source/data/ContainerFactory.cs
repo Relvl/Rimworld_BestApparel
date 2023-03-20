@@ -29,7 +29,7 @@ public class ContainerFactory
         }
         catch (Exception e)
         {
-            Log.Warning($"Can not produce container for ThingDef '{thingDef.defName}' -> NRE {e.Message}");
+            Log.Error($"Can not produce container for ThingDef '{thingDef.defName}' -> {e.Message}");
         }
 
         return null;

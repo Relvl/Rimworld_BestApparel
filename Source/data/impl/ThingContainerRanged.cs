@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.compatibility;
+using BestApparel.compatibility.stat_processor;
 using BestApparel.stat_processor;
 using BestApparel.ui;
 using RimWorld;
@@ -14,6 +15,10 @@ public class ThingContainerRanged : AThingContainer
 
     public ThingContainerRanged(ThingDef thingDef) : base(thingDef)
     {
+        if (Config.IsCeLoaded)
+        {
+            CeRangedDamageStatProcessor.TryToLoadAmmo(DefaultThing);
+        }
     }
 
     public override bool CheckForFilters()

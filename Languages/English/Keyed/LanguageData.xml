@@ -16,6 +16,8 @@
     <BestApparel.Btn.Columns>Columns...</BestApparel.Btn.Columns>
     <BestApparel.Btn.Sorting>Sort...</BestApparel.Btn.Sorting>
     <BestApparel.Btn.Fitting>Fitting Room</BestApparel.Btn.Fitting>
+    <BestApparel.Btn.Ranged.RestoreAmmo>Restore ammo</BestApparel.Btn.Ranged.RestoreAmmo>
+    <BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>Restore all weapons' ammo to their default values</BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>
 
     <BestApparel.Label.Columns>Visible columns:</BestApparel.Label.Columns>
     <BestApparel.Label.Columns.Tooltip>Which columns should be displayed in the table</BestApparel.Label.Columns.Tooltip>

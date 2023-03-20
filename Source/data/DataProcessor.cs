@@ -165,4 +165,6 @@ public class DataProcessor
     public IReadOnlyList<AThingContainer> GetTable(TabId tabId) => _filteredContainers[tabId];
     public IEnumerable<AStatProcessor> GetStatProcessors(TabId tabId) => _stats[tabId];
     public IEnumerable<ThingContainerApparel> GetAllApparels() => _containers[TabId.Apparel].Cast<ThingContainerApparel>();
+
+    public IEnumerable<AThingContainer> GetContainers(TabId tabId) => _containers[tabId];
 }

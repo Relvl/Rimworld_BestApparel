@@ -6,11 +6,11 @@ using Verse;
 
 namespace BestApparel.compatibility.stat_processor;
 
-public class CeMeleePenetration : AStatProcessor
+public class CeMeleePenetrationStatProcessor : AStatProcessor
 {
     private readonly bool _sharp;
 
-    public CeMeleePenetration(bool sharp) : base(DefaultStat)
+    public CeMeleePenetrationStatProcessor(bool sharp) : base(DefaultStat)
     {
         _sharp = sharp;
     }

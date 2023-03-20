@@ -13,8 +13,8 @@ public static class CombatExtendedCompat
         if (thingDef.tools != null && Config.IsCeLoaded)
         {
             yield return new CeMeleeDamageStatProcessor();
-            yield return new CeMeleePenetration(true);
-            yield return new CeMeleePenetration(false);
+            yield return new CeMeleePenetrationStatProcessor(true);
+            yield return new CeMeleePenetrationStatProcessor(false);
             yield return new CommonStatProcessor(CE_StatDefOf.MeleePenetrationFactor);
         }
     }
@@ -29,6 +29,6 @@ public static class CombatExtendedCompat
         yield return new CommonStatProcessor(CE_StatDefOf.ShotSpread);
         yield return new CommonStatProcessor(CE_StatDefOf.NightVisionEfficiency_Weapon);
         yield return new CommonStatProcessor(CE_StatDefOf.Suppressability);
-        yield return new CeRangedAmmoType();
+        yield return new CeRangedDamageStatProcessor();
     }
 }

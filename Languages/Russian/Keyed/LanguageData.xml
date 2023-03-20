@@ -16,6 +16,8 @@
     <BestApparel.Btn.Columns>Колонки...</BestApparel.Btn.Columns>
     <BestApparel.Btn.Sorting>Сортировка...</BestApparel.Btn.Sorting>
     <BestApparel.Btn.Fitting>Примерочная</BestApparel.Btn.Fitting>
+    <BestApparel.Btn.Ranged.RestoreAmmo>Восстановить патроны</BestApparel.Btn.Ranged.RestoreAmmo>
+    <BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>Восстановить стандартный тип патронов у всего оружия</BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>
 
     <BestApparel.Label.Columns>Видимые колонки:</BestApparel.Label.Columns>
     <BestApparel.Label.Columns.Tooltip>Какие колонки должны быть оторажены в таблице</BestApparel.Label.Columns.Tooltip>
