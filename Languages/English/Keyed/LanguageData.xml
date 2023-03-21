@@ -11,13 +11,17 @@
 
     <BestApparel.Btn.Resort>Resort</BestApparel.Btn.Resort>
     <BestApparel.Btn.Resort.Tooltip>Closing this window also resorts the results.</BestApparel.Btn.Resort.Tooltip>
-    <BestApparel.Btn.Defaults>Defaults</BestApparel.Btn.Defaults>
+    <BestApparel.Btn.Defaults>Reset all to default</BestApparel.Btn.Defaults>
     <BestApparel.Btn.Filter>Filter...</BestApparel.Btn.Filter>
     <BestApparel.Btn.Columns>Columns...</BestApparel.Btn.Columns>
     <BestApparel.Btn.Sorting>Sort...</BestApparel.Btn.Sorting>
     <BestApparel.Btn.Fitting>Fitting Room</BestApparel.Btn.Fitting>
     <BestApparel.Btn.Ranged.RestoreAmmo>Restore ammo</BestApparel.Btn.Ranged.RestoreAmmo>
     <BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>Restore all weapons' ammo to their default values</BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>
+    
+    <BestApparel.Btn.Utility.None>None</BestApparel.Btn.Utility.None>
+    <BestApparel.Btn.Utility.Default>Default</BestApparel.Btn.Utility.Default>
+    <BestApparel.Btn.Utility.All>All</BestApparel.Btn.Utility.All>
 
     <BestApparel.Label.Columns>Visible columns:</BestApparel.Label.Columns>
     <BestApparel.Label.Columns.Tooltip>Which columns should be displayed in the table</BestApparel.Label.Columns.Tooltip>

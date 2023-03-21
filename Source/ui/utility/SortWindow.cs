@@ -7,6 +7,8 @@ namespace BestApparel.ui.utility;
 
 public class SortWindow : AUtilityWindow
 {
+    protected override float RowHeight => 30;
+
     public SortWindow(MainTabWindow parent) : base(parent)
     {
     }
@@ -17,11 +19,12 @@ public class SortWindow : AUtilityWindow
 
         var defs = BestApparel.Config.GetColumnsFor(BestApparel.Config.SelectedTab).OrderBy(it => it).ToList();
 
+        heightCounter += RenderTitle(ref inRect, TranslationCache.LabelSorting);
+
         heightCounter += UIUtils.RenderUtilityGrid( //
             ref inRect,
-            TranslationCache.LabelSorting,
             2,
-            30,
+            RowHeight,
             defs,
             (defName, cellRect) =>
             {
@@ -34,6 +37,8 @@ public class SortWindow : AUtilityWindow
                 if (Math.Abs(oldValue - value) > 0.1)
                 {
                     BestApparel.Config.GetSortingFor(BestApparel.Config.SelectedTab)[defName] = value;
+                    // todo! may lags...
+                    Parent.DataProcessor.Rebuild();
                 }
             }
         );

@@ -11,13 +11,17 @@
 
     <BestApparel.Btn.Resort>Применить</BestApparel.Btn.Resort>
     <BestApparel.Btn.Resort.Tooltip>Закрытие этого окна так же применяет настройки.</BestApparel.Btn.Resort.Tooltip>
-    <BestApparel.Btn.Defaults>По-умолчанию</BestApparel.Btn.Defaults>
+    <BestApparel.Btn.Defaults>Сбросить всё на значения по-умолчанию</BestApparel.Btn.Defaults>
     <BestApparel.Btn.Filter>Фильтр...</BestApparel.Btn.Filter>
     <BestApparel.Btn.Columns>Колонки...</BestApparel.Btn.Columns>
     <BestApparel.Btn.Sorting>Сортировка...</BestApparel.Btn.Sorting>
     <BestApparel.Btn.Fitting>Примерочная</BestApparel.Btn.Fitting>
     <BestApparel.Btn.Ranged.RestoreAmmo>Восстановить патроны</BestApparel.Btn.Ranged.RestoreAmmo>
     <BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>Восстановить стандартный тип патронов у всего оружия</BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>
+
+    <BestApparel.Btn.Utility.None>Ни одного</BestApparel.Btn.Utility.None>
+    <BestApparel.Btn.Utility.Default>Сброс</BestApparel.Btn.Utility.Default>
+    <BestApparel.Btn.Utility.All>Все</BestApparel.Btn.Utility.All>
 
     <BestApparel.Label.Columns>Видимые колонки:</BestApparel.Label.Columns>
     <BestApparel.Label.Columns.Tooltip>Какие колонки должны быть оторажены в таблице</BestApparel.Label.Columns.Tooltip>

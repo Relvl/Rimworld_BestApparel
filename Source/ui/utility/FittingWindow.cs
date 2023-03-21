@@ -95,7 +95,7 @@ public class FittingWindow : Window, IReloadObserver
         Widgets.Label(inRect, TranslationCache.FittingWindowTitle.Text);
 
         // Title info icon
-        GUI.color = BestApparel.ColorWhiteA50;
+        GUI.color = UIUtils.ColorWhiteA50;
         var infoRect = new Rect(TranslationCache.FittingWindowTitle.Size.x + 8, inRect.y + 8, 16, 16);
         MouseoverSounds.DoRegion(infoRect);
         Widgets.ButtonImage(infoRect, TexButton.Info, GUI.color);
@@ -267,7 +267,7 @@ public class FittingWindow : Window, IReloadObserver
             if (apparels.Any())
             {
                 Text.Font = GameFont.Small;
-                GUI.color = BestApparel.ColorWhiteA50;
+                GUI.color = UIUtils.ColorWhiteA50;
 
                 for (var thingIdx = 0; thingIdx < apparels.Length; thingIdx++)
                 {
@@ -298,7 +298,7 @@ public class FittingWindow : Window, IReloadObserver
             else
             {
                 Text.Font = GameFont.Tiny;
-                GUI.color = BestApparel.ColorWhiteA50;
+                GUI.color = UIUtils.ColorWhiteA50;
                 Widgets.Label(new Rect(cellRect.x + CellPadding, cellRect.y + CellPadding + 16, scrollInnerRect.width, IconSize), TranslationCache.FittingLabelSelectApparel.Text);
             }
 
@@ -324,7 +324,7 @@ public class FittingWindow : Window, IReloadObserver
         paneRect.height -= IconSize + CellPadding;
 
         Text.Font = GameFont.Tiny;
-        GUI.color = BestApparel.ColorWhiteA50;
+        GUI.color = UIUtils.ColorWhiteA50;
         var shownType = BestApparel.Config.UseAllThings ? TranslationCache.ControlUseAllThings.Text : TranslationCache.ControlUseCraftableThings.Text;
         if (_selectedBodyPart != null) shownType += " " + "BestApparel.Fitting.Label.Sown.Part".Translate(_selectedBodyPart.label);
         Widgets.Label(paneRect, "BestApparel.Fitting.Label.Sown".Translate(shownType));

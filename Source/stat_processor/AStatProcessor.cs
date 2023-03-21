@@ -1,5 +1,6 @@
 using System;
 using BestApparel.data;
+using BestApparel.ui;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -52,7 +53,7 @@ public abstract class AStatProcessor
 
     protected static void RenderEmptyCell(Rect cellRect)
     {
-        GUI.color = BestApparel.ColorWhiteA20;
+        GUI.color = UIUtils.ColorWhiteA20;
         Widgets.Label(cellRect, "---");
         GUI.color = Color.white;
     }

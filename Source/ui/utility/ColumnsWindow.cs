@@ -16,25 +16,28 @@ public class ColumnsWindow : AUtilityWindow
     {
         float heightCounter = 0;
         var lSearch = SearchString.ToLower();
-        var defs = Parent.DataProcessor.GetStatProcessors(BestApparel.Config.SelectedTab)
+        var processors = Parent.DataProcessor.GetStatProcessors(BestApparel.Config.SelectedTab)
             .Where(proc => lSearch == "" || proc.GetDefName().ToLower().Contains(lSearch) || proc.GetDefLabel().ToLower().Contains(lSearch))
             .ToList();
-        const int rowHeight = 20;
+
+        if (processors.Count == 0) return heightCounter;
+
         var feature = BestApparel.Config.GetColumnsFor(BestApparel.Config.SelectedTab);
+
+        heightCounter += RenderTitle(ref inRect, TranslationCache.LabelColumns, processors.Select(p => p.GetDefName()), feature);
 
         heightCounter += UIUtils.RenderUtilityGrid(
             ref inRect,
-            TranslationCache.LabelColumns,
             2,
             20,
-            defs,
+            processors,
             (processor, cellRect) =>
             {
                 var defName = processor.GetDefName();
                 var defLabel = processor.GetDefLabel();
-                cellRect.width = Text.CalcSize(defLabel).x + rowHeight + 6;
+                cellRect.width = Text.CalcSize(defLabel).x + RowHeight + 6;
 
-                var chkRect = new Rect(cellRect.x, cellRect.y, rowHeight, rowHeight);
+                var chkRect = new Rect(cellRect.x, cellRect.y, RowHeight, RowHeight);
                 var isMouseOver = Mouse.IsOver(cellRect);
 
                 cellRect.xMin += 4;
@@ -44,9 +47,10 @@ public class ColumnsWindow : AUtilityWindow
                 {
                     if (chkState) feature.Remove(defName);
                     else feature.Add(defName);
+                    Parent.DataProcessor.Rebuild();
                 }
 
-                Widgets.CheckboxDraw(chkRect.x, chkRect.y, chkState, false, rowHeight);
+                Widgets.CheckboxDraw(chkRect.x, chkRect.y, chkState, false, RowHeight);
 
                 if (isMouseOver)
                 {
@@ -58,7 +62,7 @@ public class ColumnsWindow : AUtilityWindow
                     }
                 }
 
-                cellRect.x += rowHeight + 2;
+                cellRect.x += RowHeight + 2;
                 Widgets.Label(cellRect, defLabel);
             }
         );

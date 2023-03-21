@@ -118,7 +118,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
 
         // Header
         var firstContainer = thingContainers.First();
-        GUI.color = BestApparel.ColorWhiteA50;
+        GUI.color = UIUtils.ColorWhiteA50;
         Text.Anchor = TextAnchor.MiddleCenter;
         Text.Font = GameFont.Tiny;
         var headerRect = new Rect(inRect.x + CellHeight * 2 + NameCellWidth + CellPadding * 3 - _scrollPosition.x, inRect.y, 0, HeaderHeight);
@@ -214,7 +214,7 @@ public class MainTabWindow : RimWorld.MainTabWindow
 
                 if (idx < thingContainers.Count - 1)
                 {
-                    UIUtils.DrawLineFull(BestApparel.ColorWhiteA20, CellHeight * (idx + 1), inRect.width);
+                    UIUtils.DrawLineFull(UIUtils.ColorWhiteA20, CellHeight * (idx + 1), inRect.width);
                 }
             }
 

@@ -10,9 +10,13 @@ namespace BestApparel.ui;
 
 public static class UIUtils
 {
+    public static Color ColorLinkHover = new(0.58f, 0.58f, 1f);
+    public static Color ColorWhiteA20 = new(1f, 1f, 1f, 0.2f);
+    public static Color ColorWhiteA50 = new(1f, 1f, 1f, 0.5f);
+
     public static void DrawLineAtTop(ref Rect inRect, bool usesScroll = true, int bottomMargin = 10)
     {
-        DrawLineFull(BestApparel.ColorWhiteA20, inRect.y, inRect.width - /*scrollbar width*/(usesScroll ? 16 : 0));
+        DrawLineFull(ColorWhiteA20, inRect.y, inRect.width - /*scrollbar width*/(usesScroll ? 16 : 0));
         if (bottomMargin > 0)
         {
             inRect.yMin += bottomMargin;
@@ -65,12 +69,11 @@ public static class UIUtils
         Text.Anchor = TextAnchor.UpperLeft;
     }
 
-    public static float RenderUtilityGrid<T>(ref Rect inRect, TranslationCache.E label, int columnCount, int rowHeight, List<T> elements, Action<T, Rect> action)
+    public static float RenderUtilityGrid<T>(ref Rect inRect, int columnCount, float rowHeight, List<T> elements, Action<T, Rect> renderElement)
     {
         var inRectStartsAt = inRect.yMin;
         if (elements.Count == 0) return inRect.yMin - inRectStartsAt;
 
-        RenderUtilityHeader(ref inRect, label);
         Text.Anchor = TextAnchor.MiddleLeft;
         Text.Font = GameFont.Tiny;
 
@@ -90,7 +93,7 @@ public static class UIUtils
 
             GUI.color = Color.white;
 
-            action(elements[idx], cellRect);
+            renderElement(elements[idx], cellRect);
         }
 
         inRect.yMin += (int)Math.Ceiling(elements.Count / (float)columnCount) * (rowHeight + padding);
@@ -103,15 +106,20 @@ public static class UIUtils
         return inRect.yMin - inRectStartsAt;
     }
 
-    public static void RenderUtilityHeader(ref Rect inRect, TranslationCache.E label)
+    public static void Link(Rect btnRect, string text, Color color, Action onClick)
     {
-        Text.Anchor = TextAnchor.UpperLeft;
-        Text.Font = GameFont.Small;
+        GUI.color = color;
+        if (Mouse.IsOver(btnRect))
+        {
+            GUI.color = ColorLinkHover;
+        }
 
-        var labelRect = new Rect(inRect.x, inRect.y, label.Size.x, 20);
-        Widgets.Label(labelRect, label.Text);
-        TooltipHandler.TipRegion(labelRect, label.Tooltip);
+        Widgets.Label(btnRect, text);
 
-        inRect.yMin += 36;
+        if (Widgets.ButtonInvisible(btnRect))
+        {
+            SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+            onClick();
+        }
     }
 }

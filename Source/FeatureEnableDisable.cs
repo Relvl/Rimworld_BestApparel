@@ -29,6 +29,20 @@ public class FeatureEnableDisable : IExposable
         _disabled.Remove(name);
     }
 
+    public void EnableAll(IEnumerable<string> names)
+    {
+        _enabled.Clear();
+        _enabled.AddRange(names);
+        _disabled.Clear();
+    }
+
+    public void DisableAll(IEnumerable<string> names)
+    {
+        _enabled.Clear();
+        _disabled.Clear();
+        _disabled.AddRange(names);
+    }
+
     public MultiCheckboxState GetState(string name)
     {
         if (_enabled.Contains(name)) return MultiCheckboxState.On;
