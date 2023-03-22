@@ -155,9 +155,9 @@ public class DataProcessor
                 yield return (_stuffs[TabId.Ranged], TranslationCache.FilterStuff, BestApparel.Config.Ranged.Stuff);
                 break;
             case TabId.Melee:
-                yield return (_weaponClasses[TabId.Ranged], TranslationCache.FilterCategory, BestApparel.Config.Ranged.WeaponClass);
-                yield return (_categories[TabId.Ranged], TranslationCache.FilterWeaponClass, BestApparel.Config.Ranged.Category);
-                yield return (_stuffs[TabId.Ranged], TranslationCache.FilterStuff, BestApparel.Config.Ranged.Stuff);
+                yield return (_weaponClasses[TabId.Melee], TranslationCache.FilterCategory, BestApparel.Config.Melee.WeaponClass);
+                yield return (_categories[TabId.Melee], TranslationCache.FilterWeaponClass, BestApparel.Config.Melee.Category);
+                yield return (_stuffs[TabId.Melee], TranslationCache.FilterStuff, BestApparel.Config.Melee.Stuff);
                 break;
         }
     }

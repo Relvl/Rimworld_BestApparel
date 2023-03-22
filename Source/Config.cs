@@ -8,6 +8,9 @@ namespace BestApparel;
 
 public class Config : ModSettings
 {
+    // Please up this version only when breaking changes
+    private static int Version = 1;
+
     public const float MaxSortingWeight = 10f;
     public const float DefaultTolerance = 0.0001f;
 
@@ -130,6 +133,23 @@ public class Config : ModSettings
 
         Scribe_Collections.Look(ref RangedAmmo, "RangedSelectedAmmo");
         RangedAmmo ??= new Dictionary<string, string>();
+
+        var version = Version;
+        Scribe_Values.Look(ref version, "Version", 0);
+        if (version != Version)
+        {
+            Log.Warning("BestApparel: version upgraded, all config clear");
+            Clear();
+        }
+    }
+
+    public void Clear()
+    {
+        Apparel.Clear();
+        Ranged.Clear();
+        Melee.Clear();
+        FittingWorn.Clear();
+        RangedAmmo.Clear();
     }
 
     public class ApparelConfig : IExposable
@@ -158,6 +178,16 @@ public class Config : ModSettings
             Layer ??= new FeatureEnableDisable();
             BodyPart ??= new FeatureEnableDisable();
         }
+
+        public void Clear()
+        {
+            Columns.Clear();
+            Sorting.Clear();
+            Stuff.Clear();
+            Category.Clear();
+            Layer.Clear();
+            BodyPart.Clear();
+        }
     }
 
     public class RangedConfig : IExposable
@@ -183,6 +213,15 @@ public class Config : ModSettings
             Category ??= new FeatureEnableDisable();
             WeaponClass ??= new FeatureEnableDisable();
         }
+
+        public void Clear()
+        {
+            Columns.Clear();
+            Sorting.Clear();
+            Stuff.Clear();
+            Category.Clear();
+            WeaponClass.Clear();
+        }
     }
 
     public class MeleeConfig : IExposable
@@ -192,6 +231,7 @@ public class Config : ModSettings
 
         public FeatureEnableDisable Stuff = new();
         public FeatureEnableDisable Category = new();
+        public FeatureEnableDisable WeaponClass = new();
 
         public void ExposeData()
         {
@@ -199,11 +239,22 @@ public class Config : ModSettings
             Scribe_Collections.Look(ref Sorting, "Sorting");
             Scribe_Deep.Look(ref Stuff, "Stuff");
             Scribe_Deep.Look(ref Category, "Category");
+            Scribe_Deep.Look(ref WeaponClass, "WeaponClass");
 
             Columns ??= new List<string>();
             Sorting ??= new Dictionary<string, float>();
             Stuff ??= new FeatureEnableDisable();
             Category ??= new FeatureEnableDisable();
+            WeaponClass ??= new FeatureEnableDisable();
+        }
+
+        public void Clear()
+        {
+            Columns.Clear();
+            Sorting.Clear();
+            Stuff.Clear();
+            Category.Clear();
+            WeaponClass.Clear();
         }
     }
 }

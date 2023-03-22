@@ -18,6 +18,7 @@ public class ThingContainerMelee : AThingContainer
     public override bool CheckForFilters()
     {
         if (!BestApparel.Config.Melee.Category.IsCollectionAllowed(Def.thingCategories)) return false;
+        if (!BestApparel.Config.Melee.WeaponClass.IsCollectionAllowed(Def.weaponClasses)) return false;
         return true;
     }
 
