@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.compatibility;
-using BestApparel.compatibility.stat_processor;
 using BestApparel.stat_processor;
 using BestApparel.ui;
 using RimWorld;
@@ -17,7 +16,7 @@ public class ThingContainerRanged : AThingContainer
     {
         if (Config.IsCeLoaded)
         {
-            CeRangedDamageStatProcessor.TryToLoadAmmo(DefaultThing);
+            CombatExtendedCompat.TryToLoadAmmo(DefaultThing);
         }
     }
 

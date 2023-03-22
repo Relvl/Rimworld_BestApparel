@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using BestApparel.compatibility.stat_processor;
+using BestApparel.data;
 using BestApparel.stat_processor;
-using CombatExtended;
+using RimWorld;
 using Verse;
 
 namespace BestApparel.compatibility;
@@ -15,20 +16,30 @@ public static class CombatExtendedCompat
             yield return new CeMeleeDamageStatProcessor();
             yield return new CeMeleePenetrationStatProcessor(true);
             yield return new CeMeleePenetrationStatProcessor(false);
-            yield return new CommonStatProcessor(CE_StatDefOf.MeleePenetrationFactor);
+            yield return new CommonStatProcessor(StatDef.Named("MeleePenetrationFactor"));
         }
     }
 
     public static IEnumerable<AStatProcessor> GetRangedStats(ThingDef thingDef)
     {
-        yield return new CommonStatProcessor(CE_StatDefOf.MagazineCapacity);
-        yield return new CommonStatProcessor(CE_StatDefOf.MuzzleFlash);
-        yield return new CommonStatProcessor(CE_StatDefOf.ReloadSpeed);
-        yield return new CommonStatProcessor(CE_StatDefOf.AimingAccuracy);
-        yield return new CommonStatProcessor(CE_StatDefOf.SwayFactor);
-        yield return new CommonStatProcessor(CE_StatDefOf.ShotSpread);
-        yield return new CommonStatProcessor(CE_StatDefOf.NightVisionEfficiency_Weapon);
-        yield return new CommonStatProcessor(CE_StatDefOf.Suppressability);
+        yield return new CommonStatProcessor(StatDef.Named("MagazineCapacity"));
+        yield return new CommonStatProcessor(StatDef.Named("MuzzleFlash"));
+        yield return new CommonStatProcessor(StatDef.Named("ReloadSpeed"));
+        yield return new CommonStatProcessor(StatDef.Named("AimingAccuracy"));
+        yield return new CommonStatProcessor(StatDef.Named("SwayFactor"));
+        yield return new CommonStatProcessor(StatDef.Named("ShotSpread"));
+        yield return new CommonStatProcessor(StatDef.Named("NightVisionEfficiency_Weapon"));
+        yield return new CommonStatProcessor(StatDef.Named("Suppressability"));
         yield return new CeRangedDamageStatProcessor();
+    }
+
+    public static void TryToLoadAmmo(Thing thing)
+    {
+        CeRangedDamageStatProcessor.TryToLoadAmmo(thing);
+    }
+
+    public static void OnRangedRestoreAmmoClick(DataProcessor processor)
+    {
+        CeRangedDamageStatProcessor.OnRangedRestoreAmmoClick(processor);
     }
 }

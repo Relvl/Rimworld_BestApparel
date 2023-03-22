@@ -3,8 +3,10 @@ using BestApparel.data;
 using BestApparel.stat_processor;
 using BestApparel.ui;
 using CombatExtended;
+using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 using MainTabWindow = BestApparel.ui.MainTabWindow;
 
 namespace BestApparel.compatibility.stat_processor;
@@ -99,20 +101,25 @@ public class CeRangedDamageStatProcessor : AStatProcessor
         ammoUser.CurrentAmmo = link.ammo;
     }
 
-    private static void TryRestoreAmmo(Thing thing)
+    public static void OnRangedRestoreAmmoClick(DataProcessor processor)
     {
-        if (!BestApparel.Config.RangedAmmo.ContainsKey(thing.def.defName)) return;
-        BestApparel.Config.RangedAmmo.Remove(thing.def.defName);
-        var ammoDefToLoad = thing.def.Verbs?.FirstOrDefault(it => it is VerbPropertiesCE)?.defaultProjectile?.defName;
-        if (ammoDefToLoad.NullOrEmpty()) return;
-        var ammoUser = thing.TryGetComp<CompAmmoUser>();
-        var link = ammoUser?.Props.ammoSet.ammoTypes.FirstOrDefault(l => l.projectile.defName == ammoDefToLoad);
-        if (link is null) return;
-        ammoUser.CurrentAmmo = link.ammo;
+        SoundDefOf.Tick_High.PlayOneShotOnCamera();
+        foreach (var container in processor.GetContainers(TabId.Ranged))
+        {
+            var thing = container.DefaultThing;
+            if (!BestApparel.Config.RangedAmmo.ContainsKey(thing.def.defName)) continue;
+            BestApparel.Config.RangedAmmo.Remove(thing.def.defName);
+            var ammoDefToLoad = thing.def.Verbs?.FirstOrDefault(it => it is VerbPropertiesCE)?.defaultProjectile?.defName;
+            if (ammoDefToLoad.NullOrEmpty()) continue;
+            var ammoUser = thing.TryGetComp<CompAmmoUser>();
+            var link = ammoUser?.Props.ammoSet.ammoTypes.FirstOrDefault(l => l.projectile.defName == ammoDefToLoad);
+            if (link is null) continue;
+            ammoUser.CurrentAmmo = link.ammo;
+        }
     }
 }
 
-public class CellDataCeRangedDamage : CellData
+internal class CellDataCeRangedDamage : CellData
 {
     public readonly CompAmmoUser AmmoUser;
 
