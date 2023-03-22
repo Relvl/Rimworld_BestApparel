@@ -96,14 +96,24 @@ public class FeatureEnableDisable : IExposable
         _disabled.Clear();
     }
 
-    public bool IsAllowed(string name) => !_disabled.Contains(name) && _enabled.Contains(name);
-
     public bool IsCollectionAllowed<T>(ICollection<T> collection) where T : Def
     {
         // Every Enabled must be in the collection
-        if (collection != null && _enabled.Count > 0 && !_enabled.All(e => collection.Any(c => c.defName == e))) return false;
+        if (_enabled.Count > 0)
+        {
+            if (collection == null || collection.Count == 0) return false;
+            if (!_enabled.All(e => collection.Any(c => c.defName == e)))
+                return false;
+        }
+
         // No one Disabled must be in the collection
-        if (collection != null && _disabled.Count > 0 && collection.Any(e => _disabled.Contains(e.defName))) return false;
+        if (_disabled.Count > 0)
+        {
+            if (collection == null || collection.Count == 0) return true;
+            if (_disabled.Any(d => collection.Any(c => c.defName == d)))
+                return false;
+        }
+
         return true;
     }
 

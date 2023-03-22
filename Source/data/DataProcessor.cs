@@ -150,14 +150,14 @@ public class DataProcessor
                 yield return (_stuffs[TabId.Apparel], TranslationCache.FilterStuff, BestApparel.Config.Apparel.Stuff);
                 break;
             case TabId.Ranged:
-                yield return (_weaponClasses[TabId.Ranged], TranslationCache.FilterCategory, BestApparel.Config.Ranged.Category);
-                yield return (_categories[TabId.Ranged], TranslationCache.FilterWeaponClass, BestApparel.Config.Ranged.WeaponClass);
-                yield return (_stuffs[TabId.Apparel], TranslationCache.FilterStuff, BestApparel.Config.Ranged.Stuff);
+                yield return (_weaponClasses[TabId.Ranged], TranslationCache.FilterCategory, BestApparel.Config.Ranged.WeaponClass);
+                yield return (_categories[TabId.Ranged], TranslationCache.FilterWeaponClass, BestApparel.Config.Ranged.Category);
+                yield return (_stuffs[TabId.Ranged], TranslationCache.FilterStuff, BestApparel.Config.Ranged.Stuff);
                 break;
             case TabId.Melee:
-                yield return (_weaponClasses[TabId.Ranged], TranslationCache.FilterCategory, BestApparel.Config.Ranged.Category);
-                yield return (_categories[TabId.Ranged], TranslationCache.FilterWeaponClass, BestApparel.Config.Ranged.WeaponClass);
-                yield return (_stuffs[TabId.Apparel], TranslationCache.FilterStuff, BestApparel.Config.Ranged.Stuff);
+                yield return (_weaponClasses[TabId.Ranged], TranslationCache.FilterCategory, BestApparel.Config.Ranged.WeaponClass);
+                yield return (_categories[TabId.Ranged], TranslationCache.FilterWeaponClass, BestApparel.Config.Ranged.Category);
+                yield return (_stuffs[TabId.Ranged], TranslationCache.FilterStuff, BestApparel.Config.Ranged.Stuff);
                 break;
         }
     }
