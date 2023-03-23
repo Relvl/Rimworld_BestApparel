@@ -8,28 +8,22 @@ public static class Scribe_Config
 {
     public static void LookDictionary<TV>(ref Dictionary<string, TV> dict, string label)
     {
+        dict ??= new Dictionary<string, TV>();
         if (Scribe.EnterNode(label))
         {
             try
             {
-                dict ??= new Dictionary<string, TV>();
-
                 switch (Scribe.mode)
                 {
                     case LoadSaveMode.Saving:
                         foreach (var (key, value) in dict)
-                        {
                             Scribe.saver.WriteElement(key, value.ToString());
-                        }
-
                         break;
                     case LoadSaveMode.LoadingVars:
+                        dict.Clear();
                         var children = Scribe.loader.curXmlParent;
                         foreach (XmlElement child in children)
-                        {
                             dict[child.Name] = ScribeExtractor.ValueFromNode<TV>(child, default);
-                        }
-
                         break;
                 }
             }
@@ -38,26 +32,22 @@ public static class Scribe_Config
                 Scribe.ExitNode();
             }
         }
-        else if (Scribe.mode == LoadSaveMode.LoadingVars)
-        {
-            dict = new Dictionary<string, TV>();
-        }
     }
 
-    public static void LookStringList(ref List<string> list, string label)
+    public static void LookListString(ref List<string> list, string label)
     {
+        list ??= new List<string>();
         if (Scribe.EnterNode(label))
         {
             try
             {
-                list ??= new List<string>();
-
                 switch (Scribe.mode)
                 {
                     case LoadSaveMode.Saving:
                         foreach (var element in list) Scribe.saver.WriteElement(element, "");
                         break;
                     case LoadSaveMode.LoadingVars:
+                        list.Clear();
                         var children = Scribe.loader.curXmlParent;
                         foreach (XmlElement child in children) list.Add(child.Name);
                         break;
@@ -68,36 +58,32 @@ public static class Scribe_Config
                 Scribe.ExitNode();
             }
         }
-        else if (Scribe.mode == LoadSaveMode.LoadingVars)
-        {
-            list ??= new List<string>();
-        }
     }
 
-    public static void LookListDictionary(ref Dictionary<string, List<string>> dict, string label)
+    public static void LookDictionaryList(ref Dictionary<string, List<string>> dict, string label)
     {
+        dict ??= new Dictionary<string, List<string>>();
         if (Scribe.EnterNode(label))
         {
             try
             {
-                dict ??= new Dictionary<string, List<string>>();
-
                 switch (Scribe.mode)
                 {
                     case LoadSaveMode.Saving:
                         foreach (var (key, list) in dict)
                         {
                             var innerlist = list ?? new List<string>();
-                            LookStringList(ref innerlist, key);
+                            LookListString(ref innerlist, key);
                         }
 
                         break;
                     case LoadSaveMode.LoadingVars:
+                        dict.Clear();
                         var children = Scribe.loader.curXmlParent;
                         foreach (XmlElement child in children)
                         {
                             var innerList = new List<string>();
-                            LookStringList(ref innerList, child.Name);
+                            LookListString(ref innerList, child.Name);
                             dict[child.Name] = innerList;
                         }
 
@@ -109,20 +95,15 @@ public static class Scribe_Config
                 Scribe.ExitNode();
             }
         }
-        else if (Scribe.mode == LoadSaveMode.LoadingVars)
-        {
-            dict = new Dictionary<string, List<string>>();
-        }
     }
 
-    public static void LookDeepDictionary<TV>(ref Dictionary<string, Dictionary<string, TV>> dict, string label)
+    public static void LookDictionaryDeep2<TV>(ref Dictionary<string, Dictionary<string, TV>> dict, string label)
     {
+        dict ??= new Dictionary<string, Dictionary<string, TV>>();
         if (Scribe.EnterNode(label))
         {
             try
             {
-                dict ??= new Dictionary<string, Dictionary<string, TV>>();
-
                 switch (Scribe.mode)
                 {
                     case LoadSaveMode.Saving:
@@ -134,6 +115,7 @@ public static class Scribe_Config
 
                         break;
                     case LoadSaveMode.LoadingVars:
+                        dict.Clear();
                         var children = Scribe.loader.curXmlParent;
                         foreach (XmlElement child in children)
                         {
@@ -150,9 +132,43 @@ public static class Scribe_Config
                 Scribe.ExitNode();
             }
         }
-        else if (Scribe.mode == LoadSaveMode.LoadingVars)
+    }
+
+    // todo! чёт оно слишком дико выглядит
+    public static void LookDictionaryDeep3<TV>(ref Dictionary<string, Dictionary<string, Dictionary<string, TV>>> dict, string label)
+    {
+        dict ??= new Dictionary<string, Dictionary<string, Dictionary<string, TV>>>();
+        if (Scribe.EnterNode(label))
         {
-            dict = new Dictionary<string, Dictionary<string, TV>>();
+            try
+            {
+                switch (Scribe.mode)
+                {
+                    case LoadSaveMode.Saving:
+                        foreach (var (key, value) in dict)
+                        {
+                            var inner = value;
+                            LookDictionaryDeep2(ref inner, key);
+                        }
+
+                        break;
+                    case LoadSaveMode.LoadingVars:
+                        dict.Clear();
+                        var children = Scribe.loader.curXmlParent;
+                        foreach (XmlElement child in children)
+                        {
+                            var inner = new Dictionary<string, Dictionary<string, TV>>();
+                            LookDictionaryDeep2(ref inner, child.Name);
+                            dict[child.Name] = inner;
+                        }
+
+                        break;
+                }
+            }
+            finally
+            {
+                Scribe.ExitNode();
+            }
         }
     }
 }

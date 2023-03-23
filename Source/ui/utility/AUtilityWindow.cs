@@ -102,7 +102,7 @@ public abstract class AUtilityWindow : Window
         return 36;
     }
 
-    protected float RenderTitle(ref Rect inRect, TranslationCache.E label, List<Def> defs) =>
+    protected float RenderTitle(ref Rect inRect, TranslationCache.E label, List<Def> defs, string category) =>
         RenderTitle(
             ref inRect,
             label,
@@ -118,7 +118,7 @@ public abstract class AUtilityWindow : Window
                     Color.red,
                     () =>
                     {
-                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), def.defName, MultiCheckboxState.Off);
+                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), category, def.defName, MultiCheckboxState.Off);
                         Parent.UpdateFilter();
                     }
                 );
@@ -134,7 +134,7 @@ public abstract class AUtilityWindow : Window
                     Color.yellow,
                     () =>
                     {
-                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), def.defName, MultiCheckboxState.Partial);
+                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), category, def.defName, MultiCheckboxState.Partial);
                         Parent.UpdateFilter();
                     }
                 );
@@ -150,7 +150,7 @@ public abstract class AUtilityWindow : Window
                     Color.green,
                     () =>
                     {
-                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), def.defName, MultiCheckboxState.On);
+                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), category, def.defName, MultiCheckboxState.On);
                         Parent.UpdateFilter();
                     }
                 );

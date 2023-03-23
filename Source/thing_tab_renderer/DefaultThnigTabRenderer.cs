@@ -294,9 +294,12 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         WeaponClasses.Clear();
     }
 
-    public virtual IEnumerable<(IEnumerable<Def>, TranslationCache.E)> GetFilterData()
+    public virtual IEnumerable<(IEnumerable<Def>, TranslationCache.E, string)> GetFilterData()
     {
-        yield return (Categories, TranslationCache.FilterCategory);
+        yield return (Categories, TranslationCache.FilterCategory, nameof(ThingCategoryDef));
+        
+        if (WeaponClasses.Count > 0)
+            yield return (WeaponClasses, TranslationCache.FilterWeaponClass, nameof(WeaponClassDef));
     }
 
     public virtual IEnumerable<AStatProcessor> GetColumnData()

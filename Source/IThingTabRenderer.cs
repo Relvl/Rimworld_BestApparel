@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
-namespace BestApparel.ui;
+namespace BestApparel;
 
 public interface IThingTabRenderer
 {
@@ -25,7 +25,7 @@ public interface IThingTabRenderer
 
     void DisposeContainers();
 
-    IEnumerable<(IEnumerable<Def>, TranslationCache.E)> GetFilterData();
+    IEnumerable<(IEnumerable<Def>, TranslationCache.E, string)> GetFilterData();
 
     IEnumerable<AStatProcessor> GetColumnData();
 }

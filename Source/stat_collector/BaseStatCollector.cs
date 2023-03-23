@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using BestApparel.stat_processor;
 using RimWorld;
 using Verse;
 
 namespace BestApparel.stat_collector;
 
+// ReSharper disable once UnusedType.Global -- reflection: DefaultThnigTabRenderer:ctor
 public class BaseStatCollector : IStatCollector
 {
     public IEnumerable<AStatProcessor> Collect(Thing thing)
@@ -20,17 +22,4 @@ public class BaseStatCollector : IStatCollector
             }
         }
     }
-}
-
-public class BaseStatProcessor : AStatProcessor
-{
-    public BaseStatProcessor(StatDef def) : base(def)
-    {
-    }
-
-    public override float GetStatValue(Thing thing) => thing.GetStatValue(Def);
-
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) => GetStatValueFormatted(Def, GetStatValue(thing), forceUnformatted);
-
-    public override int GetHashCode() => Def.GetHashCode();
 }

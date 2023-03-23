@@ -38,4 +38,11 @@ public class ApparelTabRenderer : DefaultThnigTabRenderer
         if (def.apparel?.layers != null) Layers.AddRange(def.apparel.layers);
         if (def.apparel?.bodyPartGroups != null) BodyParts.AddRange(def.apparel.bodyPartGroups);
     }
+
+    public override IEnumerable<(IEnumerable<Def>, TranslationCache.E, string)> GetFilterData()
+    {
+        yield return (BodyParts, TranslationCache.FilterBodyParts, nameof(BodyPartGroupDef));
+        yield return (Layers, TranslationCache.FilterLayers, nameof(ApparelLayerDef));
+        foreach (var tuple in base.GetFilterData()) yield return tuple;
+    }
 }

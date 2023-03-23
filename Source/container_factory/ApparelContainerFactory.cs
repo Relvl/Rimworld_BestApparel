@@ -10,9 +10,9 @@ public class ThingContainerApparel : AThingContainer
 
     public override bool CheckForFilters()
     {
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories)) return false;
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.apparel.layers)) return false;
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.apparel.bodyPartGroups)) return false;
+        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories, nameof(ThingCategoryDef))) return false;
+        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.apparel.layers, nameof(ApparelLayerDef))) return false;
+        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.apparel.bodyPartGroups, nameof(BodyPartGroupDef))) return false;
         return true;
     }
 }
@@ -27,8 +27,5 @@ public class ApparelContainerFactory : IContainerFactory
         return true;
     }
 
-    public AThingContainer Produce(ThingDef def, string tabId)
-    {
-        return new ThingContainerApparel(def, tabId);
-    }
+    public AThingContainer Produce(ThingDef def, string tabId) => new ThingContainerApparel(def, tabId);
 }

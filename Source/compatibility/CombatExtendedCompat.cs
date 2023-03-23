@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BestApparel.compatibility.stat_processor;
 using BestApparel.stat_collector;
+using BestApparel.stat_processor;
 using RimWorld;
 using Verse;
 

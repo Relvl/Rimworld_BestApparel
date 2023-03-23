@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BestApparel.compatibility;
+using BestApparel.stat_processor;
 using Verse;
 
 namespace BestApparel.container_factory;
@@ -17,8 +18,8 @@ public class ThingContainerRanged : AThingContainer
 
     public override bool CheckForFilters()
     {
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories)) return false;
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.weaponClasses)) return false;
+        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories, nameof(ThingCategoryDef))) return false;
+        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.weaponClasses, nameof(WeaponClassDef))) return false;
         return true;
     }
 
@@ -27,10 +28,6 @@ public class ThingContainerRanged : AThingContainer
         if (Config.IsCeLoaded)
         {
             foreach (var processor in CombatExtendedCompat.GetRangedStats(Def)) yield return processor;
-        }
-        else
-        {
-            yield return new FuncStatProcessor(thing => thing.def.Verbs.FirstOrDefault()?.defaultProjectile?.projectile?.GetDamageAmount(thing) ?? 0, "Ranged_Damage");
         }
     }
 }
@@ -45,8 +42,5 @@ public class RangedContainerFactory : IContainerFactory
         return true;
     }
 
-    public AThingContainer Produce(ThingDef def, string tabId)
-    {
-        return new ThingContainerRanged(def, tabId);
-    }
+    public AThingContainer Produce(ThingDef def, string tabId) => new ThingContainerRanged(def, tabId);
 }

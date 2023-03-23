@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BestApparel.compatibility;
 using BestApparel.stat_collector;
+using BestApparel.stat_processor;
 using RimWorld;
 using Verse;
 
@@ -14,8 +15,8 @@ public class ThingContainerMelee : AThingContainer
 
     public override bool CheckForFilters()
     {
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories)) return false;
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.weaponClasses)) return false;
+        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories, nameof(ThingCategoryDef))) return false;
+        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.weaponClasses, nameof(WeaponClassDef))) return false;
         return true;
     }
 
@@ -26,13 +27,6 @@ public class ThingContainerMelee : AThingContainer
             yield return new CommonStatProcessor(StatDef.Named("MeleePenetrationFactor"));
             yield return new CommonStatProcessor(StatDef.Named("MeleeCounterParryBonus"));
             foreach (var processor in CombatExtendedCompat.GetMeleeStats(Def)) yield return processor;
-        }
-        else
-        {
-            yield return new CommonStatProcessor(StatDefOf.MeleeWeapon_AverageArmorPenetration);
-            yield return new CommonStatProcessor(StatDefOf.MeleeWeapon_DamageMultiplier);
-            yield return new CommonStatProcessor(StatDefOf.MeleeWeapon_CooldownMultiplier);
-            yield return new CommonStatProcessor(StatDefOf.MeleeWeapon_AverageDPS);
         }
     }
 }
@@ -50,8 +44,5 @@ public class MeleeContainerFactory : IContainerFactory
         return true;
     }
 
-    public AThingContainer Produce(ThingDef def, string tabId)
-    {
-        return new ThingContainerMelee(def, tabId);
-    }
+    public AThingContainer Produce(ThingDef def, string tabId) => new ThingContainerMelee(def, tabId);
 }

@@ -16,18 +16,18 @@ public class FilterWindow : AUtilityWindow
 
         float heightCounter = 0;
 
-        foreach (var (defs, label) in Parent.GetFilterData())
+        foreach (var (defs, label, category) in Parent.GetFilterData())
         {
             var defsAsList = defs.ToList();
             if (defsAsList.Count == 0) continue;
-            heightCounter += RenderTitle(ref inRect, label, defsAsList);
-            heightCounter += UIUtils.RenderUtilityGrid(ref inRect, 3, RowHeight, defsAsList, RenderElement);
+            heightCounter += RenderTitle(ref inRect, label, defsAsList, category);
+            heightCounter += UIUtils.RenderUtilityGrid(ref inRect, 3, RowHeight, defsAsList, (def, rect) => RenderElement(def, rect, category));
         }
 
         return heightCounter;
     }
 
-    private void RenderElement(Def def, Rect cellRect)
+    private void RenderElement(Def def, Rect cellRect, string category)
     {
         var defName = def.defName;
         var defLabel = def.label;
@@ -38,10 +38,10 @@ public class FilterWindow : AUtilityWindow
 
         cellRect.xMin += 4;
 
-        var chkState = BestApparel.Config.GetFilter(Parent.GetTabId(), defName);
+        var chkState = BestApparel.Config.GetFilter(Parent.GetTabId(), category, defName);
         if (Widgets.ButtonInvisible(cellRect))
         {
-            chkState = BestApparel.Config.ToggleFilter(Parent.GetTabId(), defName);
+            chkState = BestApparel.Config.ToggleFilter(Parent.GetTabId(), category, defName);
             Parent.UpdateFilter();
         }
 
