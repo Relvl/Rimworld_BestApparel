@@ -123,6 +123,9 @@
       <Content Include="..\Languages\English\Keyed\NonCached.xml">
         <Link>Languages\English\Keyed\NonCached.xml</Link>
       </Content>
+      <Content Include="..\Languages\Russian\DefInjected\BestApparel.def.ThingTabDef\LanguageData.xml">
+        <Link>Languages\Russian\DefInjected\BestApparel.def.ThingTabDef\LanguageData.xml</Link>
+      </Content>
       <Content Include="..\Languages\Russian\Keyed\LanguageData.xml">
         <Link>Languages\Russian\Keyed\LanguageData.xml</Link>
       </Content>

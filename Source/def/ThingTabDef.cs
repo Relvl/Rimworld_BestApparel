@@ -8,11 +8,6 @@ namespace BestApparel.def;
 public class ThingTabDef : Def
 {
     /// <summary>
-    /// UI tab caption
-    /// </summary>
-    public string caption;
-
-    /// <summary>
     /// UI tab order (lesser to the left)
     /// </summary>
     public int order = 0;

@@ -2,7 +2,7 @@
 <Defs>
     <BestApparel.def.ThingTabDef>
         <defName>Apparel</defName>
-        <caption>Apparel</caption>
+        <label>Apparel</label>
         <order>100</order>
         <renderClass>BestApparel.thing_tab_renderer.ApparelTabRenderer</renderClass>
         <factoryClass>BestApparel.container_factory.ApparelContainerFactory</factoryClass>
@@ -14,7 +14,7 @@
 
     <BestApparel.def.ThingTabDef>
         <defName>Ranged</defName>
-        <caption>Ranged</caption>
+        <label>Ranged</label>
         <order>200</order>
         <renderClass>BestApparel.thing_tab_renderer.DefaultThnigTabRenderer</renderClass>
         <factoryClass>BestApparel.container_factory.RangedContainerFactory</factoryClass>
@@ -27,7 +27,7 @@
 
     <BestApparel.def.ThingTabDef>
         <defName>Melee</defName>
-        <caption>Melee</caption>
+        <label>Melee</label>
         <order>300</order>
         <renderClass>BestApparel.thing_tab_renderer.DefaultThnigTabRenderer</renderClass>
         <factoryClass>BestApparel.container_factory.MeleeContainerFactory</factoryClass>

@@ -18,6 +18,8 @@ public interface IThingTabRenderer
     void PrepareCriteria();
 
     void CollectContainers();
+    
+    void PostProcessContainer(AThingContainer container);
 
     void UpdateFilter();
 

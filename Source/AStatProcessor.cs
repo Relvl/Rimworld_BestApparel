@@ -36,7 +36,7 @@ public abstract class AStatProcessor
 
     public virtual CellData MakeCell(Thing thing) => new(this, thing);
 
-    public virtual void RenderCell(Rect cellRect, CellData cell)
+    public virtual void RenderCell(Rect cellRect, CellData cell, IThingTabRenderer renderer)
     {
         if (cell.IsEmpty)
         {

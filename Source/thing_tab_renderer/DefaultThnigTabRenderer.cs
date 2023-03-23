@@ -15,6 +15,8 @@ namespace BestApparel.thing_tab_renderer;
 // ReSharper disable once ClassNeverInstantiated.Global -- instantiated by reflection: ThingTabDef.renderClass -> ThingTab:ctor
 public class DefaultThnigTabRenderer : IThingTabRenderer
 {
+    public List<IReloadObserver> ReloadObservers { get; } = new();
+
     protected const int CellPadding = 2;
     protected const int NameCellWidth = 200;
     protected const int CellHeight = 24;
@@ -120,7 +122,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
                         mouseOverAnyCell = true;
                     }
 
-                    cell.Processor.RenderCell(cellRect, cell); // todo! move to this' method
+                    cell.Processor.RenderCell(cellRect, cell, this); // todo! move to this' method
 
                     // offset to the right
                     cellRect.x += /*todo config? auto-calc?*/ cellRect.width + CellPadding - 1;
@@ -232,6 +234,8 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
             if (!Factory.CanProduce(def)) continue;
             var container = Factory.Produce(def, GetTabId());
             if (container is null) continue;
+
+            PostProcessContainer(container);
             AllContainers.Add(container);
 
             // only collect stats from available things - just for propper (min,max) value calculation
@@ -249,6 +253,10 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         StatProcessors.AddRange(tmpStatProcessors.OrderBy(p => p.GetDefLabel()));
 
         UpdateFilter();
+    }
+
+    public virtual void PostProcessContainer(AThingContainer container)
+    {
     }
 
     public virtual void UpdateFilter()
@@ -282,6 +290,8 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
                 .OrderByDescending(c => c.CachedSortingWeight)
                 .ThenBy(c => c.Def.label)
         );
+
+        foreach (var observer in ReloadObservers) observer.OnDataProcessorReloaded();
     }
 
     public virtual void DisposeContainers()
@@ -297,7 +307,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
     public virtual IEnumerable<(IEnumerable<Def>, TranslationCache.E, string)> GetFilterData()
     {
         yield return (Categories, TranslationCache.FilterCategory, nameof(ThingCategoryDef));
-        
+
         if (WeaponClasses.Count > 0)
             yield return (WeaponClasses, TranslationCache.FilterWeaponClass, nameof(WeaponClassDef));
     }

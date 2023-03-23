@@ -1,6 +1,7 @@
 using System;
 using BestApparel.def;
 using BestApparel.ui;
+using BestApparel.ui.utility;
 using UnityEngine;
 using Verse;
 
@@ -8,22 +9,17 @@ namespace BestApparel;
 
 public class ThingTab
 {
-    private readonly string _tabId;
-    private readonly string _caption;
     private readonly IThingTabRenderer _renderer;
 
     public ThingTab(ThingTabDef def)
     {
-        _tabId = def.defName;
-        _caption = def.caption;
         _renderer = Activator.CreateInstance(def.renderClass, def) as IThingTabRenderer;
         if (_renderer is null)
             throw new ArgumentException($"Can't instantiate renderer class ({def.renderClass?.FullName}) - should be `public ctor(ThingTabDef)`");
 
-        _renderer.PrepareCriteria();
+        Config.SelectedTab = def.defName;
+        Reload();
     }
-
-    public TabRecord GetTabRecord() => new(_caption, () => Config.SelectedTab = _tabId, Config.SelectedTab == _tabId);
 
     public void DoMainWindowContents(ref Rect inRect)
     {
@@ -55,13 +51,15 @@ public class ThingTab
         _renderer.DoWindowContents(ref inRect);
     }
 
-    public void MainWindowPreOpen()
-    {
-        _renderer.CollectContainers();
-    }
+    public void Reload() => _renderer.CollectContainers();
 
-    public void MainWindowPreClose()
+    public void OnTabClosed()
     {
+        Find.WindowStack.TryRemove(typeof(FilterWindow));
+        Find.WindowStack.TryRemove(typeof(ColumnsWindow));
+        Find.WindowStack.TryRemove(typeof(SortWindow));
+        Find.WindowStack.TryRemove(typeof(FittingWindow));
+
         _renderer.DisposeContainers();
     }
 }

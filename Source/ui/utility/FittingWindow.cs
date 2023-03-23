@@ -56,13 +56,13 @@ public class FittingWindow : Window, IReloadObserver
                 .Where(it => it != null)
         );
         DoSomethingChanged();
-        // _parent.DataProcessor.ReloadObservers.Add(this);
+        _parent.ReloadObservers.Add(this);
     }
 
     public override void PreClose()
     {
-        // _parent.DataProcessor.ReloadObservers.Remove(this);
-        Config.ModInstance.WriteSettings();
+        _parent.ReloadObservers.Remove(this);
+        Config.ModInstance?.WriteSettings();
     }
 
     public void OnDataProcessorReloaded() => DoSomethingChanged();

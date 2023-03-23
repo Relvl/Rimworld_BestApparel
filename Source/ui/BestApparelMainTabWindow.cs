@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using BestApparel.def;
-using BestApparel.ui.utility;
 using UnityEngine;
 using Verse;
 
@@ -11,7 +8,7 @@ namespace BestApparel.ui;
 // ReSharper disable once UnusedType.Global, ClassNeverInstantiated.Global -> /Defs/MainWindow.xml
 public class BestApparelMainTabWindow : RimWorld.MainTabWindow
 {
-    private readonly IReadOnlyDictionary<string, ThingTab> _thingTabs;
+    private ThingTab _currentTab;
 
     public BestApparelMainTabWindow()
     {
@@ -19,26 +16,29 @@ public class BestApparelMainTabWindow : RimWorld.MainTabWindow
         doCloseX = true;
         closeOnClickedOutside = false;
         // this
-        _thingTabs = new ReadOnlyDictionary<string, ThingTab>(DefDatabase<ThingTabDef>.AllDefs.ToDictionary(t => t.defName, t => new ThingTab(t)));
-        Config.SelectedTab = _thingTabs.FirstOrDefault().Key ?? "";
+        CreateTab();
+    }
+
+    private void CreateTab()
+    {
+        var tabDef = DefDatabase<ThingTabDef>.AllDefs.FirstOrDefault();
+        if (!Config.SelectedTab.NullOrEmpty())
+            tabDef = DefDatabase<ThingTabDef>.AllDefs.FirstOrDefault(d => d.defName == Config.SelectedTab) ?? tabDef;
+        _currentTab?.OnTabClosed();
+        _currentTab = new ThingTab(tabDef);
     }
 
     public override void PreOpen()
     {
         base.PreOpen();
-        foreach (var tab in _thingTabs.Values) tab.MainWindowPreOpen();
+        CreateTab();
     }
 
     public override void PreClose()
     {
-        Find.WindowStack.TryRemove(typeof(FilterWindow));
-        Find.WindowStack.TryRemove(typeof(ColumnsWindow));
-        Find.WindowStack.TryRemove(typeof(SortWindow));
-        Find.WindowStack.TryRemove(typeof(FittingWindow));
-
-        foreach (var tab in _thingTabs.Values) tab.MainWindowPreClose();
-
-        BestApparel.Config.Mod.WriteSettings();
+        _currentTab?.OnTabClosed();
+        _currentTab = null;
+        BestApparel.Config?.Mod?.WriteSettings();
     }
 
     public override void DoWindowContents(Rect inRect)
@@ -48,39 +48,38 @@ public class BestApparelMainTabWindow : RimWorld.MainTabWindow
         GUI.color = Color.white;
 
         inRect.yMin += 35f;
-        TabDrawer.DrawTabs(inRect, _thingTabs.Values.Select(d => d.GetTabRecord()).ToList());
+
+        TabDrawer.DrawTabs(
+            inRect,
+            DefDatabase<ThingTabDef>.AllDefs.Select(
+                    tabDef => new TabRecord(
+                        tabDef.label,
+                        () =>
+                        {
+                            _currentTab?.OnTabClosed();
+                            _currentTab = new ThingTab(tabDef);
+                        },
+                        Config.SelectedTab == tabDef.defName
+                    )
+                )
+                .ToList()
+        );
         inRect.yMin += 10f;
 
-        if (_thingTabs.ContainsKey(Config.SelectedTab))
-        {
-            _thingTabs[Config.SelectedTab].DoMainWindowContents(ref inRect);
-        }
-
-        // Ranged -> CE tab - todo how to extend?
-        // if (Config.IsCeLoaded)
-        // {
-        //     UIUtils.DrawButtonsRowRight(
-        //         ref inRect, //
-        //         (TranslationCache.BtnRangedRestoreAmmo, () => CombatExtendedCompat.OnRangedRestoreAmmoClick(DataProcessor), BestApparel.Config.SelectedTab == TabId.Ranged)
-        //     );
-        // }
+        if (_currentTab == null) return;
+        _currentTab.DoMainWindowContents(ref inRect);
 
         // Absolute positions here
-        const int collectTypeWidth = 150;
-        const int btnWidth = 100;
 
-        var collectTypeRect = new Rect(windowRect.width - Margin * 2 - 10 - collectTypeWidth - btnWidth - 10, 8, collectTypeWidth, 24);
-        UIUtils.RenderCheckboxLeft(
-            ref collectTypeRect,
-            (BestApparel.Config.UseAllThings ? TranslationCache.ControlUseAllThings : TranslationCache.ControlUseCraftableThings).Text,
-            BestApparel.Config.UseAllThings,
-            state =>
-            {
-                BestApparel.Config.UseAllThings = state;
-                // DataProcessor.OnMainWindowPreOpen();
-            }
-        );
-        TooltipHandler.TipRegion(collectTypeRect, (BestApparel.Config.UseAllThings ? TranslationCache.ControlUseAllThings : TranslationCache.ControlUseCraftableThings).Tooltip);
+        var label = BestApparel.Config.UseAllThings ? TranslationCache.ControlUseAllThings : TranslationCache.ControlUseCraftableThings;
+        var collectTypeRect = new Rect(windowRect.width - Margin * 2 - label.Size.x - 26, 8, label.Size.x + 16, 24);
+        if (Widgets.ButtonText(collectTypeRect, label.Text))
+        {
+            BestApparel.Config.UseAllThings = !BestApparel.Config.UseAllThings;
+            _currentTab?.Reload();
+        }
+
+        TooltipHandler.TipRegion(collectTypeRect, label.Tooltip);
 
         Text.Anchor = TextAnchor.UpperLeft;
         GUI.color = Color.white;

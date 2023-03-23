@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Verse;
+﻿using Verse;
 
 namespace BestApparel;
 
@@ -7,7 +6,6 @@ namespace BestApparel;
 public class BestApparel : Mod
 {
     public static Config Config { get; private set; } = new();
-    public static List<IReloadObserver> ReloadObservers { get; } = new();
 
     public BestApparel(ModContentPack content) : base(content)
     {
