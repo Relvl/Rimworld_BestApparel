@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <loadFolders>
-    <default>
+    <v1.4>
         <li>/</li>
         <li IfModActive="CETeam.CombatExtended">Compat/CombatExtended</li>
-    </default>
+    </v1.4>
 </loadFolders>
