@@ -1,7 +1,8 @@
 using CombatExtended;
 using Verse;
 
-namespace BestApparel.compatibility.stat_processor;
+// ReSharper disable once CheckNamespace
+namespace BestApparel.CombatExtendedCompat;
 
 public class CeMeleeDamageStatProcessor : AStatProcessor
 {

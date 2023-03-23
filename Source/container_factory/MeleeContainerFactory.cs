@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using BestApparel.compatibility;
-using BestApparel.stat_collector;
-using BestApparel.stat_processor;
-using RimWorld;
 using Verse;
 
 namespace BestApparel.container_factory;
@@ -18,16 +13,6 @@ public class ThingContainerMelee : AThingContainer
         if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories, nameof(ThingCategoryDef))) return false;
         if (!BestApparel.Config.CheckFilter(TabIdStr, Def.weaponClasses, nameof(WeaponClassDef))) return false;
         return true;
-    }
-
-    public IEnumerable<AStatProcessor> CollectStats()
-    {
-        if (Config.IsCeLoaded)
-        {
-            yield return new CommonStatProcessor(StatDef.Named("MeleePenetrationFactor"));
-            yield return new CommonStatProcessor(StatDef.Named("MeleeCounterParryBonus"));
-            foreach (var processor in CombatExtendedCompat.GetMeleeStats(Def)) yield return processor;
-        }
     }
 }
 

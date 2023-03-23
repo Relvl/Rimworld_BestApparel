@@ -57,8 +57,16 @@ public class Config : ModSettings
 
     public void SetColumn(string tabId, string def, bool value)
     {
-        if (value) _columns.ComputeIfAbsent(tabId, () => new List<string>()).Add(def);
-        else _columns.ComputeIfAbsent(tabId, () => new List<string>()).Remove(def);
+        if (value)
+        {
+            _columns.ComputeIfAbsent(tabId, () => new List<string>()).Add(def);
+            SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
+        }
+        else
+        {
+            _columns.ComputeIfAbsent(tabId, () => new List<string>()).Remove(def);
+            SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+        }
     }
 
     public MultiCheckboxState GetFilter(string tabId, string category, string defName)

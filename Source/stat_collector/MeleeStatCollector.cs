@@ -6,7 +6,7 @@ using Verse;
 namespace BestApparel.stat_collector;
 
 // ReSharper disable once UnusedType.Global -- reflection: DefaultThnigTabRenderer:ctor
-public class MeleeDamageStatCollector : IStatCollector
+public class MeleeStatCollector : IStatCollector
 {
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {

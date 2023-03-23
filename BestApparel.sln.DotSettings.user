@@ -63,6 +63,7 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002EVRModule_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002EWindModule_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002EXRModule_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CUnity_002ETextMeshPro_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="D:\RimWorldDev\RimWorldWin64_Data\Managed\Assembly-CSharp.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\RimWorldDev\RimWorldWin64_Data\Managed\UnityEngine.UI.dll" /&gt;&#xD;

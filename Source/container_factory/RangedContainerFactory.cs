@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using BestApparel.compatibility;
-using BestApparel.stat_processor;
 using Verse;
 
 namespace BestApparel.container_factory;
@@ -10,10 +6,6 @@ public class ThingContainerRanged : AThingContainer
 {
     public ThingContainerRanged(ThingDef thingDef, string tabId) : base(thingDef, tabId)
     {
-        if (Config.IsCeLoaded)
-        {
-            CombatExtendedCompat.TryToLoadAmmo(DefaultThing);
-        }
     }
 
     public override bool CheckForFilters()
@@ -21,14 +13,6 @@ public class ThingContainerRanged : AThingContainer
         if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories, nameof(ThingCategoryDef))) return false;
         if (!BestApparel.Config.CheckFilter(TabIdStr, Def.weaponClasses, nameof(WeaponClassDef))) return false;
         return true;
-    }
-
-    public IEnumerable<AStatProcessor> CollectStats()
-    {
-        if (Config.IsCeLoaded)
-        {
-            foreach (var processor in CombatExtendedCompat.GetRangedStats(Def)) yield return processor;
-        }
     }
 }
 

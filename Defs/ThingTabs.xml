@@ -21,7 +21,7 @@
         <collectors>
             <li>BestApparel.stat_collector.BaseStatCollector</li>
             <li>BestApparel.stat_collector.EquippedStatCollector</li>
-            <li>BestApparel.stat_collector.RangedDamageStatCollector</li>
+            <li>BestApparel.stat_collector.RangedStatCollector</li>
         </collectors>
     </BestApparel.def.ThingTabDef>
 
@@ -34,7 +34,7 @@
         <collectors>
             <li>BestApparel.stat_collector.BaseStatCollector</li>
             <li>BestApparel.stat_collector.EquippedStatCollector</li>
-            <li>BestApparel.stat_collector.MeleeDamageStatCollector</li>
+            <li>BestApparel.stat_collector.MeleeStatCollector</li>
         </collectors>
     </BestApparel.def.ThingTabDef>
 </Defs>
