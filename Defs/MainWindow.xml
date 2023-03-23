@@ -5,7 +5,7 @@
         <defName>BestApparel</defName>
         <label>Best Apparel</label>
         <description>Open things comparsion tools</description>
-        <tabWindowClass>BestApparel.ui.MainTabWindow</tabWindowClass>
+        <tabWindowClass>BestApparel.ui.BestApparelMainTabWindow</tabWindowClass>
         <order>480</order>
         <minimized>True</minimized>
         <iconPath>UI/Buttons/MainButtons/IconBetterApparel</iconPath>

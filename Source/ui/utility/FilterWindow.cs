@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
@@ -7,7 +6,7 @@ namespace BestApparel.ui.utility;
 
 public class FilterWindow : AUtilityWindow
 {
-    public FilterWindow(MainTabWindow parent) : base(parent)
+    public FilterWindow(IThingTabRenderer parent) : base(parent)
     {
     }
 
@@ -16,23 +15,22 @@ public class FilterWindow : AUtilityWindow
         // todo def.apparel.developmentalStageFilter
 
         float heightCounter = 0;
-        foreach (var (defs, label, feature) in Parent.DataProcessor.GetFilterData(BestApparel.Config.SelectedTab))
+
+        foreach (var (defs, label) in Parent.GetFilterData())
         {
             var defsAsList = defs.ToList();
-            var featuredDefs = defsAsList.Select(def => (def, feature)).ToList();
-            if (featuredDefs.Count == 0) continue;
-
-            heightCounter += RenderTitle(ref inRect, label, defsAsList, feature);
-            heightCounter += UIUtils.RenderUtilityGrid(ref inRect, 3, RowHeight, featuredDefs, RenderElement);
+            if (defsAsList.Count == 0) continue;
+            heightCounter += RenderTitle(ref inRect, label, defsAsList);
+            heightCounter += UIUtils.RenderUtilityGrid(ref inRect, 3, RowHeight, defsAsList, RenderElement);
         }
 
         return heightCounter;
     }
 
-    private void RenderElement((Def, FeatureEnableDisable) element, Rect cellRect)
+    private void RenderElement(Def def, Rect cellRect)
     {
-        var defName = element.Item1.defName;
-        var defLabel = element.Item1.label;
+        var defName = def.defName;
+        var defLabel = def.label;
         cellRect.width = Text.CalcSize(defLabel).x + RowHeight + 6;
 
         var chkRect = new Rect(cellRect.x, cellRect.y, RowHeight, RowHeight);
@@ -40,11 +38,11 @@ public class FilterWindow : AUtilityWindow
 
         cellRect.xMin += 4;
 
-        var chkState = element.Item2.GetState(defName);
+        var chkState = BestApparel.Config.GetFilter(Parent.GetTabId(), defName);
         if (Widgets.ButtonInvisible(cellRect))
         {
-            chkState = element.Item2.Toggle(defName);
-            Parent.DataProcessor.Rebuild();
+            chkState = BestApparel.Config.ToggleFilter(Parent.GetTabId(), defName);
+            Parent.UpdateFilter();
         }
 
         Widgets.CheckboxMulti(chkRect, chkState);
@@ -63,5 +61,5 @@ public class FilterWindow : AUtilityWindow
         Widgets.Label(cellRect, defLabel);
     }
 
-    protected override void OnResetClick() => BestApparel.Config.RestoreDefaultFilters();
+    protected override void OnResetClick() => BestApparel.Config.ClearFilters(Parent.GetTabId());
 }

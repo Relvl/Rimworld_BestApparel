@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using BestApparel.compatibility.stat_processor;
-using BestApparel.data;
-using BestApparel.stat_processor;
+using BestApparel.stat_collector;
 using RimWorld;
 using Verse;
 
@@ -36,10 +35,5 @@ public static class CombatExtendedCompat
     public static void TryToLoadAmmo(Thing thing)
     {
         CeRangedDamageStatProcessor.TryToLoadAmmo(thing);
-    }
-
-    public static void OnRangedRestoreAmmoClick(DataProcessor processor)
-    {
-        CeRangedDamageStatProcessor.OnRangedRestoreAmmoClick(processor);
     }
 }

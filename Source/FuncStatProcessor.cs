@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using Verse;
 
-namespace BestApparel.stat_processor;
+namespace BestApparel;
 
 public class FuncStatProcessor : AStatProcessor
 {

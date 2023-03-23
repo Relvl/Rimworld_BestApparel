@@ -22,4 +22,11 @@ public static class Extensions
         col.Clear();
         col.AddRange(newCol);
     }
+
+    public static TV ComputeIfAbsent<TK, TV>(this IDictionary<TK, TV> dict, TK key, Func<TV> producer)
+    {
+        var v = dict.TryGetValue(key, out var value) ? value : producer();
+        dict[key] = v;
+        return v;
+    }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -15,13 +14,13 @@ public abstract class AUtilityWindow : Window
 
     protected virtual float RowHeight => 20;
 
-    protected readonly MainTabWindow Parent;
+    protected readonly IThingTabRenderer Parent;
     protected string SearchString;
 
     private Vector2 _mainScrollPosition = Vector2.zero;
     private float _lastFrameScrollHeight;
 
-    protected AUtilityWindow(MainTabWindow parent)
+    protected AUtilityWindow(IThingTabRenderer parent)
     {
         // base
         doCloseX = true;
@@ -80,7 +79,7 @@ public abstract class AUtilityWindow : Window
         if (Widgets.ButtonImage(btnRect, TexButton.Reload))
         {
             OnResetClick();
-            Parent.DataProcessor.Rebuild();
+            Parent.UpdateFilter();
         }
 
         return btnHeight;
@@ -103,7 +102,7 @@ public abstract class AUtilityWindow : Window
         return 36;
     }
 
-    protected float RenderTitle(ref Rect inRect, TranslationCache.E label, IEnumerable<Def> defs, FeatureEnableDisable feature) =>
+    protected float RenderTitle(ref Rect inRect, TranslationCache.E label, List<Def> defs) =>
         RenderTitle(
             ref inRect,
             label,
@@ -119,8 +118,8 @@ public abstract class AUtilityWindow : Window
                     Color.red,
                     () =>
                     {
-                        feature.DisableAll(defs.Select(d => d.defName));
-                        Parent.DataProcessor.Rebuild();
+                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), def.defName, MultiCheckboxState.Off);
+                        Parent.UpdateFilter();
                     }
                 );
 
@@ -135,8 +134,8 @@ public abstract class AUtilityWindow : Window
                     Color.yellow,
                     () =>
                     {
-                        feature.Clear();
-                        Parent.DataProcessor.Rebuild();
+                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), def.defName, MultiCheckboxState.Partial);
+                        Parent.UpdateFilter();
                     }
                 );
 
@@ -151,14 +150,14 @@ public abstract class AUtilityWindow : Window
                     Color.green,
                     () =>
                     {
-                        feature.EnableAll(defs.Select(d => d.defName));
-                        Parent.DataProcessor.Rebuild();
+                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), def.defName, MultiCheckboxState.On);
+                        Parent.UpdateFilter();
                     }
                 );
             }
         );
 
-    protected float RenderTitle(ref Rect inRect, TranslationCache.E label, IEnumerable<string> defs, List<string> feature) =>
+    protected float RenderTitle(ref Rect inRect, TranslationCache.E label, IEnumerable<string> defs, Action<bool> onSet) =>
         RenderTitle(
             ref inRect,
             label,
@@ -174,8 +173,8 @@ public abstract class AUtilityWindow : Window
                     Color.red,
                     () =>
                     {
-                        feature.Clear();
-                        Parent.DataProcessor.Rebuild();
+                        onSet(false);
+                        Parent.UpdateFilter();
                     }
                 );
 
@@ -190,9 +189,8 @@ public abstract class AUtilityWindow : Window
                     Color.green,
                     () =>
                     {
-                        feature.Clear();
-                        feature.AddRange(defs);
-                        Parent.DataProcessor.Rebuild();
+                        onSet(true);
+                        Parent.UpdateFilter();
                     }
                 );
             }

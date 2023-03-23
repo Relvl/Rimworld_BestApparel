@@ -1,4 +1,4 @@
-namespace BestApparel.data;
+namespace BestApparel;
 
 public interface IReloadObserver
 {

@@ -1,5 +1,4 @@
 using System.Linq;
-using BestApparel.stat_processor;
 using CombatExtended;
 using RimWorld;
 using Verse;

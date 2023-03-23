@@ -1,12 +1,10 @@
 using System;
-using BestApparel.data;
 using BestApparel.ui;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using MainTabWindow = BestApparel.ui.MainTabWindow;
 
-namespace BestApparel.stat_processor;
+namespace BestApparel;
 
 public abstract class AStatProcessor
 {
@@ -38,7 +36,7 @@ public abstract class AStatProcessor
 
     public virtual CellData MakeCell(Thing thing) => new(this, thing);
 
-    public virtual void RenderCell(Rect cellRect, CellData cell, MainTabWindow window)
+    public virtual void RenderCell(Rect cellRect, CellData cell)
     {
         if (cell.IsEmpty)
         {

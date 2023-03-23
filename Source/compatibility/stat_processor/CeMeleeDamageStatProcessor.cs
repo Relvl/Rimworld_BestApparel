@@ -1,4 +1,3 @@
-using BestApparel.stat_processor;
 using CombatExtended;
 using Verse;
 

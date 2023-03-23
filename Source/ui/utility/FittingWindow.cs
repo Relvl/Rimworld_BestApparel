@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BestApparel.data;
-using BestApparel.data.impl;
+using BestApparel.container_factory;
+using BestApparel.thing_tab_renderer;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -15,7 +15,7 @@ public class FittingWindow : Window, IReloadObserver
 {
     public override Vector2 InitialSize => new(650, 500);
 
-    private readonly MainTabWindow _parent;
+    private readonly ApparelTabRenderer _parent;
     private Vector2 _scrollLeft = Vector2.zero;
     private Vector2 _scrollRight = Vector2.zero;
 
@@ -33,7 +33,7 @@ public class FittingWindow : Window, IReloadObserver
     private const int APCellHeight = IconSize + CellPadding * 2;
     private const float ScrollSize = 16;
 
-    public FittingWindow(MainTabWindow parent)
+    public FittingWindow(ApparelTabRenderer parent)
     {
         resizeable = true;
         draggable = true;
@@ -56,12 +56,12 @@ public class FittingWindow : Window, IReloadObserver
                 .Where(it => it != null)
         );
         DoSomethingChanged();
-        _parent.DataProcessor.ReloadObservers.Add(this);
+        // _parent.DataProcessor.ReloadObservers.Add(this);
     }
 
     public override void PreClose()
     {
-        _parent.DataProcessor.ReloadObservers.Remove(this);
+        // _parent.DataProcessor.ReloadObservers.Remove(this);
         Config.ModInstance.WriteSettings();
     }
 
@@ -71,7 +71,8 @@ public class FittingWindow : Window, IReloadObserver
     {
         if (!changed) return;
         _apparelsFiltered.ReplaceWith(
-            _parent.DataProcessor.GetAllApparels()
+            _parent.AllContainers.ToList()
+                .Cast<ThingContainerApparel>()
                 .Where(
                     it =>
                     {
@@ -226,7 +227,7 @@ public class FittingWindow : Window, IReloadObserver
 
         Widgets.BeginScrollView(paneRect, ref _scrollLeft, scrollInnerRect);
         var cellRect = new Rect(CellPadding, CellPadding, scrollInnerRect.width, BpCellHeight);
-        foreach (var bodyPart in _parent.DataProcessor.ApparelBodyParts)
+        foreach (var bodyPart in _parent.BodyParts.ToList())
         {
             GUI.color = Color.white;
             Text.Font = GameFont.Small;

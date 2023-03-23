@@ -1,13 +1,7 @@
 using System.Linq;
-using BestApparel.data;
-using BestApparel.stat_processor;
-using BestApparel.ui;
 using CombatExtended;
-using RimWorld;
 using UnityEngine;
 using Verse;
-using Verse.Sound;
-using MainTabWindow = BestApparel.ui.MainTabWindow;
 
 namespace BestApparel.compatibility.stat_processor;
 
@@ -52,7 +46,7 @@ public class CeRangedDamageStatProcessor : AStatProcessor
 
     public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) => GetStatValue(thing).ToStringByStyle(ToStringStyle.Integer);
 
-    public override void RenderCell(Rect cellRect, CellData cell, MainTabWindow window)
+    public override void RenderCell(Rect cellRect, CellData cell)
     {
         Widgets.Label(cellRect, cell.Value);
         foreach (var tooltip in cell.Tooltips) TooltipHandler.TipRegion(cellRect, tooltip);
@@ -79,7 +73,7 @@ public class CeRangedDamageStatProcessor : AStatProcessor
                                             BestApparel.Config.RangedAmmo[cell.Thing.def.defName] = ammoLink.projectile.defName;
 
                                         cellCe.AmmoUser.CurrentAmmo = ammoLink.ammo;
-                                        window.DataProcessor.Rebuild();
+                                        // window.DataProcessor.Rebuild();
                                     }
                                 )
                             )
@@ -101,22 +95,22 @@ public class CeRangedDamageStatProcessor : AStatProcessor
         ammoUser.CurrentAmmo = link.ammo;
     }
 
-    public static void OnRangedRestoreAmmoClick(DataProcessor processor)
-    {
-        SoundDefOf.Tick_High.PlayOneShotOnCamera();
-        foreach (var container in processor.GetContainers(TabId.Ranged))
-        {
-            var thing = container.DefaultThing;
-            if (!BestApparel.Config.RangedAmmo.ContainsKey(thing.def.defName)) continue;
-            BestApparel.Config.RangedAmmo.Remove(thing.def.defName);
-            var ammoDefToLoad = thing.def.Verbs?.FirstOrDefault(it => it is VerbPropertiesCE)?.defaultProjectile?.defName;
-            if (ammoDefToLoad.NullOrEmpty()) continue;
-            var ammoUser = thing.TryGetComp<CompAmmoUser>();
-            var link = ammoUser?.Props.ammoSet.ammoTypes.FirstOrDefault(l => l.projectile.defName == ammoDefToLoad);
-            if (link is null) continue;
-            ammoUser.CurrentAmmo = link.ammo;
-        }
-    }
+    // public static void OnRangedRestoreAmmoClick(DataProcessor processor)
+    // {
+    //     SoundDefOf.Tick_High.PlayOneShotOnCamera();
+    //     // foreach (var container in processor.GetContainers(TabId.Ranged))
+    //     // {
+    //     //     var thing = container.DefaultThing;
+    //     //     if (!BestApparel.Config.RangedAmmo.ContainsKey(thing.def.defName)) continue;
+    //     //     BestApparel.Config.RangedAmmo.Remove(thing.def.defName);
+    //     //     var ammoDefToLoad = thing.def.Verbs?.FirstOrDefault(it => it is VerbPropertiesCE)?.defaultProjectile?.defName;
+    //     //     if (ammoDefToLoad.NullOrEmpty()) continue;
+    //     //     var ammoUser = thing.TryGetComp<CompAmmoUser>();
+    //     //     var link = ammoUser?.Props.ammoSet.ammoTypes.FirstOrDefault(l => l.projectile.defName == ammoDefToLoad);
+    //     //     if (link is null) continue;
+    //     //     ammoUser.CurrentAmmo = link.ammo;
+    //     // }
+    // }
 }
 
 internal class CellDataCeRangedDamage : CellData

@@ -1,260 +1,145 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using BestApparel.ui;
+using RimWorld;
 using Verse;
+using Verse.Sound;
 
 namespace BestApparel;
 
 public class Config : ModSettings
 {
-    // Please up this version only when breaking changes
-    private static int Version = 1;
+    // Please up this version only when breaking changes in the configs
+    private const int Version = 3;
 
     public const float MaxSortingWeight = 10f;
     public const float DefaultTolerance = 0.0001f;
 
     public static BestApparel ModInstance;
+
     public static readonly bool IsCeLoaded = ModsConfig.ActiveModsInLoadOrder.Any(m => "Combat Extended".Equals(m.Name));
 
-    // ========================== NON storable
-
-    public TabId SelectedTab = TabId.Apparel;
+    public static string SelectedTab;
 
     // ========================== Storable
 
     /* Do show all the things? Otherwise - only available on the workbenches. */
     public bool UseAllThings;
 
-    /* */
-    public bool DoLogThingsLoading;
-
-    /* */
-    public bool DoAutoResortOnAnyChanges;
-
-    public ApparelConfig Apparel = new();
-    public RangedConfig Ranged = new();
-    public MeleeConfig Melee = new();
-
     public List<string> FittingWorn = new();
     public Dictionary<string, string> RangedAmmo = new();
 
-    public void RestoreDefaultFilters()
+    private Dictionary<string, Dictionary<string, float>> _sorting = new();
+    private Dictionary<string, List<string>> _columns = new();
+    private Dictionary<string, Dictionary<string, bool>> _filters = new();
+
+    public void ClearFilters(string tabId) => _filters.ComputeIfAbsent(tabId, () => new Dictionary<string, bool>())?.Clear();
+
+    public void ClearColumns(string tabId) => _columns.ComputeIfAbsent(tabId, () => new List<string>()).Clear();
+
+    public void ClearSorting(string tabId) => _sorting.ComputeIfAbsent(tabId, () => new Dictionary<string, float>())?.Clear();
+
+    public float GetSorting(string tabId, string defName) => _sorting.ComputeIfAbsent(tabId, () => new Dictionary<string, float>())?.ComputeIfAbsent(defName, () => 0) ?? 0f;
+
+    public void SetSorting(string tabId, string defName, float value)
     {
-        switch (SelectedTab)
+        // todo! удалять сортинги, если 0
+        if (!_sorting.ContainsKey(tabId)) _sorting[tabId] = new Dictionary<string, float>();
+        _sorting[tabId][defName] = value;
+    }
+
+    public IReadOnlyList<string> GetColumns(string tabId) => _columns.ComputeIfAbsent(tabId, () => new List<string>());
+
+    public bool GetColumn(string tabId, string def) => _columns.ComputeIfAbsent(tabId, () => new List<string>()).Contains(def);
+
+    public void SetColumn(string tabId, string def, bool value)
+    {
+        if (value) _columns.ComputeIfAbsent(tabId, () => new List<string>()).Add(def);
+        else _columns.ComputeIfAbsent(tabId, () => new List<string>()).Remove(def);
+    }
+
+    public MultiCheckboxState GetFilter(string tabId, string defName)
+    {
+        if (!_filters.ContainsKey(tabId)) _filters[tabId] = new Dictionary<string, bool>();
+        if (!_filters[tabId].ContainsKey(defName)) return MultiCheckboxState.Partial;
+        return _filters[tabId][defName] ? MultiCheckboxState.On : MultiCheckboxState.Off;
+    }
+
+    public MultiCheckboxState ToggleFilter(string tabId, string defName)
+    {
+        var filter = _filters.ComputeIfAbsent(tabId, () => new Dictionary<string, bool>());
+        if (!filter.ContainsKey(defName))
         {
-            case TabId.Apparel:
-                Apparel.Stuff.Clear();
-                Apparel.Category.Clear();
-                Apparel.Layer.Clear();
-                Apparel.BodyPart.Clear();
-                break;
-            case TabId.Ranged:
-                Ranged.Stuff.Clear();
-                Ranged.Category.Clear();
-                Ranged.WeaponClass.Clear();
-                break;
-            case TabId.Melee:
-                Melee.Stuff.Clear();
-                Melee.Category.Clear();
-                break;
+            filter[defName] = true;
+            SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
+            return MultiCheckboxState.On;
         }
-    }
 
-    public void RestoreDefaultColumns()
-    {
-        switch (SelectedTab)
+        if (filter[defName])
         {
-            case TabId.Apparel:
-                Apparel.Columns.Clear();
-                break;
-            case TabId.Ranged:
-                Ranged.Columns.Clear();
-                break;
-            case TabId.Melee:
-                Melee.Columns.Clear();
-                break;
+            filter[defName] = false;
+            SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+            return MultiCheckboxState.Off;
         }
+
+        filter.Remove(defName);
+        SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+        return MultiCheckboxState.Partial;
     }
 
-    public void RestoreDefaultSortingFor()
+    public bool CheckFilter<T>(string tabId, List<T> defs) where T : Def
     {
-        switch (SelectedTab)
+        var filter = _filters.ComputeIfAbsent(tabId, () => new Dictionary<string, bool>());
+        foreach (var (key, value) in filter)
         {
-            case TabId.Apparel:
-                Apparel.Sorting.Clear();
-                break;
-            case TabId.Ranged:
-                Ranged.Sorting.Clear();
-                break;
-            case TabId.Melee:
-                Melee.Sorting.Clear();
-                break;
+            if (value)
+            {
+                if (defs == null || defs.Count == 0) return false;
+                if (!defs.Any(d => d.defName == key)) return false;
+            }
+            else
+            {
+                if (defs == null || defs.Count == 0) continue;
+                if (defs.Any(d => d.defName == key)) return false;
+            }
         }
+
+        return true;
     }
 
-    public List<string> GetColumnsFor(TabId tabId)
+    public void SetFilter(string tabId, string defName, MultiCheckboxState value)
     {
-        return tabId switch
-        {
-            TabId.Apparel => Apparel.Columns,
-            TabId.Ranged => Ranged.Columns,
-            TabId.Melee => Melee.Columns,
-            _ => throw new ArgumentOutOfRangeException(nameof(tabId), tabId, null)
-        };
-    }
-
-    public Dictionary<string, float> GetSortingFor(TabId tabId)
-    {
-        return tabId switch
-        {
-            TabId.Apparel => Apparel.Sorting,
-            TabId.Ranged => Ranged.Sorting,
-            TabId.Melee => Melee.Sorting,
-            _ => throw new ArgumentOutOfRangeException(nameof(tabId), tabId, null)
-        };
+        if (!_filters.ContainsKey(tabId)) _filters[tabId] = new Dictionary<string, bool>();
+        if (value == MultiCheckboxState.Partial) _filters[tabId].Remove(defName);
+        else _filters[tabId][defName] = value == MultiCheckboxState.On;
     }
 
     public override void ExposeData()
     {
-        Scribe_Values.Look(ref UseAllThings, "UseAllThings", false, true);
-        Scribe_Values.Look(ref DoLogThingsLoading, "DoLogThingsLoading", false, true);
-        Scribe_Values.Look(ref DoAutoResortOnAnyChanges, "DoAutoResortOnAnyChanges", false, true);
-
-        Scribe_Deep.Look(ref Apparel, "Apparel");
-        Apparel ??= new ApparelConfig();
-        Scribe_Deep.Look(ref Ranged, "Ranged");
-        Ranged ??= new RangedConfig();
-        Scribe_Deep.Look(ref Melee, "Melee");
-        Melee ??= new MeleeConfig();
-
-        Scribe_Collections.Look(ref FittingWorn, "FittingWorn");
-        FittingWorn ??= new List<string>();
-
-        Scribe_Collections.Look(ref RangedAmmo, "RangedSelectedAmmo");
-        RangedAmmo ??= new Dictionary<string, string>();
-
         var version = Version;
-        Scribe_Values.Look(ref version, "Version", 0);
-        if (version != Version)
+        Scribe_Values.Look(ref version, "Version");
+        if (version == Version)
+        {
+            Scribe_Values.Look(ref UseAllThings, "UseAllThings", false, true);
+            Scribe_Config.LookDeepDictionary(ref _sorting, "Sorting");
+            Scribe_Config.LookListDictionary(ref _columns, "Columns");
+            Scribe_Config.LookDeepDictionary(ref _filters, "Filters");
+            Scribe_Config.LookStringList(ref FittingWorn, "FittingWorn");
+            Scribe_Config.LookDictionary(ref RangedAmmo, "RangedSelectedAmmo");
+        }
+        else
         {
             Log.Warning("BestApparel: version upgraded, all config clear");
             Clear();
+            ModInstance.WriteSettings();
         }
     }
 
-    public void Clear()
+    private void Clear()
     {
-        Apparel.Clear();
-        Ranged.Clear();
-        Melee.Clear();
+        _sorting.Clear();
+        _columns.Clear();
+        _filters.Clear();
         FittingWorn.Clear();
         RangedAmmo.Clear();
-    }
-
-    public class ApparelConfig : IExposable
-    {
-        public List<string> Columns = new();
-        public Dictionary<string, float> Sorting = new();
-
-        public FeatureEnableDisable Stuff = new();
-        public FeatureEnableDisable Category = new();
-        public FeatureEnableDisable Layer = new();
-        public FeatureEnableDisable BodyPart = new();
-
-        public void ExposeData()
-        {
-            Scribe_Collections.Look(ref Columns, "Columns");
-            Scribe_Collections.Look(ref Sorting, "Sorting");
-            Scribe_Deep.Look(ref Stuff, "Stuff");
-            Scribe_Deep.Look(ref Category, "Category");
-            Scribe_Deep.Look(ref Layer, "Layer");
-            Scribe_Deep.Look(ref BodyPart, "BodyPart");
-
-            Columns ??= new List<string>();
-            Sorting ??= new Dictionary<string, float>();
-            Stuff ??= new FeatureEnableDisable();
-            Category ??= new FeatureEnableDisable();
-            Layer ??= new FeatureEnableDisable();
-            BodyPart ??= new FeatureEnableDisable();
-        }
-
-        public void Clear()
-        {
-            Columns.Clear();
-            Sorting.Clear();
-            Stuff.Clear();
-            Category.Clear();
-            Layer.Clear();
-            BodyPart.Clear();
-        }
-    }
-
-    public class RangedConfig : IExposable
-    {
-        public List<string> Columns = new();
-        public Dictionary<string, float> Sorting = new();
-
-        public FeatureEnableDisable Stuff = new();
-        public FeatureEnableDisable Category = new();
-        public FeatureEnableDisable WeaponClass = new();
-
-        public void ExposeData()
-        {
-            Scribe_Collections.Look(ref Columns, "Columns");
-            Scribe_Collections.Look(ref Sorting, "Sorting");
-            Scribe_Deep.Look(ref Stuff, "Stuff");
-            Scribe_Deep.Look(ref Category, "Category");
-            Scribe_Deep.Look(ref WeaponClass, "WeaponClass");
-
-            Columns ??= new List<string>();
-            Sorting ??= new Dictionary<string, float>();
-            Stuff ??= new FeatureEnableDisable();
-            Category ??= new FeatureEnableDisable();
-            WeaponClass ??= new FeatureEnableDisable();
-        }
-
-        public void Clear()
-        {
-            Columns.Clear();
-            Sorting.Clear();
-            Stuff.Clear();
-            Category.Clear();
-            WeaponClass.Clear();
-        }
-    }
-
-    public class MeleeConfig : IExposable
-    {
-        public List<string> Columns = new();
-        public Dictionary<string, float> Sorting = new();
-
-        public FeatureEnableDisable Stuff = new();
-        public FeatureEnableDisable Category = new();
-        public FeatureEnableDisable WeaponClass = new();
-
-        public void ExposeData()
-        {
-            Scribe_Collections.Look(ref Columns, "Columns");
-            Scribe_Collections.Look(ref Sorting, "Sorting");
-            Scribe_Deep.Look(ref Stuff, "Stuff");
-            Scribe_Deep.Look(ref Category, "Category");
-            Scribe_Deep.Look(ref WeaponClass, "WeaponClass");
-
-            Columns ??= new List<string>();
-            Sorting ??= new Dictionary<string, float>();
-            Stuff ??= new FeatureEnableDisable();
-            Category ??= new FeatureEnableDisable();
-            WeaponClass ??= new FeatureEnableDisable();
-        }
-
-        public void Clear()
-        {
-            Columns.Clear();
-            Sorting.Clear();
-            Stuff.Clear();
-            Category.Clear();
-            WeaponClass.Clear();
-        }
     }
 }

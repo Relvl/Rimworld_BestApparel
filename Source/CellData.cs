@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using BestApparel.stat_processor;
 using Verse;
 
-namespace BestApparel.data;
+namespace BestApparel;
 
 public class CellData
 {

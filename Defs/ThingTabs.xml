@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <BestApparel.def.ThingTabDef>
+        <defName>Apparel</defName>
+        <caption>Apparel</caption>
+        <order>100</order>
+        <renderClass>BestApparel.thing_tab_renderer.ApparelTabRenderer</renderClass>
+        <factoryClass>BestApparel.container_factory.ApparelContainerFactory</factoryClass>
+        <collectors>
+            <li>BestApparel.stat_collector.BaseStatCollector</li>
+            <li>BestApparel.stat_collector.EquippedStatCollector</li>
+        </collectors>
+    </BestApparel.def.ThingTabDef>
+
+    <BestApparel.def.ThingTabDef>
+        <defName>Ranged</defName>
+        <caption>Ranged</caption>
+        <order>200</order>
+        <renderClass>BestApparel.thing_tab_renderer.DefaultThnigTabRenderer</renderClass>
+        <factoryClass>BestApparel.container_factory.RangedContainerFactory</factoryClass>
+        <collectors>
+            <li>BestApparel.stat_collector.BaseStatCollector</li>
+            <li>BestApparel.stat_collector.EquippedStatCollector</li>
+        </collectors>
+    </BestApparel.def.ThingTabDef>
+
+    <BestApparel.def.ThingTabDef>
+        <defName>Melee</defName>
+        <caption>Melee</caption>
+        <order>300</order>
+        <renderClass>BestApparel.thing_tab_renderer.DefaultThnigTabRenderer</renderClass>
+        <factoryClass>BestApparel.container_factory.MeleeContainerFactory</factoryClass>
+        <collectors>
+            <li>BestApparel.stat_collector.BaseStatCollector</li>
+            <li>BestApparel.stat_collector.EquippedStatCollector</li>
+        </collectors>
+    </BestApparel.def.ThingTabDef>
+</Defs>

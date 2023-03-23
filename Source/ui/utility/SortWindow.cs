@@ -9,7 +9,7 @@ public class SortWindow : AUtilityWindow
 {
     protected override float RowHeight => 30;
 
-    public SortWindow(MainTabWindow parent) : base(parent)
+    public SortWindow(IThingTabRenderer parent) : base(parent)
     {
     }
 
@@ -17,7 +17,7 @@ public class SortWindow : AUtilityWindow
     {
         float heightCounter = 0;
 
-        var defs = BestApparel.Config.GetColumnsFor(BestApparel.Config.SelectedTab).OrderBy(it => it).ToList();
+        var columns = BestApparel.Config.GetColumns(Parent.GetTabId()).OrderBy(it => it).ToList();
 
         heightCounter += RenderTitle(ref inRect, TranslationCache.LabelSorting);
 
@@ -25,20 +25,19 @@ public class SortWindow : AUtilityWindow
             ref inRect,
             2,
             RowHeight,
-            defs,
+            columns,
             (defName, cellRect) =>
             {
-                var defLabel = Parent.DataProcessor.GetStatProcessors(BestApparel.Config.SelectedTab).FirstOrDefault(p => p.GetDefName() == defName)?.GetDefLabel();
+                var defLabel = Parent.GetColumnData().FirstOrDefault(p => p.GetDefName() == defName)?.GetDefLabel();
                 if (defLabel == null) return;
 
-                var oldValue = BestApparel.Config.GetSortingFor(BestApparel.Config.SelectedTab)[defName];
+                var oldValue = BestApparel.Config.GetSorting(Parent.GetTabId(), defName);
                 var value = oldValue;
                 Widgets.HorizontalSlider(cellRect, ref value, new FloatRange(-Config.MaxSortingWeight, Config.MaxSortingWeight), $"{defLabel}: {value}", 1);
                 if (Math.Abs(oldValue - value) > 0.1)
                 {
-                    BestApparel.Config.GetSortingFor(BestApparel.Config.SelectedTab)[defName] = value;
-                    // todo! may lags...
-                    Parent.DataProcessor.Rebuild();
+                    BestApparel.Config.SetSorting(Parent.GetTabId(), defName, value);
+                    Parent.UpdateSort();
                 }
             }
         );
@@ -46,5 +45,5 @@ public class SortWindow : AUtilityWindow
         return heightCounter;
     }
 
-    protected override void OnResetClick() => BestApparel.Config.RestoreDefaultSortingFor();
+    protected override void OnResetClick() => BestApparel.Config.ClearSorting(Parent.GetTabId());
 }

@@ -8,7 +8,7 @@ public class ColumnsWindow : AUtilityWindow
 {
     protected override bool UseSearch => true;
 
-    public ColumnsWindow(MainTabWindow parent) : base(parent)
+    public ColumnsWindow(IThingTabRenderer parent) : base(parent)
     {
     }
 
@@ -16,15 +16,21 @@ public class ColumnsWindow : AUtilityWindow
     {
         float heightCounter = 0;
         var lSearch = SearchString.ToLower();
-        var processors = Parent.DataProcessor.GetStatProcessors(BestApparel.Config.SelectedTab)
+        var processors = Parent.GetColumnData()
             .Where(proc => lSearch == "" || proc.GetDefName().ToLower().Contains(lSearch) || proc.GetDefLabel().ToLower().Contains(lSearch))
             .ToList();
 
         if (processors.Count == 0) return heightCounter;
 
-        var feature = BestApparel.Config.GetColumnsFor(BestApparel.Config.SelectedTab);
-
-        heightCounter += RenderTitle(ref inRect, TranslationCache.LabelColumns, processors.Select(p => p.GetDefName()), feature);
+        heightCounter += RenderTitle(
+            ref inRect,
+            TranslationCache.LabelColumns,
+            processors.Select(p => p.GetDefName()),
+            set =>
+            {
+                foreach (var processor in processors) BestApparel.Config.SetColumn(Parent.GetTabId(), processor.GetDefName(), set);
+            }
+        );
 
         heightCounter += UIUtils.RenderUtilityGrid(
             ref inRect,
@@ -42,12 +48,11 @@ public class ColumnsWindow : AUtilityWindow
 
                 cellRect.xMin += 4;
 
-                var chkState = feature.Contains(defName);
+                var chkState = BestApparel.Config.GetColumn(Parent.GetTabId(), defName);
                 if (Widgets.ButtonInvisible(cellRect))
                 {
-                    if (chkState) feature.Remove(defName);
-                    else feature.Add(defName);
-                    Parent.DataProcessor.Rebuild();
+                    BestApparel.Config.SetColumn(Parent.GetTabId(), defName, !chkState);
+                    Parent.UpdateSort();
                 }
 
                 Widgets.CheckboxDraw(chkRect.x, chkRect.y, chkState, false, RowHeight);
@@ -70,5 +75,5 @@ public class ColumnsWindow : AUtilityWindow
         return heightCounter;
     }
 
-    protected override void OnResetClick() => BestApparel.Config.RestoreDefaultColumns();
+    protected override void OnResetClick() => BestApparel.Config.ClearColumns(Parent.GetTabId());
 }

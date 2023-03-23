@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BestApparel.stat_processor;
 using BestApparel.ui;
 using RimWorld;
 using Verse;
 
-namespace BestApparel.data;
+namespace BestApparel;
 
 public abstract class AThingContainer
 {
-    public abstract TabId GetTabId();
+    public readonly string TabIdStr;
 
     public readonly ThingDef Def;
     public readonly Thing DefaultThing;
@@ -20,9 +19,10 @@ public abstract class AThingContainer
 
     public float CachedSortingWeight { get; private set; }
 
-    protected AThingContainer(ThingDef thingDef)
+    protected AThingContainer(ThingDef thingDef, string tabId)
     {
         Def = thingDef;
+        TabIdStr = tabId;
         if (thingDef.MadeFromStuff)
         {
             // todo! деструктуризация по материалу
@@ -39,9 +39,7 @@ public abstract class AThingContainer
 
     public abstract bool CheckForFilters();
 
-    public abstract IEnumerable<AStatProcessor> CollectStats();
-
-    public void CacheCells(Dictionary<AStatProcessor, (float, float)> calculated)
+    public void CacheCells(Dictionary<AStatProcessor, (float, float)> calculated, IThingTabRenderer renderer)
     {
         CachedCells = calculated.Select(
                 pair =>
@@ -53,14 +51,11 @@ public abstract class AThingContainer
                     var normal = (value - valueMin) / (valueMax - valueMin);
                     if (float.IsNaN(normal)) normal = 0f;
 
-                    var sorting = BestApparel.Config.GetSortingFor(GetTabId());
-                    if (!sorting.ContainsKey(pair.Key.GetDefName())) sorting[pair.Key.GetDefName()] = 0;
-
                     var cell = pair.Key.MakeCell(DefaultThing);
-                    cell.WeightFactor = sorting[pair.Key.GetDefName()] + Config.MaxSortingWeight;
+                    cell.WeightFactor = BestApparel.Config.GetSorting(renderer.GetTabId(), pair.Key.GetDefName()) + Config.MaxSortingWeight;
                     cell.NormalizedWeight = normal;
 
-                    cell.Tooltips.Add("BestApparel.Label.RangePercent".Translate(Math.Round(cell.NormalizedWeight * 100f, 1), cell.WeightFactor));
+                    cell.Tooltips.Add(TranslatorFormattedStringExtensions.Translate("BestApparel.Label.RangePercent", Math.Round(cell.NormalizedWeight * 100f, 1), cell.WeightFactor));
 
                     return cell;
                 }

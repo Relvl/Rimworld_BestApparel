@@ -44,6 +44,7 @@
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
+        <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
           <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
           <Private>False</Private>
@@ -62,31 +63,35 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="AStatProcessor.cs" />
+        <Compile Include="AThingContainer.cs" />
+        <Compile Include="CellData.cs" />
         <Compile Include="compatibility\stat_processor\CeMeleeDamageStatProcessor.cs" />
         <Compile Include="compatibility\stat_processor\CeMeleePenetrationStatProcessor.cs" />
         <Compile Include="compatibility\stat_processor\CeRangedDamageStatProcessor.cs" />
         <Compile Include="Config.cs" />
-        <Compile Include="data\CellData.cs" />
-        <Compile Include="data\DataProcessor.cs" />
-        <Compile Include="data\AThingContainer.cs" />
+        <Compile Include="container_factory\ApparelContainerFactory.cs" />
+        <Compile Include="container_factory\MeleeContainerFactory.cs" />
+        <Compile Include="container_factory\RangedContainerFactory.cs" />
         <Compile Include="BestApparel.cs" />
-        <Compile Include="data\ContainerFactory.cs" />
-        <Compile Include="data\impl\ThingContainerApparel.cs" />
-        <Compile Include="data\impl\ThingContainerMelee.cs" />
-        <Compile Include="data\impl\ThingContainerRanged.cs" />
-        <Compile Include="data\IReloadObserver.cs" />
+        <Compile Include="def\ThingTabDef.cs" />
         <Compile Include="Extensions.cs" />
-        <Compile Include="FeatureEnableDisable.cs" />
+        <Compile Include="FuncStatProcessor.cs" />
+        <Compile Include="IContainerFactory.cs" />
+        <Compile Include="IReloadObserver.cs" />
+        <Compile Include="IStatCollector.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="compatibility\CombatExtendedCompat.cs" />
-        <Compile Include="stat_processor\AStatProcessor.cs" />
-        <Compile Include="stat_processor\CommonStatProcessor.cs" />
-        <Compile Include="stat_processor\BaseStatProcessor.cs" />
-        <Compile Include="stat_processor\FuncStatProcessor.cs" />
+        <Compile Include="Scribe_Config.cs" />
+        <Compile Include="stat_collector\BaseStatCollector.cs" />
+        <Compile Include="stat_collector\EquippedStatCollector.cs" />
+        <Compile Include="ThingTab.cs" />
+        <Compile Include="thing_tab_renderer\ApparelTabRenderer.cs" />
+        <Compile Include="thing_tab_renderer\DefaultThnigTabRenderer.cs" />
         <Compile Include="TranslationCache.cs" />
         <Compile Include="ui\ColonistFloatMenuOption.cs" />
-        <Compile Include="ui\TabId.cs" />
-        <Compile Include="ui\MainTabWindow.cs" />
+        <Compile Include="ui\IThingTabRenderer.cs" />
+        <Compile Include="ui\BestApparelMainTabWindow.cs" />
         <Compile Include="ui\UIUtils.cs" />
         <Compile Include="ui\utility\AUtilityWindow.cs" />
         <Compile Include="ui\utility\ColumnsWindow.cs" />
