@@ -26,4 +26,9 @@ public class ThingTabDef : Def
     /// List of collectors def names of StatCollectorDef
     /// </summary>
     public List<Type> collectors = new();
+
+    /// <summary>
+    /// ref to ToolbarButtonDef
+    /// </summary>
+    public List<string> toolbar = new();
 }

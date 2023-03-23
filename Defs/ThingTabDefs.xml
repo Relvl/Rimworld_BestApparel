@@ -10,6 +10,12 @@
             <li>BestApparel.stat_collector.BaseStatCollector</li>
             <li>BestApparel.stat_collector.EquippedStatCollector</li>
         </collectors>
+        <toolbar>
+            <li>ButtonOpenFilters</li>
+            <li>ButtonOpenColumns</li>
+            <li>ButtonOpenSorting</li>
+            <li>ButtonOpenFitting</li>
+        </toolbar>
     </BestApparel.def.ThingTabDef>
 
     <BestApparel.def.ThingTabDef>
@@ -23,6 +29,11 @@
             <li>BestApparel.stat_collector.EquippedStatCollector</li>
             <li>BestApparel.stat_collector.RangedStatCollector</li>
         </collectors>
+        <toolbar>
+            <li>ButtonOpenFilters</li>
+            <li>ButtonOpenColumns</li>
+            <li>ButtonOpenSorting</li>
+        </toolbar>
     </BestApparel.def.ThingTabDef>
 
     <BestApparel.def.ThingTabDef>
@@ -36,5 +47,10 @@
             <li>BestApparel.stat_collector.EquippedStatCollector</li>
             <li>BestApparel.stat_collector.MeleeStatCollector</li>
         </collectors>
+        <toolbar>
+            <li>ButtonOpenFilters</li>
+            <li>ButtonOpenColumns</li>
+            <li>ButtonOpenSorting</li>
+        </toolbar>
     </BestApparel.def.ThingTabDef>
 </Defs>

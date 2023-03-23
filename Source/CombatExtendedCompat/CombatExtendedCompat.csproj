@@ -66,6 +66,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="container_postprocess\CeContainerPostprocessRanged.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="stat_collector\CeMeleeStatCollector.cs" />
         <Compile Include="stat_collector\CeRangedStatCollector.cs" />
@@ -73,11 +74,26 @@
         <Compile Include="stat_processor\CeMeleePenetrationStatProcessor.cs" />
         <Compile Include="stat_processor\CeRangedDamageStatProcessor.cs" />
         <Compile Include="thing_tab_renderer\CeRangedThingTabRenderer.cs" />
+        <Compile Include="toolbar_button\ToolbarButtonResetAmmo.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="..\..\Compat\CombatExtended\Defs\CE_ToolbarButtonDefs.xml">
+        <Link>Defs\CE_ToolbarButtonDefs.xml</Link>
+      </Content>
+      <Content Include="..\..\Compat\CombatExtended\Defs\CE_ContainerPostprocessDefs.xml">
+        <Link>Defs\CE_ContainerPostprocessDefs.xml</Link>
+      </Content>
+      <Content Include="..\..\Compat\CombatExtended\Languages\Russian\DefInjected\BestApparel.def.ToolbarButtonDef\CE_LanguageData.xml">
+        <Link>Languages\Russian\DefInjected\BestApparel.def.ToolbarButtonDef\CE_LanguageData.xml</Link>
+      </Content>
       <Content Include="..\..\Compat\CombatExtended\Patches\Patch_BestApparel_CE.xml">
         <Link>Patches\Patch_BestApparel_CE.xml</Link>
       </Content>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="..\..\Compat\CombatExtended\Languages\Russian">
+        <Link>Languages\Russian</Link>
+      </Folder>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

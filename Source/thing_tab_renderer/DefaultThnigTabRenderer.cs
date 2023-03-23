@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BestApparel.def;
 using BestApparel.ui;
-using BestApparel.ui.utility;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -26,6 +25,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
     protected readonly IContainerFactory Factory;
     protected readonly List<IStatCollector> Collectors;
     protected readonly List<AThingContainer> FilteredContainers = new();
+    protected readonly List<IContainerPostprocess> Postprocessors = new();
 
     protected Vector2 Scroll = Vector2.zero;
     protected Vector2 LastFrameTableSize = Vector2.zero;
@@ -42,6 +42,13 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         TabId = def.defName;
         Factory = Activator.CreateInstance(def.factoryClass) as IContainerFactory;
         Collectors = def.collectors.Select(c => Activator.CreateInstance(c) as IStatCollector).ToList();
+
+        foreach (var postprocessDef in DefDatabase<ContainerPostprocessDef>.AllDefs.OrderBy(d => d.Order))
+        {
+            if (!postprocessDef.Tabs.Contains(def.defName)) continue;
+            var postprocessor = Activator.CreateInstance(postprocessDef.Postprocessor) as IContainerPostprocess;
+            Postprocessors.Add(postprocessor);
+        }
     }
 
     public string GetTabId() => TabId;
@@ -171,18 +178,6 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
 
     protected virtual bool IsRowInViewport(ref Rect inRect, int idx) => Scroll.y < CellHeight * idx + CellHeight * 2 && Scroll.y + inRect.height > CellHeight * idx;
 
-    public virtual IEnumerable<(TranslationCache.E, Action)> GetToolbarLeft()
-    {
-        yield return (TranslationCache.BtnColumns, OnColumnsClick);
-        yield return (TranslationCache.BtnFilter, OnFilterClick);
-        yield return (TranslationCache.BtnSorting, OnSortingClick);
-    }
-
-    public virtual IEnumerable<(TranslationCache.E, Action)> GetToolbarRight()
-    {
-        yield break;
-    }
-
     protected virtual IEnumerable<ThingDef> GetAllThingDefs()
     {
         if (BestApparel.Config.UseAllThings)
@@ -257,6 +252,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
 
     public virtual void PostProcessContainer(AThingContainer container)
     {
+        foreach (var poroc in Postprocessors) poroc.Postprocess(container, this);
     }
 
     public virtual void UpdateFilter()
@@ -320,21 +316,5 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         }
     }
 
-    protected virtual void OnFilterClick()
-    {
-        Find.WindowStack.TryRemove(typeof(FilterWindow));
-        Find.WindowStack.Add(new FilterWindow(this));
-    }
-
-    protected virtual void OnSortingClick()
-    {
-        Find.WindowStack.TryRemove(typeof(SortWindow));
-        Find.WindowStack.Add(new SortWindow(this));
-    }
-
-    protected virtual void OnColumnsClick()
-    {
-        Find.WindowStack.TryRemove(typeof(ColumnsWindow));
-        Find.WindowStack.Add(new ColumnsWindow(this));
-    }
+    public virtual HashSet<AThingContainer> GetAllContainers() => AllContainers;
 }

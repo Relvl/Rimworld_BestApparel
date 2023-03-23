@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using BestApparel.def;
 using BestApparel.ui;
 using BestApparel.ui.utility;
@@ -10,12 +12,36 @@ namespace BestApparel;
 public class ThingTab
 {
     private readonly IThingTabRenderer _renderer;
+    private readonly List<AToolbarButton> _toolbar;
 
     public ThingTab(ThingTabDef def)
     {
         _renderer = Activator.CreateInstance(def.renderClass, def) as IThingTabRenderer;
+
         if (_renderer is null)
             throw new ArgumentException($"Can't instantiate renderer class ({def.renderClass?.FullName}) - should be `public ctor(ThingTabDef)`");
+
+        _toolbar = def.toolbar.Select(
+                d =>
+                {
+                    var buttonDef = DefDatabase<ToolbarButtonDef>.GetNamed(d);
+                    if (buttonDef is null)
+                        throw new ArgumentException($"Can't instantiate toolbar button class - BestApparel.def.ToolbarButtonDef[defName='{d}'] not found");
+                    return buttonDef;
+                }
+            )
+            .OrderBy(d => d.Order)
+            .Select(
+                buttonDef =>
+                {
+                    if (Activator.CreateInstance(buttonDef.Action, buttonDef, _renderer) is not AToolbarButton inst)
+                        throw new ArgumentException(
+                            $"Can't instantiate toolbar button class ({buttonDef?.Action?.FullName}) - should be `public ctor(ToolbarButtonDef, IThingTabRenderer)`"
+                        );
+                    return inst;
+                }
+            )
+            .ToList();
 
         Config.SelectedTab = def.defName;
         Reload();
@@ -23,25 +49,13 @@ public class ThingTab
 
     public void DoMainWindowContents(ref Rect inRect)
     {
-        // ======================== Toolbar right side
-        var toolbarLeftRect = new Rect(0, inRect.y, 0, 24);
-        foreach (var (label, onClick) in _renderer.GetToolbarLeft())
-        {
-            toolbarLeftRect.width = label.Size.x + 16;
-            if (Widgets.ButtonText(toolbarLeftRect, label.Text)) onClick();
-            if (label.Tooltip != "") TooltipHandler.TipRegion(toolbarLeftRect, label.Tooltip);
-            toolbarLeftRect.x += toolbarLeftRect.width + 10;
-        }
-
-        // ======================== Toolbar left side
-        var r = new Rect(inRect.xMax, inRect.y, 0, 24);
-        foreach (var (label, onClick) in _renderer.GetToolbarRight())
-        {
-            r.width = label.Size.x + 16;
-            r.x -= r.width + 10;
-            if (Widgets.ButtonText(r, label.Text)) onClick();
-            if (label.Tooltip != "") TooltipHandler.TipRegion(r, label.Tooltip);
-        }
+        // ======================== Toolbar 
+        var btnRect = new Rect(0, inRect.y, 0, 24);
+        foreach (var button in _toolbar.Where(a => a.IsLeftSide())) button.Render(ref btnRect);
+        btnRect.x = inRect.xMax;
+        btnRect.y = inRect.y;
+        btnRect.width = 0;
+        foreach (var button in _toolbar.Where(a => a.IsRightSide())) button.Render(ref btnRect);
 
         // ======================== Line
         inRect.yMin += 34;

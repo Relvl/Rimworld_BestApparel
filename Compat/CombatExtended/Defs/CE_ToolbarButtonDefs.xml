@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <BestApparel.def.ToolbarButtonDef>
+        <defName>ButtonRestoreAmmo</defName>
+        <label>Restore ammo</label>
+        <description>Restore all weapons' ammo to their default values</description>
+        <Side>right</Side>
+        <Order>100</Order>
+        <Action>BestApparel.CombatExtendedCompat.ToolbarButtonResetAmmo</Action>
+    </BestApparel.def.ToolbarButtonDef>
+</Defs>

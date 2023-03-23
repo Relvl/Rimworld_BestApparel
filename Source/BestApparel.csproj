@@ -67,12 +67,16 @@
         <Compile Include="container_factory\MeleeContainerFactory.cs" />
         <Compile Include="container_factory\RangedContainerFactory.cs" />
         <Compile Include="BestApparel.cs" />
+        <Compile Include="def\ContainerPostprocessDef.cs" />
         <Compile Include="def\ThingTabDef.cs" />
+        <Compile Include="def\ToolbarButtonDef.cs" />
         <Compile Include="Extensions.cs" />
         <Compile Include="IContainerFactory.cs" />
+        <Compile Include="IContainerPostprocess.cs" />
         <Compile Include="IReloadObserver.cs" />
         <Compile Include="IStatCollector.cs" />
         <Compile Include="IThingTabRenderer.cs" />
+        <Compile Include="AToolbarButton.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Scribe_Config.cs" />
         <Compile Include="stat_collector\BaseStatCollector.cs" />
@@ -85,6 +89,10 @@
         <Compile Include="ThingTab.cs" />
         <Compile Include="thing_tab_renderer\ApparelTabRenderer.cs" />
         <Compile Include="thing_tab_renderer\DefaultThnigTabRenderer.cs" />
+        <Compile Include="toolbar_button\ToolbarButtonColumns.cs" />
+        <Compile Include="toolbar_button\ToolbarButtonFilters.cs" />
+        <Compile Include="toolbar_button\ToolbarButtonFitting.cs" />
+        <Compile Include="toolbar_button\ToolbarButtonSorting.cs" />
         <Compile Include="TranslationCache.cs" />
         <Compile Include="ui\ColonistFloatMenuOption.cs" />
         <Compile Include="ui\BestApparelMainTabWindow.cs" />
@@ -111,11 +119,17 @@
       <Content Include="..\About\steam-description-ru.txt">
         <Link>About\steam-description-ru.txt</Link>
       </Content>
-      <Content Include="..\Defs\MainWindow.xml">
-        <Link>Defs\MainWindow.xml</Link>
+      <Content Include="..\Defs\ContainerPostprocessDefs.xml">
+        <Link>Defs\ContainerPostprocessDefs.xml</Link>
       </Content>
-      <Content Include="..\Defs\ThingTabs.xml">
-        <Link>Defs\ThingTabs.xml</Link>
+      <Content Include="..\Defs\MainButtonDefs.xml">
+        <Link>Defs\MainButtonDefs.xml</Link>
+      </Content>
+      <Content Include="..\Defs\ThingTabDefs.xml">
+        <Link>Defs\ThingTabDefs.xml</Link>
+      </Content>
+      <Content Include="..\Defs\ToolbarButtonDefs.xml">
+        <Link>Defs\ToolbarButtonDefs.xml</Link>
       </Content>
       <Content Include="..\Languages\English\Keyed\LanguageData.xml">
         <Link>Languages\English\Keyed\LanguageData.xml</Link>
@@ -125,6 +139,9 @@
       </Content>
       <Content Include="..\Languages\Russian\DefInjected\BestApparel.def.ThingTabDef\LanguageData.xml">
         <Link>Languages\Russian\DefInjected\BestApparel.def.ThingTabDef\LanguageData.xml</Link>
+      </Content>
+      <Content Include="..\Languages\Russian\DefInjected\BestApparel.def.ToolbarButtonDef\LanguageData.xml">
+        <Link>Languages\Russian\DefInjected\BestApparel.def.ToolbarButtonDef\LanguageData.xml</Link>
       </Content>
       <Content Include="..\Languages\Russian\Keyed\LanguageData.xml">
         <Link>Languages\Russian\Keyed\LanguageData.xml</Link>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <ButtonOpenFilters.label>Фильтр...</ButtonOpenFilters.label>
+    <ButtonOpenColumns.label>Колонки...</ButtonOpenColumns.label>
+    <ButtonOpenSorting.label>Сортировка...</ButtonOpenSorting.label>
+    <ButtonOpenFitting.label>Примерочная</ButtonOpenFitting.label>
+</LanguageData>

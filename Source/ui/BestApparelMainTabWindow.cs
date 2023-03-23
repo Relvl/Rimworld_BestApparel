@@ -51,7 +51,9 @@ public class BestApparelMainTabWindow : RimWorld.MainTabWindow
 
         TabDrawer.DrawTabs(
             inRect,
-            DefDatabase<ThingTabDef>.AllDefs.Select(
+            DefDatabase<ThingTabDef>.AllDefs //
+                .OrderBy(d => d.order)
+                .Select(
                     tabDef => new TabRecord(
                         tabDef.label,
                         () =>
@@ -64,6 +66,7 @@ public class BestApparelMainTabWindow : RimWorld.MainTabWindow
                 )
                 .ToList()
         );
+
         inRect.yMin += 10f;
 
         if (_currentTab == null) return;

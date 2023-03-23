@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using BestApparel.def;
-using BestApparel.ui.utility;
 using Verse;
 
 namespace BestApparel.thing_tab_renderer;
@@ -14,15 +12,6 @@ public class ApparelTabRenderer : DefaultThnigTabRenderer
 
     public ApparelTabRenderer(ThingTabDef def) : base(def)
     {
-    }
-
-    public override IEnumerable<(TranslationCache.E, Action)> GetToolbarRight()
-    {
-        yield return (TranslationCache.BtnFitting, () =>
-        {
-            Find.WindowStack.TryRemove(typeof(FittingWindow));
-            Find.WindowStack.Add(new FittingWindow(this));
-        });
     }
 
     public override void PrepareCriteria()

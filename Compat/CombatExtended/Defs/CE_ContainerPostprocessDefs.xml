@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <BestApparel.def.ContainerPostprocessDef>
+        <defName>CE_Ranged</defName>
+        <Order>100</Order>
+        <Tabs>
+            <li>Ranged</li>
+        </Tabs>
+        <Postprocessor>BestApparel.CombatExtendedCompat.CeContainerPostprocessRanged</Postprocessor>
+    </BestApparel.def.ContainerPostprocessDef>
+</Defs>
