@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-    <BestApparel.Apparel>Apparel</BestApparel.Apparel>
-    <BestApparel.Ranged>Ranged weapon</BestApparel.Ranged>
-    <BestApparel.Melee>Melee weapon</BestApparel.Melee>
-
     <BestApparel.Control.UseAllThings>All things</BestApparel.Control.UseAllThings>
     <BestApparel.Control.UseAllThings.Tooltip>Do search things in the whole game</BestApparel.Control.UseAllThings.Tooltip>
     <BestApparel.Control.UseCraftableThings>Craftable things</BestApparel.Control.UseCraftableThings>
     <BestApparel.Control.UseCraftableThings.Tooltip>Do search things only in available workbenches bills</BestApparel.Control.UseCraftableThings.Tooltip>
 
-    <BestApparel.Btn.Resort>Resort</BestApparel.Btn.Resort>
-    <BestApparel.Btn.Resort.Tooltip>Closing this window also resorts the results.</BestApparel.Btn.Resort.Tooltip>
     <BestApparel.Btn.Defaults>Reset all to default</BestApparel.Btn.Defaults>
-    <BestApparel.Btn.Filter>Filter...</BestApparel.Btn.Filter>
-    <BestApparel.Btn.Columns>Columns...</BestApparel.Btn.Columns>
-    <BestApparel.Btn.Sorting>Sort...</BestApparel.Btn.Sorting>
-    <BestApparel.Btn.Fitting>Fitting Room</BestApparel.Btn.Fitting>
-    <BestApparel.Btn.Ranged.RestoreAmmo>Restore ammo</BestApparel.Btn.Ranged.RestoreAmmo>
-    <BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>Restore all weapons' ammo to their default values</BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>
     
     <BestApparel.Btn.Utility.None>None</BestApparel.Btn.Utility.None>
     <BestApparel.Btn.Utility.Default>Default</BestApparel.Btn.Utility.Default>

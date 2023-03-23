@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-    <BestApparel.Apparel>Экипировка</BestApparel.Apparel>
-    <BestApparel.Ranged>Стрелковое</BestApparel.Ranged>
-    <BestApparel.Melee>Ближний бой</BestApparel.Melee>
-
     <BestApparel.Control.UseAllThings>Показать всё</BestApparel.Control.UseAllThings>
     <BestApparel.Control.UseAllThings.Tooltip>Показывает все зарегистрированные предметы</BestApparel.Control.UseAllThings.Tooltip>
     <BestApparel.Control.UseCraftableThings>Крафтовое</BestApparel.Control.UseCraftableThings>
     <BestApparel.Control.UseCraftableThings.Tooltip>Показывает только то, что можно скрафтить на текущей карте</BestApparel.Control.UseCraftableThings.Tooltip>
 
-    <BestApparel.Btn.Resort>Применить</BestApparel.Btn.Resort>
-    <BestApparel.Btn.Resort.Tooltip>Закрытие этого окна так же применяет настройки.</BestApparel.Btn.Resort.Tooltip>
     <BestApparel.Btn.Defaults>Сбросить всё на значения по-умолчанию</BestApparel.Btn.Defaults>
-    <BestApparel.Btn.Filter>Фильтр...</BestApparel.Btn.Filter>
-    <BestApparel.Btn.Columns>Колонки...</BestApparel.Btn.Columns>
-    <BestApparel.Btn.Sorting>Сортировка...</BestApparel.Btn.Sorting>
-    <BestApparel.Btn.Fitting>Примерочная</BestApparel.Btn.Fitting>
-    <BestApparel.Btn.Ranged.RestoreAmmo>Восстановить патроны</BestApparel.Btn.Ranged.RestoreAmmo>
-    <BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>Восстановить стандартный тип патронов у всего оружия</BestApparel.Btn.Ranged.RestoreAmmo.Tooltip>
 
     <BestApparel.Btn.Utility.None>Ни одного</BestApparel.Btn.Utility.None>
     <BestApparel.Btn.Utility.Default>Сброс</BestApparel.Btn.Utility.Default>

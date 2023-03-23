@@ -9,19 +9,10 @@ public static class TranslationCache
     private static readonly Dictionary<string, TaggedString> Translation = new();
     private static readonly Dictionary<string, Vector2> SizeCache = new();
 
-    public static readonly E Apparel = new("BestApparel.Apparel");
-    public static readonly E Ranged = new("BestApparel.Ranged");
-    public static readonly E Melee = new("BestApparel.Melee");
-
     public static readonly E ControlUseAllThings = new("BestApparel.Control.UseAllThings");
     public static readonly E ControlUseCraftableThings = new("BestApparel.Control.UseCraftableThings");
 
-    public static readonly E BtnResort = new("BestApparel.Btn.Resort");
     public static readonly E BtnDefaults = new("BestApparel.Btn.Defaults");
-    public static readonly E BtnFilter = new("BestApparel.Btn.Filter");
-    public static readonly E BtnColumns = new("BestApparel.Btn.Columns");
-    public static readonly E BtnSorting = new("BestApparel.Btn.Sorting");
-    public static readonly E BtnFitting = new("BestApparel.Btn.Fitting");
 
     public static readonly E LabelColumns = new("BestApparel.Label.Columns");
     public static readonly E LabelSorting = new("BestApparel.Label.Sorting");
@@ -49,8 +40,6 @@ public static class TranslationCache
     public static readonly E StatMeleeAvgDamage = new("BestApparel.Stat.MeleeAvgDamage");
     public static readonly E StatMeleePenetrationSharp = new("BestApparel.Stat.CE_DescSharpPenetration");
     public static readonly E StatMeleePenetrationBlunt = new("BestApparel.Stat.CE_DescBluntPenetration");
-
-    public static readonly E BtnRangedRestoreAmmo = new("BestApparel.Btn.Ranged.RestoreAmmo");
 
     private static TaggedString Get(string key, params object[] args)
     {
