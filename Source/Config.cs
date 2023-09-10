@@ -9,7 +9,7 @@ namespace BestApparel;
 public class Config : ModSettings
 {
     // Please up this version only when breaking changes in the configs
-    private const int Version = 4;
+    private const int Version = 5;
 
     public const float MaxSortingWeight = 10f;
     public const float DefaultTolerance = 0.0001f;

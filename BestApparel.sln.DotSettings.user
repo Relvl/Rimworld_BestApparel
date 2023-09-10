@@ -2,6 +2,9 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CMods_005CBestApparel_005CAssemblies_005CBestApparel_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CMods_005CCombatExtended_005CAssemblies_005CCombatExtended_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CAssembly_002DCSharp_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CSystem_002ECore_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CSystem_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CSystem_002EXml_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002EAccessibilityModule_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002EAIModule_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002EAndroidJNIModule_002Edll/@EntryIndexedValue">True</s:Boolean>
