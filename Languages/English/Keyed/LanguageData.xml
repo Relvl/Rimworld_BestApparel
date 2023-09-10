@@ -78,5 +78,6 @@
     <BestApparel.Stat.MeleeAvgDamage>Average damage</BestApparel.Stat.MeleeAvgDamage>
     <BestApparel.Stat.CE_DescSharpPenetration>Penetration: Sharp</BestApparel.Stat.CE_DescSharpPenetration>
     <BestApparel.Stat.CE_DescBluntPenetration>Penetration: Blunt</BestApparel.Stat.CE_DescBluntPenetration>
+    <BestApparel.Stat.CE_RangedDamage>Damage (ranged)</BestApparel.Stat.CE_RangedDamage>
 
 </LanguageData>

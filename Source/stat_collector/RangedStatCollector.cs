@@ -10,6 +10,7 @@ public class RangedStatCollector : IStatCollector
 {
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
-        yield return new FuncStatProcessor(weapon => weapon.def.Verbs.FirstOrDefault()?.defaultProjectile?.projectile?.GetDamageAmount(weapon) ?? 0, "Ranged_Damage");
+        yield return new FuncStatProcessor(weapon => weapon.def.Verbs.FirstOrDefault()?.defaultProjectile?.projectile?.GetDamageAmount(weapon) ?? 0, "Damage");
+        yield return new FuncStatProcessor(weapon => weapon.def.Verbs.FirstOrDefault()?.range ?? 0, "Range");
     }
 }

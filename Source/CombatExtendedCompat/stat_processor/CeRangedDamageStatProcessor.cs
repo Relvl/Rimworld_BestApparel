@@ -16,7 +16,7 @@ public class CeRangedDamageStatProcessor : AStatProcessor
 
     public override string GetDefName() => "Ranged_Damage";
 
-    public override string GetDefLabel() => "Ranged_Damage";
+    public override string GetDefLabel() => TranslationCache.StatCERangedDamage.Text;
 
     public override bool IsValueDefault(Thing thing) => GetStatValue(thing) == 0;
 

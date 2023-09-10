@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BestApparel.stat_processor;
 using RimWorld;
 using Verse;
@@ -20,5 +21,6 @@ public class CeRangedStatCollector : IStatCollector
         yield return new CommonStatProcessor(StatDef.Named("NightVisionEfficiency_Weapon"));
         yield return new CommonStatProcessor(StatDef.Named("Suppressability"));
         yield return new CeRangedDamageStatProcessor();
+        yield return new FuncStatProcessor(weapon => weapon.def.Verbs.FirstOrDefault()?.range ?? 0, "Range");
     }
 }

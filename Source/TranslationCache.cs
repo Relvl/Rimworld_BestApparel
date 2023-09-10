@@ -40,6 +40,8 @@ public static class TranslationCache
     public static readonly E StatMeleeAvgDamage = new("BestApparel.Stat.MeleeAvgDamage");
     public static readonly E StatMeleePenetrationSharp = new("BestApparel.Stat.CE_DescSharpPenetration");
     public static readonly E StatMeleePenetrationBlunt = new("BestApparel.Stat.CE_DescBluntPenetration");
+    
+    public static readonly E StatCERangedDamage = new("BestApparel.Stat.CE_RangedDamage");
 
     private static TaggedString Get(string key, params object[] args)
     {
