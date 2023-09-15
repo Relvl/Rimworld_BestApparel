@@ -70,8 +70,11 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="stat_collector\CeMeleeStatCollector.cs" />
         <Compile Include="stat_collector\CeRangedStatCollector.cs" />
+        <Compile Include="stat_processor\CEAmmoStatProcessor.cs" />
         <Compile Include="stat_processor\CeMeleeDamageStatProcessor.cs" />
         <Compile Include="stat_processor\CeMeleePenetrationStatProcessor.cs" />
+        <Compile Include="stat_processor\CeRangedAmmoPenetrationBlunt.cs" />
+        <Compile Include="stat_processor\CeRangedAmmoPenetrationSharp.cs" />
         <Compile Include="stat_processor\CeRangedDamageStatProcessor.cs" />
         <Compile Include="thing_tab_renderer\CeRangedThingTabRenderer.cs" />
         <Compile Include="toolbar_button\ToolbarButtonResetAmmo.cs" />

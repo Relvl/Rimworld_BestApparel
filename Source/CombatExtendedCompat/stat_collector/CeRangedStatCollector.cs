@@ -24,7 +24,10 @@ public class CeRangedStatCollector : IStatCollector
         yield return new CommonStatProcessor(StatDef.Named("ShotSpread"));
         yield return new CommonStatProcessor(StatDef.Named("NightVisionEfficiency_Weapon"));
         yield return new CommonStatProcessor(StatDef.Named("Suppressability"));
+        yield return new CeAmmoStatProcessor();
         yield return new CeRangedDamageStatProcessor();
+        yield return new CeRangedAmmoPenetrationSharp();
+        yield return new CeRangedAmmoPenetrationBlunt();
         yield return new FuncStatProcessor(weapon => weapon.def.Verbs.FirstOrDefault()?.range ?? 0, "Range");
     }
 }

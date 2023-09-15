@@ -45,11 +45,18 @@ public class ColumnsWindow : AUtilityWindow
                 var chkState = BestApparel.Config.GetColumn(Parent.GetTabId(), defName);
                 if (Widgets.ButtonInvisible(cellRect))
                 {
-                    BestApparel.Config.SetColumn(Parent.GetTabId(), defName, !chkState);
                     if (chkState)
+                    {
                         SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+                    }
                     else
+                    {
+                        foreach (var dependant in processor.ActivateWith)
+                            BestApparel.Config.SetColumn(Parent.GetTabId(), dependant, true);
                         SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
+                    }
+
+                    BestApparel.Config.SetColumn(Parent.GetTabId(), defName, !chkState);
                     Parent.UpdateSort();
                 }
 

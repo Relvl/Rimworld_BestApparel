@@ -78,8 +78,8 @@
     <BestApparel.Stat.MeleeAvgDamage>Усредненный урон</BestApparel.Stat.MeleeAvgDamage>
     <BestApparel.Stat.CE_DescSharpPenetration>Бронепробитие (мм БКГ)</BestApparel.Stat.CE_DescSharpPenetration>
     <BestApparel.Stat.CE_DescBluntPenetration>Бронепробитие (МПа)</BestApparel.Stat.CE_DescBluntPenetration>
-
     <BestApparel.Stat.CE_RangedDamage>Урон (выстрел)</BestApparel.Stat.CE_RangedDamage>
+    <BestApparel.Stat.CE_Ammo>Боеприпас</BestApparel.Stat.CE_Ammo>
 
     <BestApparel.Config.DoNotSortColumns>Не сортировать колонки</BestApparel.Config.DoNotSortColumns>
     <BestApparel.Config.UseSimpleDataSorting>Простая сортировка по колонкам</BestApparel.Config.UseSimpleDataSorting>

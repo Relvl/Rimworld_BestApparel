@@ -13,6 +13,8 @@ public abstract class AStatProcessor
 
     public virtual float CellWidth => 70;
 
+    public virtual string[] ActivateWith => new string[] { };
+
     protected AStatProcessor(StatDef def)
     {
         Def = def;
@@ -44,7 +46,9 @@ public abstract class AStatProcessor
         }
         else
         {
+            cellRect.xMax -= 2;
             Widgets.Label(cellRect, cell.Value);
+            cellRect.xMax += 2;
             foreach (var tooltip in cell.Tooltips) TooltipHandler.TipRegion(cellRect, tooltip);
         }
     }
@@ -52,6 +56,7 @@ public abstract class AStatProcessor
     protected static void RenderEmptyCell(Rect cellRect)
     {
         GUI.color = UIUtils.ColorWhiteA20;
+        Text.Anchor = TextAnchor.MiddleCenter;
         Widgets.Label(cellRect, "---");
         GUI.color = Color.white;
     }

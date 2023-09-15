@@ -1,5 +1,4 @@
 using System;
-using RimWorld;
 using Verse;
 
 namespace BestApparel.stat_processor;

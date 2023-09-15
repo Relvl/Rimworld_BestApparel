@@ -79,6 +79,7 @@
     <BestApparel.Stat.CE_DescSharpPenetration>Penetration: Sharp</BestApparel.Stat.CE_DescSharpPenetration>
     <BestApparel.Stat.CE_DescBluntPenetration>Penetration: Blunt</BestApparel.Stat.CE_DescBluntPenetration>
     <BestApparel.Stat.CE_RangedDamage>Damage (ranged)</BestApparel.Stat.CE_RangedDamage>
+    <BestApparel.Stat.CE_Ammo>Ammo type</BestApparel.Stat.CE_Ammo>
     
     <BestApparel.Config.DoNotSortColumns>Do not sort columns</BestApparel.Config.DoNotSortColumns>
     <BestApparel.Config.UseSimpleDataSorting>Use simple column sorting</BestApparel.Config.UseSimpleDataSorting>

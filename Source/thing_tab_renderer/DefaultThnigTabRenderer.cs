@@ -68,7 +68,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         Text.Font = GameFont.Tiny;
 
         // Header cells
-        var headerRect = new Rect(inRect.x + CellHeight * 2 + NameCellWidth + CellPadding * 3 - Scroll.x, inRect.y, 0, HeaderHeight);
+        var headerRect = new Rect(inRect.x + CellHeight * 2 + NameCellWidth + CellPadding * 4 - Scroll.x, inRect.y, 0, HeaderHeight);
         foreach (var cell in firstContainer.CachedCells) RenderHeaderCell(ref headerRect, cell);
         inRect.yMin += HeaderHeight;
 
@@ -167,6 +167,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
                         mouseOverAnyCell = true;
                     }
 
+                    Text.Anchor = TextAnchor.MiddleRight;
                     cell.Processor.RenderCell(cellRect, cell, this); // todo! move to this' method
 
                     // offset to the right
@@ -192,14 +193,17 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
 
     protected virtual void RenderRowThingLabel(ref Rect cellRect, AThingContainer container)
     {
+        Text.Anchor = TextAnchor.MiddleLeft;
+        
         // i
         cellRect.width = CellHeight;
         Widgets.InfoCardButtonCentered(cellRect, container.DefaultThing);
         cellRect.x += CellHeight + CellPadding;
+
         // [icon]
         cellRect.width = CellHeight;
         Widgets.ThingIcon(cellRect, container.DefaultThing);
-        cellRect.x += CellHeight + CellPadding;
+        cellRect.x += CellHeight + CellPadding * 2;
 
         // [label]
         Text.Font = GameFont.Tiny;
