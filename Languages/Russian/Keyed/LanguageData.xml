@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-    <BestApparel.Control.UseAllThings>Показать всё</BestApparel.Control.UseAllThings>
-    <BestApparel.Control.UseAllThings.Tooltip>Показывает все зарегистрированные предметы</BestApparel.Control.UseAllThings.Tooltip>
-    <BestApparel.Control.UseCraftableThings>Крафтовое</BestApparel.Control.UseCraftableThings>
-    <BestApparel.Control.UseCraftableThings.Tooltip>Показывает только то, что можно скрафтить на текущей карте</BestApparel.Control.UseCraftableThings.Tooltip>
+    <BestApparel.Control.UseAllThings>Показаны: все</BestApparel.Control.UseAllThings>
+    <BestApparel.Control.UseAllThings.Tooltip>Показаны все зарегистрированные предметы</BestApparel.Control.UseAllThings.Tooltip>
+    <BestApparel.Control.UseCraftableThings>Показаны: крафт</BestApparel.Control.UseCraftableThings>
+    <BestApparel.Control.UseCraftableThings.Tooltip>Показаны только те предметы, которые можно скрафтить на текущей карте (есть в биллах станков)</BestApparel.Control.UseCraftableThings.Tooltip>
 
     <BestApparel.Btn.Defaults>Сбросить всё на значения по-умолчанию</BestApparel.Btn.Defaults>
 
@@ -78,6 +78,10 @@
     <BestApparel.Stat.MeleeAvgDamage>Усредненный урон</BestApparel.Stat.MeleeAvgDamage>
     <BestApparel.Stat.CE_DescSharpPenetration>Бронепробитие (мм БКГ)</BestApparel.Stat.CE_DescSharpPenetration>
     <BestApparel.Stat.CE_DescBluntPenetration>Бронепробитие (МПа)</BestApparel.Stat.CE_DescBluntPenetration>
-    
+
     <BestApparel.Stat.CE_RangedDamage>Урон (выстрел)</BestApparel.Stat.CE_RangedDamage>
+
+    <BestApparel.Config.DoNotSortColumns>Не сортировать колонки</BestApparel.Config.DoNotSortColumns>
+    <BestApparel.Config.UseSimpleDataSorting>Простая сортировка по колонкам</BestApparel.Config.UseSimpleDataSorting>
+
 </LanguageData>

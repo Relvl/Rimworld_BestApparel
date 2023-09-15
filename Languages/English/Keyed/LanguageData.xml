@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-    <BestApparel.Control.UseAllThings>All things</BestApparel.Control.UseAllThings>
-    <BestApparel.Control.UseAllThings.Tooltip>Do search things in the whole game</BestApparel.Control.UseAllThings.Tooltip>
-    <BestApparel.Control.UseCraftableThings>Craftable things</BestApparel.Control.UseCraftableThings>
-    <BestApparel.Control.UseCraftableThings.Tooltip>Do search things only in available workbenches bills</BestApparel.Control.UseCraftableThings.Tooltip>
+    <BestApparel.Control.UseAllThings>Shown: All</BestApparel.Control.UseAllThings>
+    <BestApparel.Control.UseAllThings.Tooltip>Shown all registered things in the whole game</BestApparel.Control.UseAllThings.Tooltip>
+    <BestApparel.Control.UseCraftableThings>Shown: Craftable</BestApparel.Control.UseCraftableThings>
+    <BestApparel.Control.UseCraftableThings.Tooltip>Shown things that only available in the workbench bills</BestApparel.Control.UseCraftableThings.Tooltip>
 
     <BestApparel.Btn.Defaults>Reset all to default</BestApparel.Btn.Defaults>
     
@@ -79,5 +79,8 @@
     <BestApparel.Stat.CE_DescSharpPenetration>Penetration: Sharp</BestApparel.Stat.CE_DescSharpPenetration>
     <BestApparel.Stat.CE_DescBluntPenetration>Penetration: Blunt</BestApparel.Stat.CE_DescBluntPenetration>
     <BestApparel.Stat.CE_RangedDamage>Damage (ranged)</BestApparel.Stat.CE_RangedDamage>
+    
+    <BestApparel.Config.DoNotSortColumns>Do not sort columns</BestApparel.Config.DoNotSortColumns>
+    <BestApparel.Config.UseSimpleDataSorting>Use simple column sorting</BestApparel.Config.UseSimpleDataSorting>
 
 </LanguageData>

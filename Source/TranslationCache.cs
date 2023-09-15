@@ -42,6 +42,9 @@ public static class TranslationCache
     public static readonly E StatMeleePenetrationBlunt = new("BestApparel.Stat.CE_DescBluntPenetration");
     
     public static readonly E StatCERangedDamage = new("BestApparel.Stat.CE_RangedDamage");
+    
+    public static readonly E DoNotSortColumns = new("BestApparel.Config.DoNotSortColumns");
+    public static readonly E UseSimpleDataSorting = new("BestApparel.Config.UseSimpleDataSorting");
 
     private static TaggedString Get(string key, params object[] args)
     {

@@ -9,6 +9,10 @@ namespace BestApparel.CombatExtendedCompat;
 // ReSharper disable once UnusedType.Global -- reflection: DefaultThnigTabRenderer:ctor
 public class CeMeleeStatCollector : IStatCollector
 {
+    public void Prepare(Thing thing)
+    {
+    }
+
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
         yield return new CommonStatProcessor(StatDef.Named("MeleePenetrationFactor"));

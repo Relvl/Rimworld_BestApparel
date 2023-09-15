@@ -53,4 +53,22 @@
             <li>ButtonOpenSorting</li>
         </toolbar>
     </BestApparel.def.ThingTabDef>
+
+    <BestApparel.def.ThingTabDef>
+        <defName>Materials</defName>
+        <label>Materials</label>
+        <order>400</order>
+        <renderClass>BestApparel.thing_tab_renderer.DefaultThnigTabRenderer</renderClass>
+        <factoryClass>BestApparel.container_factory.MaterialContainerFactory</factoryClass>
+        <collectors>
+            <li>BestApparel.stat_collector.BaseStatCollector</li>
+            <li>BestApparel.stat_collector.MaterialStatCollector</li>
+        </collectors>
+        <toolbar>
+            <li>ButtonOpenFilters</li>
+            <li>ButtonOpenColumns</li>
+            <li>ButtonOpenSorting</li>
+        </toolbar>
+    </BestApparel.def.ThingTabDef>
+
 </Defs>

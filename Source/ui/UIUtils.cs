@@ -12,6 +12,8 @@ public static class UIUtils
     public static Color ColorLinkHover = new(0.58f, 0.58f, 1f);
     public static Color ColorWhiteA20 = new(1f, 1f, 1f, 0.2f);
     public static Color ColorWhiteA50 = new(1f, 1f, 1f, 0.5f);
+    public static Color ColorSortPositive = new(1f, 0.6f, 0.6f, 0.5f);
+    public static Color ColorSortNegative = new(0.6f, 1f, 0.6f, 0.5f);
 
     public static void DrawLineAtTop(ref Rect inRect, bool usesScroll = true, int bottomMargin = 10)
     {
@@ -117,7 +119,6 @@ public static class UIUtils
 
         if (Widgets.ButtonInvisible(btnRect))
         {
-            SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
             onClick();
         }
     }

@@ -8,11 +8,27 @@ namespace BestApparel;
 
 public abstract class AThingContainer
 {
-    public readonly string TabIdStr;
+    protected readonly string TabIdStr;
 
     public readonly ThingDef Def;
     public readonly Thing DefaultThing;
-    public readonly string DefaultTooltip;
+    private string _defaultTooltip;
+
+    public string DefaultTooltip
+    {
+        get
+        {
+            if (_defaultTooltip is null)
+            {
+                var label = GenLabel.ThingLabel(Def, DefaultThing.Stuff).CapitalizeFirst().Colorize(ColoredText.TipSectionTitleColor);
+                var extras = GenLabel.LabelExtras(DefaultThing, 1, true, true);
+                var description = DefaultThing.DescriptionDetailed;
+                _defaultTooltip = $"{label}{extras}\n\n{description}";
+            }
+
+            return _defaultTooltip;
+        }
+    }
 
     public CellData[] CachedCells { get; private set; } = { };
 
@@ -32,36 +48,48 @@ public abstract class AThingContainer
         {
             DefaultThing = ThingMaker.MakeThing(thingDef);
         }
-
-        DefaultTooltip = $"{DefaultThing.LabelNoParenthesisCap.AsTipTitle()}{GenLabel.LabelExtras(DefaultThing, 1, true, true)}\n\n{DefaultThing.DescriptionDetailed}";
     }
 
     public abstract bool CheckForFilters();
 
     public void CacheCells(Dictionary<AStatProcessor, (float, float)> calculated, IThingTabRenderer renderer)
     {
-        CachedCells = calculated.Select(
-                pair =>
+        var list = calculated.Select(
+            pair =>
+            {
+                var valueMin = pair.Value.Item1;
+                var value = pair.Key.GetStatValue(DefaultThing);
+                var valueMax = pair.Value.Item2;
+
+                var normal = (value - valueMin) / (valueMax - valueMin);
+                if (float.IsNaN(normal)) normal = 0f;
+
+                var cell = pair.Key.MakeCell(DefaultThing);
+
+                if (BestApparel.Config.UseSimpleDataSorting)
                 {
-                    var valueMin = pair.Value.Item1;
-                    var value = pair.Key.GetStatValue(DefaultThing);
-                    var valueMax = pair.Value.Item2;
-
-                    var normal = (value - valueMin) / (valueMax - valueMin);
-                    if (float.IsNaN(normal)) normal = 0f;
-
-                    var cell = pair.Key.MakeCell(DefaultThing);
-                    cell.WeightFactor = BestApparel.Config.GetSorting(renderer.GetTabId(), pair.Key.GetDefName()) + Config.MaxSortingWeight;
-                    cell.NormalizedWeight = normal;
-
-                    cell.Tooltips.Add(TranslatorFormattedStringExtensions.Translate("BestApparel.Label.RangePercent", Math.Round(cell.NormalizedWeight * 100f, 1), cell.WeightFactor));
-
-                    return cell;
+                    if (BestApparel.Config.SimpleSorting.ContainsKey(TabIdStr))
+                    {
+                        var sorting = BestApparel.Config.SimpleSorting[TabIdStr];
+                        cell.WeightFactor = cell.Processor.GetDefName() == sorting.First ? sorting.Second : 0;
+                    }
                 }
-            )
-            .OrderByDescending(cellData => cellData.WeightFactor)
-            .ThenBy(cellData => cellData.DefLabel)
-            .ToArray();
+                else
+                {
+                    cell.WeightFactor = BestApparel.Config.GetSorting(renderer.GetTabId(), pair.Key.GetDefName()) + Config.MaxSortingWeight;
+                }
+
+                cell.NormalizedWeight = normal;
+
+                return cell;
+            }
+        );
+        if (!BestApparel.Config.DoNotSortColumns)
+        {
+            list = list.OrderByDescending(cellData => cellData.WeightFactor).ThenBy(cellData => cellData.DefLabel);
+        }
+
+        CachedCells = list.ToArray();
         CachedSortingWeight = CachedCells.Sum(c => c.NormalizedWeight * c.WeightFactor);
     }
 

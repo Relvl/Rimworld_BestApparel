@@ -6,4 +6,6 @@ namespace BestApparel;
 public interface IStatCollector
 {
     IEnumerable<AStatProcessor> Collect(Thing thing);
+
+    void Prepare(Thing thing);
 }

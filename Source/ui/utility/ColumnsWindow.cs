@@ -1,6 +1,8 @@
 using System.Linq;
+using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace BestApparel.ui.utility;
 
@@ -22,15 +24,7 @@ public class ColumnsWindow : AUtilityWindow
 
         if (processors.Count == 0) return heightCounter;
 
-        heightCounter += RenderTitle(
-            ref inRect,
-            TranslationCache.LabelColumns,
-            processors.Select(p => p.GetDefName()),
-            set =>
-            {
-                foreach (var processor in processors) BestApparel.Config.SetColumn(Parent.GetTabId(), processor.GetDefName(), set);
-            }
-        );
+        heightCounter += RenderColumnsTitle(ref inRect, TranslationCache.LabelColumns, processors.Select(p => p.GetDefName()));
 
         heightCounter += UIUtils.RenderUtilityGrid(
             ref inRect,
@@ -52,6 +46,10 @@ public class ColumnsWindow : AUtilityWindow
                 if (Widgets.ButtonInvisible(cellRect))
                 {
                     BestApparel.Config.SetColumn(Parent.GetTabId(), defName, !chkState);
+                    if (chkState)
+                        SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
+                    else
+                        SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
                     Parent.UpdateSort();
                 }
 

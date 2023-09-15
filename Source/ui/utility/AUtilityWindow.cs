@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace BestApparel.ui.utility;
 
@@ -102,7 +104,7 @@ public abstract class AUtilityWindow : Window
         return 36;
     }
 
-    protected float RenderTitle(ref Rect inRect, TranslationCache.E label, List<Def> defs, string category) =>
+    protected float RenderFilterTitle(ref Rect inRect, TranslationCache.E label, List<Def> defs, string category) =>
         RenderTitle(
             ref inRect,
             label,
@@ -119,6 +121,7 @@ public abstract class AUtilityWindow : Window
                     () =>
                     {
                         foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), category, def.defName, MultiCheckboxState.Off);
+                        SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }
                 );
@@ -135,6 +138,7 @@ public abstract class AUtilityWindow : Window
                     () =>
                     {
                         foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), category, def.defName, MultiCheckboxState.Partial);
+                        SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }
                 );
@@ -151,13 +155,14 @@ public abstract class AUtilityWindow : Window
                     () =>
                     {
                         foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), category, def.defName, MultiCheckboxState.On);
+                        SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }
                 );
             }
         );
 
-    protected float RenderTitle(ref Rect inRect, TranslationCache.E label, IEnumerable<string> defs, Action<bool> onSet) =>
+    protected float RenderColumnsTitle(ref Rect inRect, TranslationCache.E label, IEnumerable<string> defs) =>
         RenderTitle(
             ref inRect,
             label,
@@ -173,7 +178,8 @@ public abstract class AUtilityWindow : Window
                     Color.red,
                     () =>
                     {
-                        onSet(false);
+                        foreach (var def in defs) BestApparel.Config.SetColumn(Parent.GetTabId(), def, false);
+                        SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }
                 );
@@ -189,7 +195,8 @@ public abstract class AUtilityWindow : Window
                     Color.green,
                     () =>
                     {
-                        onSet(true);
+                        foreach (var def in defs) BestApparel.Config.SetColumn(Parent.GetTabId(), def, true);
+                        SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }
                 );

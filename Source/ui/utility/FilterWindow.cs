@@ -20,7 +20,7 @@ public class FilterWindow : AUtilityWindow
         {
             var defsAsList = defs.ToList();
             if (defsAsList.Count == 0) continue;
-            heightCounter += RenderTitle(ref inRect, label, defsAsList, category);
+            heightCounter += RenderFilterTitle(ref inRect, label, defsAsList, category);
             heightCounter += UIUtils.RenderUtilityGrid(ref inRect, 3, RowHeight, defsAsList, (def, rect) => RenderElement(def, rect, category));
         }
 

@@ -64,7 +64,6 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
 
     protected virtual void RenderTableHeader(ref Rect inRect, AThingContainer firstContainer)
     {
-        GUI.color = UIUtils.ColorWhiteA50;
         Text.Anchor = TextAnchor.MiddleCenter;
         Text.Font = GameFont.Tiny;
 
@@ -72,6 +71,8 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         var headerRect = new Rect(inRect.x + CellHeight * 2 + NameCellWidth + CellPadding * 3 - Scroll.x, inRect.y, 0, HeaderHeight);
         foreach (var cell in firstContainer.CachedCells) RenderHeaderCell(ref headerRect, cell);
         inRect.yMin += HeaderHeight;
+
+        GUI.color = UIUtils.ColorWhiteA50;
 
         // Final line todo! move to upper level?
         headerRect.x = inRect.x;
@@ -88,7 +89,44 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
 
     protected virtual void RenderHeaderCell(ref Rect headerRect, CellData cell)
     {
+        GUI.color = UIUtils.ColorWhiteA50;
         headerRect.width = cell.Processor.CellWidth;
+
+        if (BestApparel.Config.UseSimpleDataSorting)
+        {
+            var isSortedColumn = BestApparel.Config.SimpleSorting.ContainsKey(TabId) && BestApparel.Config.SimpleSorting[TabId].First == cell.Processor.GetDefName();
+            if (isSortedColumn)
+            {
+                var order = BestApparel.Config.SimpleSorting[TabId].Second;
+                if (order < 0)
+                {
+                    GUI.color = UIUtils.ColorSortPositive;
+                    // todo! arrow!
+                }
+                else if (order > 0)
+                {
+                    GUI.color = UIUtils.ColorSortNegative;
+                    // todo! arrow!
+                }
+            }
+
+            if (Mouse.IsOver(headerRect))
+            {
+                GUI.color = UIUtils.ColorLinkHover;
+                if (Widgets.ButtonInvisible(headerRect))
+                {
+                    var order = 1;
+                    if (isSortedColumn)
+                    {
+                        order = BestApparel.Config.SimpleSorting[TabId].Second * -1;
+                    }
+
+                    BestApparel.Config.SimpleSorting[TabId] = new Pair<string, int>(cell.Processor.GetDefName() ?? "--unk--", order);
+                    UpdateSort();
+                }
+            }
+        }
+
         Widgets.Label(headerRect, cell.DefLabel);
         TooltipHandler.TipRegion(headerRect, cell.DefLabel);
         headerRect.x += headerRect.width + CellPadding - 2;
@@ -224,15 +262,20 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         PrepareCriteria(); // todo! на самом деле надо бы это кешировать на всю сессию
 
         var tmpStatProcessors = new HashSet<AStatProcessor>();
-        foreach (var def in GetAllThingDefs())
-        {
-            if (!Factory.CanProduce(def)) continue;
-            var container = Factory.Produce(def, GetTabId());
-            if (container is null) continue;
+        var allContainers = GetAllThingDefs().Select(def => !Factory.CanProduce(def) ? null : Factory.Produce(def, GetTabId())).Where(con => con is not null).ToList();
 
+        foreach (var collector in Collectors)
+        {
+            foreach (var container in allContainers)
+            {
+                collector.Prepare(container.DefaultThing);
+            }
+        }
+
+        foreach (var container in allContainers)
+        {
             PostProcessContainer(container);
             AllContainers.Add(container);
-
             // only collect stats from available things - just for propper (min,max) value calculation
             // todo! move up to PrepareCriteria - we have column selection
             foreach (var collector in Collectors)

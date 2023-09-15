@@ -7,6 +7,10 @@ namespace BestApparel.stat_collector;
 // ReSharper disable once UnusedType.Global -- reflection: DefaultThnigTabRenderer:ctor
 public class EquippedStatCollector : IStatCollector
 {
+    public void Prepare(Thing thing)
+    {
+    }
+
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
         if (thing.def.equippedStatOffsets is null) yield break;

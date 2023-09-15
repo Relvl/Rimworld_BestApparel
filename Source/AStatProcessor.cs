@@ -19,7 +19,7 @@ public abstract class AStatProcessor
     }
 
     public virtual StatDef GetStatDef() => Def;
-    public virtual string GetDefName() => Def.defName;
+    public virtual string GetDefName() => Def?.defName ?? "--unk-def-name--";
     public virtual string GetDefLabel() => Def.label;
 
     public abstract float GetStatValue(Thing thing);

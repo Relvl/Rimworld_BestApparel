@@ -22,6 +22,7 @@ public class RangedContainerFactory : IContainerFactory
     public bool CanProduce(ThingDef def)
     {
         if (def.destroyOnDrop) return false;
+        if (def.IsStuff) return false;
         if (!def.IsRangedWeapon) return false;
         return true;
     }

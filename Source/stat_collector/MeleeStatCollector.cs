@@ -8,6 +8,10 @@ namespace BestApparel.stat_collector;
 // ReSharper disable once UnusedType.Global -- reflection: DefaultThnigTabRenderer:ctor
 public class MeleeStatCollector : IStatCollector
 {
+    public void Prepare(Thing thing)
+    {
+    }
+
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
         yield return new CommonStatProcessor(StatDefOf.MeleeWeapon_AverageArmorPenetration);

@@ -8,6 +8,10 @@ namespace BestApparel.stat_collector;
 // ReSharper disable once UnusedType.Global -- reflection: DefaultThnigTabRenderer:ctor
 public class BaseStatCollector : IStatCollector
 {
+    public void Prepare(Thing thing)
+    {
+    }
+
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
         foreach (var def in DefDatabase<StatDef>.AllDefs)

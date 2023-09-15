@@ -23,6 +23,7 @@ public class ApparelContainerFactory : IContainerFactory
     public bool CanProduce(ThingDef def)
     {
         if (def.destroyOnDrop) return false;
+        if (def.IsStuff) return false;
         if (!def.IsApparel) return false;
         return true;
     }

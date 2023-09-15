@@ -17,7 +17,8 @@ public static class Scribe_Config
                 {
                     case LoadSaveMode.Saving:
                         foreach (var (key, value) in dict)
-                            Scribe.saver.WriteElement(key, value.ToString());
+                            if (key is not null && value is not null)
+                                Scribe.saver.WriteElement(key, value.ToString());
                         break;
                     case LoadSaveMode.LoadingVars:
                         dict.Clear();
@@ -37,6 +38,32 @@ public static class Scribe_Config
     public static void LookListString(ref List<string> list, string label)
     {
         list ??= new List<string>();
+        if (Scribe.EnterNode(label))
+        {
+            try
+            {
+                switch (Scribe.mode)
+                {
+                    case LoadSaveMode.Saving:
+                        foreach (var element in list) Scribe.saver.WriteElement(element, "");
+                        break;
+                    case LoadSaveMode.LoadingVars:
+                        list.Clear();
+                        var children = Scribe.loader.curXmlParent;
+                        foreach (XmlElement child in children) list.Add(child.Name);
+                        break;
+                }
+            }
+            finally
+            {
+                Scribe.ExitNode();
+            }
+        }
+    }
+
+    public static void LookHashSetString(ref HashSet<string> list, string label)
+    {
+        list ??= new HashSet<string>();
         if (Scribe.EnterNode(label))
         {
             try
@@ -84,6 +111,43 @@ public static class Scribe_Config
                         {
                             var innerList = new List<string>();
                             LookListString(ref innerList, child.Name);
+                            dict[child.Name] = innerList;
+                        }
+
+                        break;
+                }
+            }
+            finally
+            {
+                Scribe.ExitNode();
+            }
+        }
+    }
+
+    public static void LookDictionaryHashSet(ref Dictionary<string, HashSet<string>> dict, string label)
+    {
+        dict ??= new Dictionary<string, HashSet<string>>();
+        if (Scribe.EnterNode(label))
+        {
+            try
+            {
+                switch (Scribe.mode)
+                {
+                    case LoadSaveMode.Saving:
+                        foreach (var (key, list) in dict)
+                        {
+                            var innerlist = list ?? new HashSet<string>();
+                            LookHashSetString(ref innerlist, key);
+                        }
+
+                        break;
+                    case LoadSaveMode.LoadingVars:
+                        dict.Clear();
+                        var children = Scribe.loader.curXmlParent;
+                        foreach (XmlElement child in children)
+                        {
+                            var innerList = new HashSet<string>();
+                            LookHashSetString(ref innerList, child.Name);
                             dict[child.Name] = innerList;
                         }
 

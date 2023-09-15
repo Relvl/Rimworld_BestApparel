@@ -3,4 +3,5 @@
     <Apparel.label>Экипировка</Apparel.label>
     <Ranged.label>Дальний бой</Ranged.label>
     <Melee.label>Ближний бой</Melee.label>
+    <Materials.label>Материалы</Materials.label>
 </LanguageData>

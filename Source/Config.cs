@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using UnityEngine;
 using Verse;
 using Verse.Sound;
 
@@ -16,8 +17,6 @@ public class Config : ModSettings
 
     public static BestApparel ModInstance;
 
-    public static readonly bool IsCeLoaded = ModsConfig.ActiveModsInLoadOrder.Any(m => "Combat Extended".Equals(m.Name));
-
     public static string SelectedTab;
 
     // ========================== Storable
@@ -25,20 +24,26 @@ public class Config : ModSettings
     /* Do show all the things? Otherwise - only available on the workbenches. */
     public bool UseAllThings;
 
+    public bool DoNotSortColumns = false;
+
+    public bool UseSimpleDataSorting = false;
+
     public List<string> FittingWorn = new();
     public Dictionary<string, string> RangedAmmo = new();
 
     private Dictionary<string, Dictionary<string, float>> _sorting = new();
-    private Dictionary<string, List<string>> _columns = new();
+    private Dictionary<string, HashSet<string>> _columns = new();
 
     /// <summary>
     /// [tabId, [category, [defName, state]]]
     /// </summary>
     private Dictionary<string, Dictionary<string, Dictionary<string, bool>>> _filters = new();
 
+    public Dictionary<string, Pair<string, int>> SimpleSorting = new();
+
     public void ClearFilters(string tabId) => _filters.ComputeIfAbsent(tabId, () => new Dictionary<string, Dictionary<string, bool>>())?.Clear();
 
-    public void ClearColumns(string tabId) => _columns.ComputeIfAbsent(tabId, () => new List<string>()).Clear();
+    public void ClearColumns(string tabId) => _columns.ComputeIfAbsent(tabId, () => new HashSet<string>()).Clear();
 
     public void ClearSorting(string tabId) => _sorting.ComputeIfAbsent(tabId, () => new Dictionary<string, float>())?.Clear();
 
@@ -51,22 +56,16 @@ public class Config : ModSettings
         _sorting[tabId][defName] = value;
     }
 
-    public IReadOnlyList<string> GetColumns(string tabId) => _columns.ComputeIfAbsent(tabId, () => new List<string>());
+    public HashSet<string> GetColumns(string tabId) => _columns.ComputeIfAbsent(tabId, () => new HashSet<string>());
 
-    public bool GetColumn(string tabId, string def) => _columns.ComputeIfAbsent(tabId, () => new List<string>()).Contains(def);
+    public bool GetColumn(string tabId, string def) => _columns.ComputeIfAbsent(tabId, () => new HashSet<string>()).Contains(def);
 
     public void SetColumn(string tabId, string def, bool value)
     {
         if (value)
-        {
-            _columns.ComputeIfAbsent(tabId, () => new List<string>()).Add(def);
-            SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
-        }
+            _columns.ComputeIfAbsent(tabId, () => new HashSet<string>()).Add(def);
         else
-        {
-            _columns.ComputeIfAbsent(tabId, () => new List<string>()).Remove(def);
-            SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
-        }
+            _columns.ComputeIfAbsent(tabId, () => new HashSet<string>()).Remove(def);
     }
 
     public MultiCheckboxState GetFilter(string tabId, string category, string defName)
@@ -139,10 +138,13 @@ public class Config : ModSettings
         {
             Scribe_Values.Look(ref UseAllThings, "UseAllThings", false, true);
             Scribe_Config.LookDictionaryDeep2(ref _sorting, "Sorting");
-            Scribe_Config.LookDictionaryList(ref _columns, "Columns");
+            Scribe_Config.LookDictionaryHashSet(ref _columns, "Columns");
             Scribe_Config.LookDictionaryDeep3(ref _filters, "Filters");
             Scribe_Config.LookListString(ref FittingWorn, "FittingWorn");
             Scribe_Config.LookDictionary(ref RangedAmmo, "RangedSelectedAmmo");
+            Scribe_Values.Look(ref DoNotSortColumns, "DoNotSortColumns");
+            Scribe_Values.Look(ref UseSimpleDataSorting, "UseSimpleDataSorting");
+            Scribe_Config.LookDictionary(ref SimpleSorting, "SimpleSorting");
         }
         else
         {
@@ -158,5 +160,16 @@ public class Config : ModSettings
         _filters.Clear();
         FittingWorn.Clear();
         RangedAmmo.Clear();
+        DoNotSortColumns = false;
+        UseSimpleDataSorting = false;
+    }
+
+    public void DoSettingsWindowContents(Rect inRect)
+    {
+        var list = new Listing_Standard(GameFont.Small);
+        list.Begin(inRect);
+        list.CheckboxLabeled(TranslationCache.DoNotSortColumns.Text, ref DoNotSortColumns);
+        list.CheckboxLabeled(TranslationCache.UseSimpleDataSorting.Text, ref UseSimpleDataSorting);
+        list.End();
     }
 }
