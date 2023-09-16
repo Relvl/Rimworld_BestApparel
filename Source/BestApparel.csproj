@@ -9,7 +9,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>BestApparel</RootNamespace>
         <AssemblyName>BestApparel</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
@@ -143,18 +143,8 @@
         <HintPath>..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
         <Private>False</Private>
       </Reference>
-      <Reference Include="System">
-        <HintPath>..\..\..\RimWorldWin64_Data\Managed\System.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="System.Core">
-        <HintPath>..\..\..\RimWorldWin64_Data\Managed\System.Core.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="System.Xml">
-        <HintPath>..\..\..\RimWorldWin64_Data\Managed\System.Xml.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
+      <Reference Include="System" />
+      <Reference Include="System.Xml" />
       <Reference Include="UnityEngine">
         <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
         <Private>False</Private>
