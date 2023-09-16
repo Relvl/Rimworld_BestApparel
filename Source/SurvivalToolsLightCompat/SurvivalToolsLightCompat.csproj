@@ -74,8 +74,8 @@
         <Compile Include="stat_processor\StlToolStatProcessor.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="..\..\Compat\SurvivalToolsLight\Patches\Patch_BestApparel_CE.xml">
-        <Link>Patches\Patch_BestApparel_CE.xml</Link>
+      <Content Include="..\..\Compat\SurvivalToolsLight\Patches\Patch_BestApparel_SurvivalToolsLight.xml">
+        <Link>Patches\Patch_BestApparel_SurvivalToolsLight.xml</Link>
       </Content>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
