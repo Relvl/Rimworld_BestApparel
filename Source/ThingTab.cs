@@ -13,6 +13,7 @@ public class ThingTab
 {
     private readonly IThingTabRenderer _renderer;
     private readonly List<AToolbarButton> _toolbar;
+    protected string SearchString;
 
     public ThingTab(ThingTabDef def)
     {
@@ -52,7 +53,19 @@ public class ThingTab
         // ======================== Toolbar 
         var btnRect = new Rect(0, inRect.y, 0, 24);
         foreach (var button in _toolbar.Where(a => a.IsLeftSide())) button.Render(ref btnRect);
-        btnRect.x = inRect.xMax;
+
+        // search
+        const int searchWidth = 100;
+        var r = new Rect(inRect.width - 24, inRect.y, 24, 24);
+        GUI.DrawTexture(r, TexButton.Search);
+        GUI.SetNextControlName($"UI.BestApparel.{GetType().Name}.Search");
+        r.x -= searchWidth + 4;
+        r.width = searchWidth;
+        var searchString = Widgets.TextField(r, SearchString, 15);
+        SearchString = searchString;
+
+        // right buttons
+        btnRect.x = inRect.xMax - r.width - 28;
         btnRect.y = inRect.y;
         btnRect.width = 0;
         foreach (var button in _toolbar.Where(a => a.IsRightSide())) button.Render(ref btnRect);
@@ -62,7 +75,7 @@ public class ThingTab
         UIUtils.DrawLineAtTop(ref inRect, true, 1);
 
         // ======================== Table
-        _renderer.DoWindowContents(ref inRect);
+        _renderer.DoWindowContents(ref inRect, searchString);
     }
 
     public void Reload() => _renderer.CollectContainers();

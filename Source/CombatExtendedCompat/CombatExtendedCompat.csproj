@@ -44,7 +44,6 @@
         <Compile Include="stat_processor\CeRangedAmmoPenetrationBlunt.cs" />
         <Compile Include="stat_processor\CeRangedAmmoPenetrationSharp.cs" />
         <Compile Include="stat_processor\CeRangedDamageStatProcessor.cs" />
-        <Compile Include="thing_tab_renderer\CeRangedThingTabRenderer.cs" />
         <Compile Include="toolbar_button\ToolbarButtonResetAmmo.cs" />
     </ItemGroup>
     <ItemGroup>

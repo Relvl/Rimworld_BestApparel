@@ -53,9 +53,11 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
 
     public string GetTabId() => TabId;
 
-    public virtual void DoWindowContents(ref Rect inRect)
+    public virtual void DoWindowContents(ref Rect inRect, string searchString)
     {
-        var containers = FilteredContainers.ToList(); // copy containers to prevent concurrent modification exceptions
+        var containers = FilteredContainers //
+            .Where(c => searchString == "" || c.Def.defName.ToLower().Contains(searchString) || c.Def.label.ToLower().Contains(searchString))
+            .ToList(); // copy containers to prevent concurrent modification exceptions
         if (!containers.Any()) return;
 
         RenderTableHeader(ref inRect, containers.First());
@@ -194,7 +196,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
     protected virtual void RenderRowThingLabel(ref Rect cellRect, AThingContainer container)
     {
         Text.Anchor = TextAnchor.MiddleLeft;
-        
+
         // i
         cellRect.width = CellHeight;
         Widgets.InfoCardButtonCentered(cellRect, container.DefaultThing);

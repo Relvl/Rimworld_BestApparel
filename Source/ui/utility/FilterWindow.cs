@@ -23,7 +23,7 @@ public class FilterWindow : AUtilityWindow
 
         foreach (var (defs, label, category) in Parent.GetFilterData())
         {
-            var defsAsList = defs.Where(def => lSearch == "" || def.defName.ToLower().Contains(lSearch) || def.defName.ToLower().Contains(lSearch)).ToList();
+            var defsAsList = defs.Where(def => lSearch == "" || def.defName.ToLower().Contains(lSearch) || def.label.ToLower().Contains(lSearch)).ToList();
             if (defsAsList.Count == 0) continue;
             heightCounter += RenderFilterTitle(ref inRect, label, defsAsList, category);
             heightCounter += UIUtils.RenderUtilityGrid(ref inRect, 3, RowHeight, defsAsList, (def, rect) => RenderElement(def, rect, category));

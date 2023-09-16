@@ -8,7 +8,7 @@ public interface IThingTabRenderer
 {
     string GetTabId();
 
-    void DoWindowContents(ref Rect inRect);
+    void DoWindowContents(ref Rect inRect, string searchString);
 
     void PrepareCriteria();
 
