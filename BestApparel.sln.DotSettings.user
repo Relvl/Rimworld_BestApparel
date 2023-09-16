@@ -69,13 +69,11 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CRimWorldDev_005CRimWorldWin64_005FData_005CManaged_005CUnity_002ETextMeshPro_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005C_005FSTEAM_005Csteamapps_005Ccommon_005CRimWorld_005CMods_005CBestApparel_005CAssemblies_005CBestApparel_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005C_005FSTEAM_005Csteamapps_005Ccommon_005CRimWorld_005CMods_005CCombatExtended_005CAssemblies_005CCombatExtended_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005C_005FSTEAM_005Csteamapps_005Ccommon_005CRimWorld_005CMods_005CSimple_0020Sidearms_0020SK_005CAssemblies_005CSimpleSidearms_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005C_005FSTEAM_005Csteamapps_005Ccommon_005CRimWorld_005CMods_005CSurvivalToolsLite_005CAssemblies_005CSurvivalToolsLite_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005C_005FSTEAM_005Csteamapps_005Ccommon_005CRimWorld_005CRimWorldWin64_005FData_005CManaged_005CAssembly_002DCSharp_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005C_005FSTEAM_005Csteamapps_005Ccommon_005CRimWorld_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002ECoreModule_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005C_005FSTEAM_005Csteamapps_005Ccommon_005CRimWorld_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005C_005FSTEAM_005Csteamapps_005Ccommon_005CRimWorld_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002EIMGUIModule_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005C_005FSTEAM_005Csteamapps_005Ccommon_005CRimWorld_005CRimWorldWin64_005FData_005CManaged_005CUnityEngine_002ETextRenderingModule_002Edll/@EntryIndexedValue">True</s:Boolean>
-	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
-  &lt;Assembly Path="D:\RimWorldDev\RimWorldWin64_Data\Managed\Assembly-CSharp.dll" /&gt;&#xD;
-  &lt;Assembly Path="D:\RimWorldDev\RimWorldWin64_Data\Managed\UnityEngine.UI.dll" /&gt;&#xD;
-  &lt;Assembly Path="D:\RimWorldDev\Mods\CombatExtended\Assemblies\CombatExtended.dll" /&gt;&#xD;
-&lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer /&gt;</s:String></wpf:ResourceDictionary>

@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestApparel", "Source\BestA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CombatExtendedCompat", "Source\CombatExtendedCompat\CombatExtendedCompat.csproj", "{A34B1301-F729-45A2-8669-9B9E71700983}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurvivalToolsLightCompat", "Source\SurvivalToolsLightCompat\SurvivalToolsLightCompat.csproj", "{EEF2A257-539D-40C0-A8F1-C1FEBA1A9590}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{A34B1301-F729-45A2-8669-9B9E71700983}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A34B1301-F729-45A2-8669-9B9E71700983}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A34B1301-F729-45A2-8669-9B9E71700983}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEF2A257-539D-40C0-A8F1-C1FEBA1A9590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEF2A257-539D-40C0-A8F1-C1FEBA1A9590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEF2A257-539D-40C0-A8F1-C1FEBA1A9590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEF2A257-539D-40C0-A8F1-C1FEBA1A9590}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
