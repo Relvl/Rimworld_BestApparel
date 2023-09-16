@@ -1,13 +1,17 @@
 using System.Linq;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace BestApparel.ui.utility;
 
 public class FilterWindow : AUtilityWindow
 {
+    protected override bool UseSearch => true;
+
     public FilterWindow(IThingTabRenderer parent) : base(parent)
     {
+        Log.Warning("Created window");
     }
 
     protected override float DoWindowContentsInner(ref Rect inRect)
@@ -15,10 +19,11 @@ public class FilterWindow : AUtilityWindow
         // todo def.apparel.developmentalStageFilter
 
         float heightCounter = 0;
+        var lSearch = SearchString.ToLower();
 
         foreach (var (defs, label, category) in Parent.GetFilterData())
         {
-            var defsAsList = defs.ToList();
+            var defsAsList = defs.Where(def => lSearch == "" || def.defName.ToLower().Contains(lSearch) || def.defName.ToLower().Contains(lSearch)).ToList();
             if (defsAsList.Count == 0) continue;
             heightCounter += RenderFilterTitle(ref inRect, label, defsAsList, category);
             heightCounter += UIUtils.RenderUtilityGrid(ref inRect, 3, RowHeight, defsAsList, (def, rect) => RenderElement(def, rect, category));
@@ -45,7 +50,14 @@ public class FilterWindow : AUtilityWindow
             Parent.UpdateFilter();
         }
 
-        Widgets.CheckboxMulti(chkRect, chkState);
+        var tex = chkState switch
+        {
+            MultiCheckboxState.On => Widgets.CheckboxOnTex,
+            MultiCheckboxState.Off => Widgets.CheckboxOffTex,
+            _ => Widgets.CheckboxPartialTex
+        };
+        Widgets.ButtonImage(chkRect, tex, true);
+        MouseoverSounds.DoRegion(chkRect);
 
         if (isMouseOver)
         {
