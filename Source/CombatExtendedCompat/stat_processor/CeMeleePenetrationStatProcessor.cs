@@ -15,7 +15,7 @@ public class CeMeleePenetrationStatProcessor : AStatProcessor
         _sharp = sharp;
     }
 
-    public override string GetDefLabel() => (_sharp ? TranslationCache.StatMeleePenetrationSharp : TranslationCache.StatMeleePenetrationBlunt).Text;
+    public override string GetDefLabel() => _sharp ? "CE_DescSharpPenetration".Translate() : "CE_DescBluntPenetration".Translate();
 
     public override string GetDefName() => _sharp ? "CE_DescSharpPenetration" : "CE_DescBluntPenetration";
 

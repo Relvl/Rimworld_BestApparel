@@ -43,7 +43,13 @@
         <Compile Include="stat_processor\CeMeleePenetrationStatProcessor.cs" />
         <Compile Include="stat_processor\CeRangedAmmoPenetrationBlunt.cs" />
         <Compile Include="stat_processor\CeRangedAmmoPenetrationSharp.cs" />
+        <Compile Include="stat_processor\CeRangedAmmoSpeedProcessor.cs" />
         <Compile Include="stat_processor\CeRangedDamageStatProcessor.cs" />
+        <Compile Include="stat_processor\CeRangedMagazineSizeProcessor.cs" />
+        <Compile Include="stat_processor\CeRangedMuzzleFlashScaleProcessor.cs" />
+        <Compile Include="stat_processor\CeRangedRecoilPatternProcessor.cs" />
+        <Compile Include="stat_processor\CeRangedReloadTimeProcessor.cs" />
+        <Compile Include="stat_processor\CeRangedWarmupTimeProcessor.cs" />
         <Compile Include="toolbar_button\ToolbarButtonResetAmmo.cs" />
     </ItemGroup>
     <ItemGroup>

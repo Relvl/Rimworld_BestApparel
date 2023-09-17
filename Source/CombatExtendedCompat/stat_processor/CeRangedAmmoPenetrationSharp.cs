@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using CombatExtended;
 using Verse;
@@ -8,7 +9,7 @@ namespace BestApparel.CombatExtendedCompat;
 public class CeRangedAmmoPenetrationSharp : AStatProcessor
 {
     public override float CellWidth => 110;
-    public override string[] ActivateWith => new[] { "CE_Ammo" };
+    public override IEnumerable<string> ActivateWith => new[] { "CE_Ammo" };
 
     public CeRangedAmmoPenetrationSharp(IStatCollector collector) : base(DefaultStat, collector)
     {

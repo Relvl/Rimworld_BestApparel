@@ -130,13 +130,11 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         }
 
         Widgets.Label(headerRect, cell.Processor.GetDefLabel());
-        var tooltip = $"{cell.Processor.GetDefLabel().CapitalizeFirst().Colorize(Color.green)}\n\n{cell.Processor.GetStatDef().description ?? "-no-description-"}";
+        var tooltip = $"{cell.Processor.GetDefLabel().CapitalizeFirst().Colorize(Color.green)}\n\n{cell.Processor.StatDef.description ?? "-no-description-"}";
 
         if (Prefs.DevMode)
         {
-            tooltip += $"\n\nDefName: {cell.Processor.GetDefName()}".Colorize(UIUtils.ColorWhiteA20);
-            tooltip += $"\nProcessor: {cell.Processor.GetType().Name}".Colorize(UIUtils.ColorWhiteA20);
-            tooltip += $"\nCollector: {cell.Processor.Collector.GetType().Name}".Colorize(UIUtils.ColorWhiteA20);
+            tooltip += cell.Processor.DebugTooltip();
         }
 
         TooltipHandler.TipRegion(headerRect, tooltip);
@@ -299,6 +297,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
                 foreach (var processor in collector.Collect(container.DefaultThing))
                 {
                     if (tmpStatProcessors.Any(p => p.GetDefName() == processor.GetDefName())) continue;
+                    if (processor.IsValueDefault(container.DefaultThing)) continue;
                     tmpStatProcessors.Add(processor);
                 }
             }

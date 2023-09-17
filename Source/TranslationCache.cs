@@ -38,10 +38,13 @@ public static class TranslationCache
     public static readonly E FittingLetterAdd = new("BestApparel.Fitting.Letter.Totals.Add");
 
     public static readonly E StatMeleeAvgDamage = new("BestApparel.Stat.MeleeAvgDamage");
-    public static readonly E StatMeleePenetrationSharp = new("BestApparel.Stat.CE_DescSharpPenetration");
-    public static readonly E StatMeleePenetrationBlunt = new("BestApparel.Stat.CE_DescBluntPenetration");
     public static readonly E StatCERangedDamage = new("BestApparel.Stat.CE_RangedDamage");
     public static readonly E StatCEAmmo = new("BestApparel.Stat.CE_Ammo");
+    public static readonly E StatCeRangedRecoilPattern = new("BestApparel.Stat.CeRangedRecoilPattern");
+    public static readonly E StatCeRangedWarmupTime = new("BestApparel.Stat.CeRangedWarmupTime");
+    public static readonly E StatCeRangedMuzzleFlashScale = new("BestApparel.Stat.CeRangedMuzzleFlashScale");
+    public static readonly E StatCeRangedReloadTime = new("BestApparel.Stat.CeRangedReloadTime");
+    public static readonly E StatCeRangedAmmoSpeed = new("BestApparel.Stat.CeRangedAmmoSpeed");
     
     public static readonly E DoNotSortColumns = new("BestApparel.Config.DoNotSortColumns");
     public static readonly E UseSimpleDataSorting = new("BestApparel.Config.UseSimpleDataSorting");

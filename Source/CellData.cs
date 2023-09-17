@@ -24,7 +24,7 @@ public class CellData
 
         if (Prefs.DevMode)
         {
-            Tooltips.Add($"Raw value: {valueRaw}, Default: {processor.GetStatDef().defaultBaseValue}");
+            Tooltips.Add($"Raw value: {valueRaw}, Default: {processor.StatDef.defaultBaseValue}");
         }
     }
 }

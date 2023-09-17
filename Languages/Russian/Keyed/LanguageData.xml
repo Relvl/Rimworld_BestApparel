@@ -76,10 +76,13 @@
     <BestApparel.Fitting.Letter.Totals.Add>Добавить экипировку:</BestApparel.Fitting.Letter.Totals.Add>
 
     <BestApparel.Stat.MeleeAvgDamage>Усредненный урон</BestApparel.Stat.MeleeAvgDamage>
-    <BestApparel.Stat.CE_DescSharpPenetration>Бронепробитие (мм БКГ)</BestApparel.Stat.CE_DescSharpPenetration>
-    <BestApparel.Stat.CE_DescBluntPenetration>Бронепробитие (МПа)</BestApparel.Stat.CE_DescBluntPenetration>
     <BestApparel.Stat.CE_RangedDamage>Урон (выстрел)</BestApparel.Stat.CE_RangedDamage>
     <BestApparel.Stat.CE_Ammo>Боеприпас</BestApparel.Stat.CE_Ammo>
+    <BestApparel.Stat.CeRangedRecoilPattern>Recoil pattern</BestApparel.Stat.CeRangedRecoilPattern>
+    <BestApparel.Stat.CeRangedWarmupTime>Warmup time</BestApparel.Stat.CeRangedWarmupTime>
+    <BestApparel.Stat.CeRangedMuzzleFlashScale>Muzzle flash scale</BestApparel.Stat.CeRangedMuzzleFlashScale>
+    <BestApparel.Stat.CeRangedReloadTime>Время перезарядки</BestApparel.Stat.CeRangedReloadTime>
+    <BestApparel.Stat.CeRangedAmmoSpeed>Скорость снаряда</BestApparel.Stat.CeRangedAmmoSpeed>
 
     <BestApparel.Config.DoNotSortColumns>Не сортировать колонки</BestApparel.Config.DoNotSortColumns>
     <BestApparel.Config.UseSimpleDataSorting>Простая сортировка по колонкам</BestApparel.Config.UseSimpleDataSorting>

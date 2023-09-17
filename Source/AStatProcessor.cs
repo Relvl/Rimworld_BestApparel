@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BestApparel.ui;
 using RimWorld;
 using UnityEngine;
@@ -11,31 +12,25 @@ public abstract class AStatProcessor
     protected static readonly StatDef DefaultStat = new();
 
     public readonly IStatCollector Collector;
-    protected readonly StatDef Def;
+    public readonly StatDef StatDef;
 
     public virtual float CellWidth => 70;
 
-    public virtual string[] ActivateWith => new string[] { };
+    public virtual IEnumerable<string> ActivateWith => new string[] { };
 
-    protected AStatProcessor(StatDef def,IStatCollector collector)
+    protected AStatProcessor(StatDef statDef, IStatCollector collector)
     {
-        Def = def;
+        StatDef = statDef;
         Collector = collector;
     }
 
-    public virtual StatDef GetStatDef() => Def;
-    public virtual string GetDefName() => Def?.defName ?? "--unk-def-name--";
-    public virtual string GetDefLabel() => Def.label;
+    public virtual string GetDefName() => StatDef?.defName ?? "--unk-def-name--";
+    public virtual string GetDefLabel() => StatDef.label;
 
     public abstract float GetStatValue(Thing thing);
     public abstract string GetStatValueFormatted(Thing thing);
 
-    protected static string GetStatValueFormatted(StatDef def, float value)
-    {
-        return def.ValueToString(value, ToStringNumberSense.Offset, !def.formatString.NullOrEmpty());
-    }
-
-    public virtual bool IsValueDefault(Thing thing) => Math.Abs(GetStatValue(thing) - GetStatDef().defaultBaseValue) < Config.DefaultTolerance;
+    public virtual bool IsValueDefault(Thing thing) => Math.Abs(GetStatValue(thing) - StatDef.defaultBaseValue) < Config.DefaultTolerance;
 
     public override int GetHashCode() => GetDefName().GetHashCode();
 
@@ -49,4 +44,15 @@ public abstract class AStatProcessor
         cellRect.xMax += 2;
         foreach (var tooltip in cell.Tooltips) TooltipHandler.TipRegion(cellRect, tooltip);
     }
+
+    public string DebugTooltip() =>
+        @$"
+
+DefName: {GetDefName()}
+Processor: {GetType().Name}
+Collector: {Collector.GetType().Name}
+DefaultBase: {StatDef.defaultBaseValue}
+Hide at: {StatDef.hideAtValue}
+Min value: {StatDef.minValue}
+".Colorize(UIUtils.ColorWhiteA20);
 }

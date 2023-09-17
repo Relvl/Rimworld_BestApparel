@@ -7,7 +7,9 @@
         <renderClass>BestApparel.thing_tab_renderer.ApparelTabRenderer</renderClass>
         <factoryClass>BestApparel.container_factory.ApparelContainerFactory</factoryClass>
         <collectors>
+            <!-- Literally every registered StatDef (excludes stat that equal on every thing) -->
             <li>BestApparel.stat_collector.BaseStatCollector</li>
+            <!-- Every stat that contained in the <equippedStatOffsets> -->
             <li>BestApparel.stat_collector.EquippedStatCollector</li>
         </collectors>
         <toolbar>
@@ -25,7 +27,9 @@
         <renderClass>BestApparel.thing_tab_renderer.DefaultThnigTabRenderer</renderClass>
         <factoryClass>BestApparel.container_factory.RangedContainerFactory</factoryClass>
         <collectors>
+            <!-- Literally every registered StatDef (excludes stat that equal on every thing) -->
             <li>BestApparel.stat_collector.BaseStatCollector</li>
+            <!-- Every stat that contained in the <equippedStatOffsets> -->
             <li>BestApparel.stat_collector.EquippedStatCollector</li>
             <li>BestApparel.stat_collector.RangedStatCollector</li>
         </collectors>
@@ -43,7 +47,9 @@
         <renderClass>BestApparel.thing_tab_renderer.DefaultThnigTabRenderer</renderClass>
         <factoryClass>BestApparel.container_factory.MeleeContainerFactory</factoryClass>
         <collectors>
+            <!-- Literally every registered StatDef (excludes stat that equal on every thing) -->
             <li>BestApparel.stat_collector.BaseStatCollector</li>
+            <!-- Every stat that contained in the <equippedStatOffsets> -->
             <li>BestApparel.stat_collector.EquippedStatCollector</li>
             <li>BestApparel.stat_collector.MeleeStatCollector</li>
         </collectors>
@@ -61,6 +67,7 @@
         <renderClass>BestApparel.thing_tab_renderer.DefaultThnigTabRenderer</renderClass>
         <factoryClass>BestApparel.container_factory.MaterialContainerFactory</factoryClass>
         <collectors>
+            <!-- Literally every registered StatDef (excludes stat that equal on every thing) -->
             <li>BestApparel.stat_collector.BaseStatCollector</li>
             <li>BestApparel.stat_collector.MaterialStatCollector</li>
         </collectors>

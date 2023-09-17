@@ -62,14 +62,23 @@ public class ColumnsWindow : AUtilityWindow
 
                 Widgets.CheckboxDraw(chkRect.x, chkRect.y, chkState, false, RowHeight);
 
+                var tooltip = $"{processor.GetDefLabel()}";
+                if (processor.StatDef.description is not null)
+                {
+                    tooltip += $"\n\n{processor.StatDef.description}";
+                }
+
+                if (Prefs.DevMode)
+                {
+                    tooltip += processor.DebugTooltip();
+                }
+
+                TooltipHandler.TipRegion(cellRect, tooltip);
+
                 if (isMouseOver)
                 {
                     GUI.DrawTexture(chkRect, TexUI.HighlightTex);
                     GUI.color = Color.yellow;
-                    if (Prefs.DevMode)
-                    {
-                        TooltipHandler.TipRegion(cellRect, $"defName: {defName}");
-                    }
                 }
 
                 cellRect.x += RowHeight + 2;

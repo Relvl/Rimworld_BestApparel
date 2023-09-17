@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using CombatExtended;
 using Verse;
@@ -7,7 +8,7 @@ namespace BestApparel.CombatExtendedCompat;
 
 public class CeRangedDamageStatProcessor : AStatProcessor
 {
-    public override string[] ActivateWith => new[] { "CE_Ammo" };
+    public override IEnumerable<string> ActivateWith => new[] { "CE_Ammo" };
 
     public CeRangedDamageStatProcessor(IStatCollector collector) : base(DefaultStat, collector)
     {

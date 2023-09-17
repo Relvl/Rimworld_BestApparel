@@ -19,9 +19,7 @@ public class BaseStatCollector : IStatCollector
             if (!def.Worker.ShouldShowFor(StatRequest.For(thing))) continue;
             if (def.Worker.IsDisabledFor(thing)) continue;
 
-            var proc = new BaseStatProcessor(def, this);
-            if (!proc.IsValueDefault(thing))
-                yield return proc;
+            yield return new BaseStatProcessor(def, this);
         }
     }
 }

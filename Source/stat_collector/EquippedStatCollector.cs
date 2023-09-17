@@ -10,6 +10,8 @@ public class EquippedStatCollector : IStatCollector
     public void Prepare(Thing thing)
     {
     }
+    
+    
 
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
@@ -17,12 +19,8 @@ public class EquippedStatCollector : IStatCollector
         foreach (var statOffset in thing.def.equippedStatOffsets)
         {
             var stat = statOffset?.stat;
-            if (stat == null) continue;
-            var proc = new EquippedOffsetStatCollector(stat, this);
-            if (!proc.IsValueDefault(thing))
-            {
-                yield return proc;
-            }
+            if (stat is null) continue;
+            yield return new EquippedOffsetStatProcessor(stat, this);
         }
     }
 }

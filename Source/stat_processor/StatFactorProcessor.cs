@@ -9,7 +9,7 @@ public class StatFactorProcessor : AStatProcessor
 {
     private readonly Func<Thing, float> _func;
 
-    public StatFactorProcessor(StatDef def, Func<Thing, float> func, IStatCollector collector) : base(def, collector)
+    public StatFactorProcessor(StatDef statDef, Func<Thing, float> func, IStatCollector collector) : base(statDef, collector)
     {
         _func = func;
     }

@@ -61,7 +61,7 @@
         <Compile Include="stat_collector\MeleeStatCollector.cs" />
         <Compile Include="stat_collector\RangedStatCollector.cs" />
         <Compile Include="stat_processor\BaseStatProcessor.cs" />
-        <Compile Include="stat_processor\EquippedOffsetStatCollector.cs" />
+        <Compile Include="stat_processor\EquippedOffsetStatProcessor.cs" />
         <Compile Include="stat_processor\FuncStatProcessor.cs" />
         <Compile Include="stat_processor\StatFactorProcessor.cs" />
         <Compile Include="stat_processor\StringStatProcessor.cs" />

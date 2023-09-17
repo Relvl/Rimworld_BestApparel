@@ -15,14 +15,13 @@ public class CeMeleeStatCollector : IStatCollector
 
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
-        yield return new EquippedOffsetStatCollector(StatDef.Named("MeleePenetrationFactor"), this);
-        yield return new EquippedOffsetStatCollector(StatDef.Named("MeleeCounterParryBonus"), this);
+        yield return new EquippedOffsetStatProcessor(StatDef.Named("MeleePenetrationFactor"), this);
+        yield return new EquippedOffsetStatProcessor(StatDef.Named("MeleeCounterParryBonus"), this);
         if (thing.def.tools != null)
         {
             yield return new CeMeleeDamageStatProcessor(this);
             yield return new CeMeleePenetrationStatProcessor(true, this);
             yield return new CeMeleePenetrationStatProcessor(false, this);
-            yield return new EquippedOffsetStatCollector(StatDef.Named("MeleePenetrationFactor"), this);
         }
     }
 }
