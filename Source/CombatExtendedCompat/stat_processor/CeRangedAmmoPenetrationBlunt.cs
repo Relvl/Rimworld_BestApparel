@@ -2,6 +2,7 @@ using System.Linq;
 using CombatExtended;
 using Verse;
 
+// ReSharper disable once CheckNamespace
 namespace BestApparel.CombatExtendedCompat;
 
 public class CeRangedAmmoPenetrationBlunt : AStatProcessor
@@ -9,7 +10,7 @@ public class CeRangedAmmoPenetrationBlunt : AStatProcessor
     public override float CellWidth => 100;
     public override string[] ActivateWith => new[] { "CE_Ammo" };
 
-    public CeRangedAmmoPenetrationBlunt() : base(DefaultStat)
+    public CeRangedAmmoPenetrationBlunt(IStatCollector collector) : base(DefaultStat, collector)
     {
     }
 
@@ -27,6 +28,5 @@ public class CeRangedAmmoPenetrationBlunt : AStatProcessor
         return link.projectile.projectile.GetArmorPenetration(thing);
     }
 
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) =>
-        GetStatValue(thing).ToStringByStyle(ToStringStyle.FloatTwo) + " " + "CE_MPa".Translate();
+    public override string GetStatValueFormatted(Thing thing) => GetStatValue(thing).ToStringByStyle(ToStringStyle.FloatTwo) + " " + "CE_MPa".Translate();
 }

@@ -85,7 +85,7 @@ public abstract class AThingContainer
         );
         if (!BestApparel.Config.DoNotSortColumns)
         {
-            list = list.OrderByDescending(cellData => cellData.WeightFactor).ThenBy(cellData => cellData.DefLabel);
+            list = list.OrderByDescending(cellData => cellData.WeightFactor).ThenBy(cellData => cellData.Processor.GetDefLabel());
         }
 
         CachedCells = list.ToArray();

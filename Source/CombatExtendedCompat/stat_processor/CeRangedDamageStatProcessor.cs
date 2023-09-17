@@ -9,7 +9,7 @@ public class CeRangedDamageStatProcessor : AStatProcessor
 {
     public override string[] ActivateWith => new[] { "CE_Ammo" };
 
-    public CeRangedDamageStatProcessor() : base(DefaultStat)
+    public CeRangedDamageStatProcessor(IStatCollector collector) : base(DefaultStat, collector)
     {
     }
 
@@ -43,5 +43,5 @@ public class CeRangedDamageStatProcessor : AStatProcessor
         return damageLabel;
     }
 
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) => GetStatValue(thing).ToStringByStyle(ToStringStyle.Integer);
+    public override string GetStatValueFormatted(Thing thing) => GetStatValue(thing).ToStringByStyle(ToStringStyle.Integer);
 }

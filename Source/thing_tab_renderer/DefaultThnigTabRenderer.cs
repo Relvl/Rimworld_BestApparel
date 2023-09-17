@@ -129,8 +129,17 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
             }
         }
 
-        Widgets.Label(headerRect, cell.DefLabel);
-        TooltipHandler.TipRegion(headerRect, cell.DefLabel);
+        Widgets.Label(headerRect, cell.Processor.GetDefLabel());
+        var tooltip = $"{cell.Processor.GetDefLabel().CapitalizeFirst().Colorize(Color.green)}\n\n{cell.Processor.GetStatDef().description ?? "-no-description-"}";
+
+        if (Prefs.DevMode)
+        {
+            tooltip += $"\n\nDefName: {cell.Processor.GetDefName()}".Colorize(UIUtils.ColorWhiteA20);
+            tooltip += $"\nProcessor: {cell.Processor.GetType().Name}".Colorize(UIUtils.ColorWhiteA20);
+            tooltip += $"\nCollector: {cell.Processor.Collector.GetType().Name}".Colorize(UIUtils.ColorWhiteA20);
+        }
+
+        TooltipHandler.TipRegion(headerRect, tooltip);
         headerRect.x += headerRect.width + CellPadding - 2;
         headerRect.width = 1;
         GUI.DrawTexture(headerRect, BaseContent.WhiteTex);
@@ -170,6 +179,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
                     }
 
                     Text.Anchor = TextAnchor.MiddleRight;
+                    GUI.color = Color.white;
                     cell.Processor.RenderCell(cellRect, cell, this); // todo! move to this' method
 
                     // offset to the right
@@ -357,13 +367,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
             yield return (WeaponClasses, TranslationCache.FilterWeaponClass, nameof(WeaponClassDef));
     }
 
-    public virtual IEnumerable<AStatProcessor> GetColumnData()
-    {
-        foreach (var processor in StatProcessors)
-        {
-            yield return processor;
-        }
-    }
+    public virtual IEnumerable<AStatProcessor> GetColumnData() => StatProcessors;
 
     public virtual HashSet<AThingContainer> GetAllContainers() => AllContainers;
 }

@@ -16,14 +16,12 @@ public class BaseStatCollector : IStatCollector
     {
         foreach (var def in DefDatabase<StatDef>.AllDefs)
         {
-            if (def.Worker.ShouldShowFor(StatRequest.For(thing)) && !def.Worker.IsDisabledFor(thing))
-            {
-                var proc = new BaseStatProcessor(def);
-                if (!proc.IsValueDefault(thing))
-                {
-                    yield return proc;
-                }
-            }
+            if (!def.Worker.ShouldShowFor(StatRequest.For(thing))) continue;
+            if (def.Worker.IsDisabledFor(thing)) continue;
+
+            var proc = new BaseStatProcessor(def, this);
+            if (!proc.IsValueDefault(thing))
+                yield return proc;
         }
     }
 }

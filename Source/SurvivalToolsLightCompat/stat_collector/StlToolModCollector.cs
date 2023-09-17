@@ -17,8 +17,8 @@ public class StlToolModCollector : IStatCollector
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
         if (!thing.def.HasModExtension<SurvivalToolProperties>()) yield break;
-        yield return new BaseStatProcessor(ST_StatDefOf.ToolEffectivenessFactor);
+        yield return new BaseStatProcessor(ST_StatDefOf.ToolEffectivenessFactor, this);
         foreach (var modifier in thing.def.GetModExtension<SurvivalToolProperties>().baseWorkStatFactors)
-            yield return new StlToolStatProcessor(modifier.stat);
+            yield return new StlToolStatProcessor(modifier.stat, this);
     }
 }

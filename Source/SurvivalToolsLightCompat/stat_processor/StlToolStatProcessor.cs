@@ -8,7 +8,7 @@ namespace SurvivalToolsLightCompat.stat_processor;
 
 public class StlToolStatProcessor : AStatProcessor
 {
-    public StlToolStatProcessor(StatDef def) : base(def)
+    public StlToolStatProcessor(StatDef def, IStatCollector collector) : base(def, collector)
     {
     }
 
@@ -19,7 +19,7 @@ public class StlToolStatProcessor : AStatProcessor
 
     public override float GetStatValue(Thing thing) => GetModifier(thing)?.value ?? 1f;
 
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) => $"x{GetStatValue(thing) * 100}%";
+    public override string GetStatValueFormatted(Thing thing) => $"x{GetStatValue(thing) * 100}%";
 
     private StatModifier GetModifier(Thing thing) =>
         thing.def.HasModExtension<SurvivalToolProperties>() ? thing.def.GetModExtension<SurvivalToolProperties>().baseWorkStatFactors.Find(f => f.stat == Def) : null;

@@ -8,7 +8,7 @@ public class StringStatProcessor : AStatProcessor
     private readonly Func<Thing, string> _func;
     private readonly string _name;
 
-    public StringStatProcessor(Func<Thing, string> func, string name) : base(DefaultStat)
+    public StringStatProcessor(Func<Thing, string> func, string name, IStatCollector collector) : base(DefaultStat, collector)
     {
         _func = func;
         _name = name;
@@ -22,7 +22,7 @@ public class StringStatProcessor : AStatProcessor
         return 0;
     }
 
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false)
+    public override string GetStatValueFormatted(Thing thing)
     {
         return _func(thing);
     }

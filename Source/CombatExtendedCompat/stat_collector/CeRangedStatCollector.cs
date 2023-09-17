@@ -16,18 +16,18 @@ public class CeRangedStatCollector : IStatCollector
 
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
-        yield return new CommonStatProcessor(StatDef.Named("MagazineCapacity"));
-        yield return new CommonStatProcessor(StatDef.Named("MuzzleFlash"));
-        yield return new CommonStatProcessor(StatDef.Named("ReloadSpeed"));
-        yield return new CommonStatProcessor(StatDef.Named("AimingAccuracy"));
-        yield return new CommonStatProcessor(StatDef.Named("SwayFactor"));
-        yield return new CommonStatProcessor(StatDef.Named("ShotSpread"));
-        yield return new CommonStatProcessor(StatDef.Named("NightVisionEfficiency_Weapon"));
-        yield return new CommonStatProcessor(StatDef.Named("Suppressability"));
-        yield return new CeAmmoStatProcessor();
-        yield return new CeRangedDamageStatProcessor();
-        yield return new CeRangedAmmoPenetrationSharp();
-        yield return new CeRangedAmmoPenetrationBlunt();
-        yield return new FuncStatProcessor(weapon => weapon.def.Verbs.FirstOrDefault()?.range ?? 0, "Range");
+        yield return new EquippedOffsetStatCollector(StatDef.Named("MagazineCapacity"), this);
+        yield return new EquippedOffsetStatCollector(StatDef.Named("MuzzleFlash"), this);
+        yield return new EquippedOffsetStatCollector(StatDef.Named("ReloadSpeed"), this);
+        yield return new EquippedOffsetStatCollector(StatDef.Named("AimingAccuracy"), this);
+        yield return new EquippedOffsetStatCollector(StatDef.Named("SwayFactor"), this);
+        yield return new EquippedOffsetStatCollector(StatDef.Named("ShotSpread"), this);
+        yield return new EquippedOffsetStatCollector(StatDef.Named("NightVisionEfficiency_Weapon"), this);
+        yield return new EquippedOffsetStatCollector(StatDef.Named("Suppressability"), this);
+        yield return new CeAmmoStatProcessor(this);
+        yield return new CeRangedDamageStatProcessor(this);
+        yield return new CeRangedAmmoPenetrationSharp(this);
+        yield return new CeRangedAmmoPenetrationBlunt(this);
+        yield return new FuncStatProcessor(weapon => weapon.def.Verbs.FirstOrDefault()?.range ?? 0, "Range", this);
     }
 }

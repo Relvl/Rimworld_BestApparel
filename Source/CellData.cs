@@ -9,34 +9,22 @@ public class CellData
 
     public AStatProcessor Processor;
     public Thing Thing;
-    public bool IsEmpty = true;
-    public string DefLabel = "";
-    public float ValueRaw;
-    public string Value = "---";
+    public bool IsEmpty;
+    public string Value;
     public float WeightFactor = 1;
     public float NormalizedWeight = 0;
-
-    protected CellData()
-    {
-    }
 
     public CellData(AStatProcessor processor, Thing thing)
     {
         Processor = processor;
         Thing = thing;
         IsEmpty = processor.IsValueDefault(thing);
-        ValueRaw = processor.GetStatValue(thing);
-        Value = IsEmpty ? "---" : processor.GetStatValueFormatted(thing, true);
-        DefLabel = processor.GetDefLabel();
-
-        if (!IsEmpty)
-        {
-            Tooltips.Add($"{processor.GetDefLabel()}: {Value}");
-        }
+        var valueRaw = processor.GetStatValue(thing);
+        Value = processor.GetStatValueFormatted(thing);
 
         if (Prefs.DevMode)
         {
-            Tooltips.Add($"Raw value: {ValueRaw}, Default: {processor.GetStatDef().defaultBaseValue}");
+            Tooltips.Add($"Raw value: {valueRaw}, Default: {processor.GetStatDef().defaultBaseValue}");
         }
     }
 }

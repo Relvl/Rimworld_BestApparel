@@ -9,7 +9,7 @@ public class StatFactorProcessor : AStatProcessor
 {
     private readonly Func<Thing, float> _func;
 
-    public StatFactorProcessor(StatDef def, Func<Thing, float> func) : base(def)
+    public StatFactorProcessor(StatDef def, Func<Thing, float> func, IStatCollector collector) : base(def, collector)
     {
         _func = func;
     }
@@ -19,7 +19,7 @@ public class StatFactorProcessor : AStatProcessor
         return _func(thing);
     }
 
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false)
+    public override string GetStatValueFormatted(Thing thing)
     {
         return $"{(GetStatValue(thing) * 100).ToString(CultureInfo.CurrentCulture)}%";
     }

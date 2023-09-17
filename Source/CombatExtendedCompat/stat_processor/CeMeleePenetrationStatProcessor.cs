@@ -10,7 +10,7 @@ public class CeMeleePenetrationStatProcessor : AStatProcessor
 {
     private readonly bool _sharp;
 
-    public CeMeleePenetrationStatProcessor(bool sharp) : base(DefaultStat)
+    public CeMeleePenetrationStatProcessor(bool sharp, IStatCollector collector) : base(DefaultStat, collector)
     {
         _sharp = sharp;
     }
@@ -37,9 +37,5 @@ public class CeMeleePenetrationStatProcessor : AStatProcessor
         return thing.GetStatValue(CE_StatDefOf.MeleePenetrationFactor) * penetration;
     }
 
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false)
-    {
-        var penetration = GetStatValue(thing);
-        return penetration.ToStringByStyle(ToStringStyle.FloatMaxTwo);
-    }
+    public override string GetStatValueFormatted(Thing thing) => GetStatValue(thing).ToStringByStyle(ToStringStyle.FloatMaxTwo);
 }

@@ -18,7 +18,7 @@ public class EquippedStatCollector : IStatCollector
         {
             var stat = statOffset?.stat;
             if (stat == null) continue;
-            var proc = new CommonStatProcessor(stat);
+            var proc = new EquippedOffsetStatCollector(stat, this);
             if (!proc.IsValueDefault(thing))
             {
                 yield return proc;

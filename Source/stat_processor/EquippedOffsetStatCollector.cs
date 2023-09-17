@@ -4,9 +4,9 @@ using Verse;
 
 namespace BestApparel.stat_processor;
 
-public class CommonStatProcessor : AStatProcessor
+public class EquippedOffsetStatCollector : AStatProcessor
 {
-    public CommonStatProcessor(StatDef def) : base(def)
+    public EquippedOffsetStatCollector(StatDef def, IStatCollector collector) : base(def, collector)
     {
     }
 
@@ -23,7 +23,7 @@ public class CommonStatProcessor : AStatProcessor
         }
     }
 
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) => GetStatValueFormatted(Def, GetStatValue(thing), forceUnformatted);
+    public override string GetStatValueFormatted(Thing thing) => GetStatValueFormatted(Def, GetStatValue(thing));
 
     public override int GetHashCode() => Def.GetHashCode();
 }

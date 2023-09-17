@@ -21,12 +21,12 @@ public class MaterialStatCollector : IStatCollector
 
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
-        yield return new StringStatProcessor(mat => string.Join(",", mat.def.stuffProps.categories), "Stuff_Category");
-        yield return new FuncStatProcessor(mat => mat.def.stuffProps.commonality, "Commonality");
+        yield return new StringStatProcessor(mat => string.Join(",", mat.def.stuffProps.categories), "Stuff_Category", this);
+        yield return new FuncStatProcessor(mat => mat.def.stuffProps.commonality, "Commonality", this);
 
         foreach (var factorName in _statFactorNames)
         {
-            yield return new StatFactorProcessor(StatDef.Named(factorName), t => t.def.stuffProps.statFactors?.Find(f => f.stat?.defName == factorName)?.value ?? 0);
+            yield return new StatFactorProcessor(StatDef.Named(factorName), t => t.def.stuffProps.statFactors?.Find(f => f.stat?.defName == factorName)?.value ?? 0, this);
         }
     }
 }

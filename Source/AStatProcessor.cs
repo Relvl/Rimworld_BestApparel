@@ -9,15 +9,18 @@ namespace BestApparel;
 public abstract class AStatProcessor
 {
     protected static readonly StatDef DefaultStat = new();
+
+    public readonly IStatCollector Collector;
     protected readonly StatDef Def;
 
     public virtual float CellWidth => 70;
 
     public virtual string[] ActivateWith => new string[] { };
 
-    protected AStatProcessor(StatDef def)
+    protected AStatProcessor(StatDef def,IStatCollector collector)
     {
         Def = def;
+        Collector = collector;
     }
 
     public virtual StatDef GetStatDef() => Def;
@@ -25,11 +28,11 @@ public abstract class AStatProcessor
     public virtual string GetDefLabel() => Def.label;
 
     public abstract float GetStatValue(Thing thing);
-    public abstract string GetStatValueFormatted(Thing thing, bool forceUnformatted = false);
+    public abstract string GetStatValueFormatted(Thing thing);
 
-    protected static string GetStatValueFormatted(StatDef def, float value, bool forceUnformatted = false)
+    protected static string GetStatValueFormatted(StatDef def, float value)
     {
-        return def.ValueToString(value, ToStringNumberSense.Offset, !forceUnformatted && !def.formatString.NullOrEmpty());
+        return def.ValueToString(value, ToStringNumberSense.Offset, !def.formatString.NullOrEmpty());
     }
 
     public virtual bool IsValueDefault(Thing thing) => Math.Abs(GetStatValue(thing) - GetStatDef().defaultBaseValue) < Config.DefaultTolerance;
@@ -40,24 +43,10 @@ public abstract class AStatProcessor
 
     public virtual void RenderCell(Rect cellRect, CellData cell, IThingTabRenderer renderer)
     {
-        if (cell.IsEmpty)
-        {
-            RenderEmptyCell(cellRect);
-        }
-        else
-        {
-            cellRect.xMax -= 2;
-            Widgets.Label(cellRect, cell.Value);
-            cellRect.xMax += 2;
-            foreach (var tooltip in cell.Tooltips) TooltipHandler.TipRegion(cellRect, tooltip);
-        }
-    }
-
-    protected static void RenderEmptyCell(Rect cellRect)
-    {
-        GUI.color = UIUtils.ColorWhiteA20;
-        Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(cellRect, "---");
-        GUI.color = Color.white;
+        cellRect.xMax -= 2;
+        if (cell.IsEmpty) GUI.color = UIUtils.ColorWhiteA20;
+        Widgets.Label(cellRect, cell.Value);
+        cellRect.xMax += 2;
+        foreach (var tooltip in cell.Tooltips) TooltipHandler.TipRegion(cellRect, tooltip);
     }
 }

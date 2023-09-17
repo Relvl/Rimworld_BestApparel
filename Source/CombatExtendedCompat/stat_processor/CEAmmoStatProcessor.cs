@@ -10,7 +10,7 @@ public class CeAmmoStatProcessor : AStatProcessor
 {
     public override float CellWidth => 100;
 
-    public CeAmmoStatProcessor() : base(DefaultStat)
+    public CeAmmoStatProcessor(IStatCollector collector) : base(DefaultStat, collector)
     {
     }
 
@@ -18,7 +18,7 @@ public class CeAmmoStatProcessor : AStatProcessor
     public override string GetDefLabel() => TranslationCache.StatCEAmmo.Text;
     public override bool IsValueDefault(Thing thing) => false;
     public override float GetStatValue(Thing thing) => 0f;
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false) => "";
+    public override string GetStatValueFormatted(Thing thing) => "";
     public override CellData MakeCell(Thing thing) => new CeAmmoCellData(this, thing);
 
     public override void RenderCell(Rect cellRect, CellData cell, IThingTabRenderer renderer)
@@ -75,20 +75,19 @@ public class CeAmmoCellData : CellData
     {
         Processor = processor;
         Thing = thing;
-        DefLabel = processor.GetDefLabel();
-        ValueRaw = thing.def.Verbs.FirstOrDefault()?.defaultProjectile?.projectile?.GetDamageAmount(thing) ?? 0;
+        var valueRaw = thing.def.Verbs.FirstOrDefault()?.defaultProjectile?.projectile?.GetDamageAmount(thing) ?? 0f;
 
         AmmoUser = thing.TryGetComp<CompAmmoUser>();
         var link = GetLink(AmmoUser);
         if (link != null)
         {
-            ValueRaw = GetDamage(link);
+            valueRaw = GetDamage(link);
             Tooltips.Add(link.projectile.GetProjectileReadout(thing));
             Tooltips.Add($"Caliber: {AmmoUser.Props.ammoSet.LabelCap}");
         }
 
-        Value = ValueRaw.ToStringByStyle(ToStringStyle.Integer);
-        IsEmpty = ValueRaw != 0;
+        Value = valueRaw.ToStringByStyle(ToStringStyle.Integer);
+        IsEmpty = valueRaw != 0;
     }
 
     private float GetDamage(AmmoLink link)

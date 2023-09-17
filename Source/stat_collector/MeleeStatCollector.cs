@@ -14,9 +14,9 @@ public class MeleeStatCollector : IStatCollector
 
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
-        yield return new CommonStatProcessor(StatDefOf.MeleeWeapon_AverageArmorPenetration);
-        yield return new CommonStatProcessor(StatDefOf.MeleeWeapon_DamageMultiplier);
-        yield return new CommonStatProcessor(StatDefOf.MeleeWeapon_CooldownMultiplier);
-        yield return new CommonStatProcessor(StatDefOf.MeleeWeapon_AverageDPS);
+        yield return new EquippedOffsetStatCollector(StatDefOf.MeleeWeapon_AverageArmorPenetration, this);
+        yield return new EquippedOffsetStatCollector(StatDefOf.MeleeWeapon_DamageMultiplier, this);
+        yield return new EquippedOffsetStatCollector(StatDefOf.MeleeWeapon_CooldownMultiplier, this);
+        yield return new EquippedOffsetStatCollector(StatDefOf.MeleeWeapon_AverageDPS, this);
     }
 }

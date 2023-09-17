@@ -6,7 +6,7 @@ namespace BestApparel.CombatExtendedCompat;
 
 public class CeMeleeDamageStatProcessor : AStatProcessor
 {
-    public CeMeleeDamageStatProcessor() : base(DefaultStat)
+    public CeMeleeDamageStatProcessor(IStatCollector collector) : base(DefaultStat, collector)
     {
     }
 
@@ -47,7 +47,7 @@ public class CeMeleeDamageStatProcessor : AStatProcessor
 
     public override float GetStatValue(Thing thing) => GetDamage(thing).Item2;
 
-    public override string GetStatValueFormatted(Thing thing, bool forceUnformatted = false)
+    public override string GetStatValueFormatted(Thing thing)
     {
         var (min, _, max) = GetDamage(thing);
         return $"{min.ToStringByStyle(ToStringStyle.FloatMaxTwo)} - {max.ToStringByStyle(ToStringStyle.FloatMaxTwo)}";
