@@ -9,7 +9,6 @@ namespace BestApparel.CombatExtendedCompat;
 
 public class CeRangedAmmoSpeedProcessor : AStatProcessor
 {
-    public override float CellWidth => 110;
     public override IEnumerable<string> ActivateWith => new[] { "CE_Ammo" };
 
     public CeRangedAmmoSpeedProcessor(IStatCollector collector) : base(DefaultStat, collector)

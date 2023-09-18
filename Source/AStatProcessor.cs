@@ -14,7 +14,7 @@ public abstract class AStatProcessor
     public readonly IStatCollector Collector;
     public readonly StatDef StatDef;
 
-    public virtual float CellWidth => 70;
+    public virtual float CellWidth => -1;
 
     public virtual IEnumerable<string> ActivateWith => new string[] { };
 

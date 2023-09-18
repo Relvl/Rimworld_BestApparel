@@ -8,7 +8,6 @@ namespace BestApparel.CombatExtendedCompat;
 
 public class CeRangedAmmoPenetrationSharp : AStatProcessor
 {
-    public override float CellWidth => 110;
     public override IEnumerable<string> ActivateWith => new[] { "CE_Ammo" };
 
     public CeRangedAmmoPenetrationSharp(IStatCollector collector) : base(DefaultStat, collector)
@@ -29,5 +28,6 @@ public class CeRangedAmmoPenetrationSharp : AStatProcessor
         return link.projectile.projectile.GetArmorPenetration(thing);
     }
 
-    public override string GetStatValueFormatted(Thing thing) => GetStatValue(thing).ToStringByStyle(ToStringStyle.FloatTwo) + " " + "CE_mmRHA".Translate();
+    public override string GetStatValueFormatted(Thing thing) =>
+        GetStatValue(thing).ToStringByStyle(ToStringStyle.FloatTwo) + (BestApparel.Config.CePenetrationShortValue ? "" : " " + "CE_mmRHA".Translate());
 }

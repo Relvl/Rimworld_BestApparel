@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -10,6 +11,7 @@ public class Config : ModSettings
 {
     // Please up this version only when breaking changes in the configs
     private const int Version = 5;
+    public static readonly bool IsCeLoaded = ModsConfig.ActiveModsInLoadOrder.Any(m => "Combat Extended".Equals(m.Name));
 
     public const float MaxSortingWeight = 10f;
     public const float DefaultTolerance = 0.0001f;
@@ -20,7 +22,8 @@ public class Config : ModSettings
 
     // ========================== Storable
 
-    public float MainWindowWidth = 0;
+    public float MainWindowWidth;
+    public bool CePenetrationShortValue;
 
     /* Do show all the things? Otherwise - only available on the workbenches. */
     public bool UseAllThings;
@@ -138,6 +141,7 @@ public class Config : ModSettings
         if (version == Version)
         {
             Scribe_Values.Look(ref MainWindowWidth, "MainWindowWidth");
+            Scribe_Values.Look(ref CePenetrationShortValue, "CePenetrationShortValue");
             Scribe_Values.Look(ref UseAllThings, "UseAllThings", false, true);
             Scribe_Config.LookDictionaryDeep2(ref _sorting, "Sorting");
             Scribe_Config.LookDictionaryHashSet(ref _columns, "Columns");
@@ -172,6 +176,8 @@ public class Config : ModSettings
         list.Begin(inRect);
         list.CheckboxLabeled(TranslationCache.DoNotSortColumns.Text, ref DoNotSortColumns);
         list.CheckboxLabeled(TranslationCache.UseSimpleDataSorting.Text, ref UseSimpleDataSorting);
+        if (IsCeLoaded)
+            list.CheckboxLabeled(TranslationCache.CePenetrationShortValue.Text, ref CePenetrationShortValue);
         list.End();
     }
 }

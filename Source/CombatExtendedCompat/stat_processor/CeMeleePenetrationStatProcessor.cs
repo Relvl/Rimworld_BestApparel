@@ -37,5 +37,6 @@ public class CeMeleePenetrationStatProcessor : AStatProcessor
         return thing.GetStatValue(CE_StatDefOf.MeleePenetrationFactor) * penetration;
     }
 
-    public override string GetStatValueFormatted(Thing thing) => GetStatValue(thing).ToStringByStyle(ToStringStyle.FloatMaxTwo);
+    public override string GetStatValueFormatted(Thing thing) =>
+        GetStatValue(thing).ToStringByStyle(ToStringStyle.FloatTwo) + (BestApparel.Config.CePenetrationShortValue ? "" : " " + (_sharp ? "CE_mmRHA" : "CE_MPa").Translate());
 }

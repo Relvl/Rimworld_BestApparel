@@ -71,7 +71,6 @@ public class BestApparelMainTabWindow : RimWorld.MainTabWindow
         if ((int)windowRect.width != width || (int)windowRect.height != height)
         {
             windowRect = new Rect(windowRect.x, windowRect.y, width, height);
-            BestApparel.Config.MainWindowWidth = width;
         }
     }
 
@@ -79,6 +78,7 @@ public class BestApparelMainTabWindow : RimWorld.MainTabWindow
     {
         _currentTab?.OnTabClosed();
         _currentTab = null;
+        BestApparel.Config.MainWindowWidth = windowRect.width;
         BestApparel.Config?.Mod?.WriteSettings();
     }
 

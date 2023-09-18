@@ -86,5 +86,6 @@
 
     <BestApparel.Config.DoNotSortColumns>Не сортировать колонки</BestApparel.Config.DoNotSortColumns>
     <BestApparel.Config.UseSimpleDataSorting>Простая сортировка по колонкам</BestApparel.Config.UseSimpleDataSorting>
+    <BestApparel.Config.CePenetrationShortValue>CE: сокращенное форматирование бронепробития</BestApparel.Config.CePenetrationShortValue>
 
 </LanguageData>

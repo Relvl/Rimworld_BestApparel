@@ -20,6 +20,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
     protected const int NameCellWidth = 200;
     protected const int CellHeight = 24;
     protected const int HeaderHeight = 36;
+    protected int[] CellWidthArray;
 
     protected readonly string TabId;
     protected readonly IContainerFactory Factory;
@@ -60,6 +61,24 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
             .ToList(); // copy containers to prevent concurrent modification exceptions
         if (!containers.Any()) return;
 
+        CellWidthArray = new int[containers.First().CachedCells.Length];
+        foreach (var container in containers)
+        {
+            for (var cellIdx = 0; cellIdx < container.CachedCells.Length; cellIdx++)
+            {
+                var cell = container.CachedCells[cellIdx];
+                var cellWidth = cell.Processor.CellWidth;
+                if (cellWidth < 0)
+                {
+                    cellWidth = Text.CalcSize(cell.Value).x + 10;
+                    if (cellWidth < 40) cellWidth = 40;
+                    if (cellWidth > 300) cellWidth = 300;
+                }
+
+                CellWidthArray[cellIdx] = Math.Max((int)cellWidth, CellWidthArray[cellIdx]);
+            }
+        }
+
         RenderTableHeader(ref inRect, containers.First());
         RenderTable(ref inRect, containers);
     }
@@ -71,7 +90,12 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
 
         // Header cells
         var headerRect = new Rect(inRect.x + CellHeight * 2 + NameCellWidth + CellPadding * 4 - Scroll.x, inRect.y, 0, HeaderHeight);
-        foreach (var cell in firstContainer.CachedCells) RenderHeaderCell(ref headerRect, cell);
+        for (var idx = 0; idx < firstContainer.CachedCells.Length; idx++)
+        {
+            var cell = firstContainer.CachedCells[idx];
+            RenderHeaderCell(ref headerRect, cell, idx);
+        }
+
         inRect.yMin += HeaderHeight;
 
         GUI.color = UIUtils.ColorWhiteA50;
@@ -89,10 +113,10 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         Text.Font = GameFont.Small;
     }
 
-    protected virtual void RenderHeaderCell(ref Rect headerRect, CellData cell)
+    protected virtual void RenderHeaderCell(ref Rect headerRect, CellData cell, int idx)
     {
         GUI.color = UIUtils.ColorWhiteA50;
-        headerRect.width = cell.Processor.CellWidth;
+        headerRect.width = CellWidthArray[idx];
 
         if (BestApparel.Config.UseSimpleDataSorting)
         {
@@ -166,7 +190,9 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
                 for (var cellIdx = 0; cellIdx < container.CachedCells.Length; cellIdx++)
                 {
                     var cell = container.CachedCells[cellIdx];
-                    cellRect.width = cell.Processor.CellWidth;
+
+                    // todo! auto
+                    cellRect.width = CellWidthArray[cellIdx];
 
                     if (LastFrameHighlightRow == cellIdx) GUI.DrawTexture(cellRect, TexUI.HighlightTex);
 

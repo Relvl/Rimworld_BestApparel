@@ -48,6 +48,7 @@ public static class TranslationCache
     
     public static readonly E DoNotSortColumns = new("BestApparel.Config.DoNotSortColumns");
     public static readonly E UseSimpleDataSorting = new("BestApparel.Config.UseSimpleDataSorting");
+    public static readonly E CePenetrationShortValue = new("BestApparel.Config.CePenetrationShortValue");
 
     private static TaggedString Get(string key, params object[] args)
     {

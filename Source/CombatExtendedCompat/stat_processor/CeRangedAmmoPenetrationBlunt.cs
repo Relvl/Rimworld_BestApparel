@@ -8,7 +8,6 @@ namespace BestApparel.CombatExtendedCompat;
 
 public class CeRangedAmmoPenetrationBlunt : AStatProcessor
 {
-    public override float CellWidth => 100;
     public override IEnumerable<string> ActivateWith => new[] { "CE_Ammo" };
 
     public CeRangedAmmoPenetrationBlunt(IStatCollector collector) : base(DefaultStat, collector)
@@ -29,5 +28,6 @@ public class CeRangedAmmoPenetrationBlunt : AStatProcessor
         return link.projectile.projectile.GetArmorPenetration(thing);
     }
 
-    public override string GetStatValueFormatted(Thing thing) => GetStatValue(thing).ToStringByStyle(ToStringStyle.FloatTwo) + " " + "CE_MPa".Translate();
+    public override string GetStatValueFormatted(Thing thing) =>
+        GetStatValue(thing).ToStringByStyle(ToStringStyle.FloatTwo) + (BestApparel.Config.CePenetrationShortValue ? "" : " " + "CE_MPa".Translate());
 }

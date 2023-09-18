@@ -86,5 +86,6 @@
     
     <BestApparel.Config.DoNotSortColumns>Do not sort columns</BestApparel.Config.DoNotSortColumns>
     <BestApparel.Config.UseSimpleDataSorting>Use simple column sorting</BestApparel.Config.UseSimpleDataSorting>
+    <BestApparel.Config.CePenetrationShortValue>CE: short penetration format</BestApparel.Config.CePenetrationShortValue>
 
 </LanguageData>
