@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Reflection;
 using BestApparel.def;
 using UnityEngine;
 using Verse;
@@ -9,14 +10,30 @@ namespace BestApparel.ui;
 public class BestApparelMainTabWindow : RimWorld.MainTabWindow
 {
     private ThingTab _currentTab;
+    private FieldInfo _resizerField;
+    private bool _resizerPatched;
 
     public BestApparelMainTabWindow()
     {
         // super
         doCloseX = true;
         closeOnClickedOutside = false;
+        resizeable = true;
         // this
+        _resizerField = GetType().BaseType?.BaseType?.GetField("resizer", BindingFlags.NonPublic | BindingFlags.Instance);
+        _resizerPatched = false;
+
         CreateTab();
+    }
+
+    private Rect FizedWindowRect
+    {
+        get
+        {
+            var width = BestApparel.Config.MainWindowWidth;
+            if (width < UI.screenWidth / 5f || width > UI.screenWidth - 30) width = windowRect.width;
+            return new Rect(windowRect.x, windowRect.y, width, InitialSize.y);
+        }
     }
 
     private void CreateTab()
@@ -32,6 +49,29 @@ public class BestApparelMainTabWindow : RimWorld.MainTabWindow
     {
         base.PreOpen();
         CreateTab();
+    }
+
+    public override void PostOpen()
+    {
+        base.PostOpen();
+        windowRect = FizedWindowRect;
+    }
+
+    public override void WindowOnGUI()
+    {
+        base.WindowOnGUI();
+        if (!_resizerPatched && _resizerField is not null)
+        {
+            if (_resizerField.GetValue(this) is WindowResizer resizer)
+            {
+                resizer.minWindowSize = new Vector2(UI.screenWidth / 5f, InitialSize.y);
+                windowRect = FizedWindowRect;
+                _resizerPatched = true;
+            }
+        }
+
+        BestApparel.Config.MainWindowWidth = windowRect.width;
+        windowRect = FizedWindowRect;
     }
 
     public override void PreClose()

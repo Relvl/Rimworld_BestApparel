@@ -20,6 +20,8 @@ public class Config : ModSettings
 
     // ========================== Storable
 
+    public float MainWindowWidth = 0;
+
     /* Do show all the things? Otherwise - only available on the workbenches. */
     public bool UseAllThings;
 
@@ -135,6 +137,7 @@ public class Config : ModSettings
         Scribe_Values.Look(ref version, "Version");
         if (version == Version)
         {
+            Scribe_Values.Look(ref MainWindowWidth, "MainWindowWidth");
             Scribe_Values.Look(ref UseAllThings, "UseAllThings", false, true);
             Scribe_Config.LookDictionaryDeep2(ref _sorting, "Sorting");
             Scribe_Config.LookDictionaryHashSet(ref _columns, "Columns");
