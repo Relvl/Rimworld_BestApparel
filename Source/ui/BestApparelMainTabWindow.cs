@@ -26,16 +26,6 @@ public class BestApparelMainTabWindow : RimWorld.MainTabWindow
         CreateTab();
     }
 
-    private Rect FizedWindowRect
-    {
-        get
-        {
-            var width = BestApparel.Config.MainWindowWidth;
-            if (width < UI.screenWidth / 5f || width > UI.screenWidth - 30) width = windowRect.width;
-            return new Rect(windowRect.x, windowRect.y, width, InitialSize.y);
-        }
-    }
-
     private void CreateTab()
     {
         var tabDef = DefDatabase<ThingTabDef>.AllDefs.FirstOrDefault();
@@ -54,24 +44,35 @@ public class BestApparelMainTabWindow : RimWorld.MainTabWindow
     public override void PostOpen()
     {
         base.PostOpen();
-        windowRect = FizedWindowRect;
+        if (BestApparel.Config.MainWindowWidth > UI.screenWidth / 5f && BestApparel.Config.MainWindowWidth < UI.screenWidth - 30)
+        {
+            windowRect = new Rect(windowRect.x, windowRect.y, BestApparel.Config.MainWindowWidth, InitialSize.y);
+        }
     }
 
     public override void WindowOnGUI()
     {
         base.WindowOnGUI();
+
         if (!_resizerPatched && _resizerField is not null)
         {
             if (_resizerField.GetValue(this) is WindowResizer resizer)
             {
                 resizer.minWindowSize = new Vector2(UI.screenWidth / 5f, InitialSize.y);
-                windowRect = FizedWindowRect;
                 _resizerPatched = true;
             }
         }
 
-        BestApparel.Config.MainWindowWidth = windowRect.width;
-        windowRect = FizedWindowRect;
+        var width = (int)windowRect.width;
+        if (windowRect.width < UI.screenWidth / 5f) width = (int)(UI.screenWidth / 5f);
+        if (windowRect.width > UI.screenWidth - 30) width = (int)(UI.screenWidth - 30);
+        var height = (int)windowRect.height;
+        if ((int)windowRect.height != (int)InitialSize.y) height = (int)InitialSize.y;
+        if ((int)windowRect.width != width || (int)windowRect.height != height)
+        {
+            windowRect = new Rect(windowRect.x, windowRect.y, width, height);
+            BestApparel.Config.MainWindowWidth = width;
+        }
     }
 
     public override void PreClose()
