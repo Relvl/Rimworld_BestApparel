@@ -3,5 +3,6 @@
     <ButtonOpenFilters.label>Фильтр...</ButtonOpenFilters.label>
     <ButtonOpenColumns.label>Колонки...</ButtonOpenColumns.label>
     <ButtonOpenSorting.label>Сортировка...</ButtonOpenSorting.label>
+    <ButtonPresets.label>Пресеты</ButtonPresets.label>
     <ButtonOpenFitting.label>Примерочная</ButtonOpenFitting.label>
 </LanguageData>

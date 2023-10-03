@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using BestApparel.stat_processor;
 using Verse;
 
-namespace BestApparel.stat_collector;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
 // ReSharper disable once UnusedType.Global -- reflection: DefaultThnigTabRenderer:ctor
 public class RangedStatCollector : IStatCollector

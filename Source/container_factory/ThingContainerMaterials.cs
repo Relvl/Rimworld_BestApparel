@@ -10,7 +10,7 @@ public class ThingContainerMaterials : AThingContainer
 
     public override bool CheckForFilters()
     {
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories, nameof(ThingCategoryDef))) return false;
+        if (!BestApparel.GetTabConfig(TabIdStr).Filters.CheckFilter(Def.thingCategories, nameof(ThingCategoryDef))) return false;
         return true;
     }
 }

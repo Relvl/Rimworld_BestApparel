@@ -53,25 +53,6 @@
         <Compile Include="toolbar_button\ToolbarButtonResetAmmo.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="..\..\Compat\CombatExtended\Defs\CE_ToolbarButtonDefs.xml">
-        <Link>Defs\CE_ToolbarButtonDefs.xml</Link>
-      </Content>
-      <Content Include="..\..\Compat\CombatExtended\Defs\CE_ContainerPostprocessDefs.xml">
-        <Link>Defs\CE_ContainerPostprocessDefs.xml</Link>
-      </Content>
-      <Content Include="..\..\Compat\CombatExtended\Languages\Russian\DefInjected\BestApparel.def.ToolbarButtonDef\CE_LanguageData.xml">
-        <Link>Languages\Russian\DefInjected\BestApparel.def.ToolbarButtonDef\CE_LanguageData.xml</Link>
-      </Content>
-      <Content Include="..\..\Compat\CombatExtended\Patches\Patch_BestApparel_CE.xml">
-        <Link>Patches\Patch_BestApparel_CE.xml</Link>
-      </Content>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="..\..\Compat\CombatExtended\Languages\Russian">
-        <Link>Languages\Russian</Link>
-      </Folder>
-    </ItemGroup>
-    <ItemGroup>
       <Reference Include="Assembly-CSharp">
         <HintPath>..\..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
         <Private>False</Private>

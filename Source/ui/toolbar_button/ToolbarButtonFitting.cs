@@ -1,11 +1,11 @@
-using BestApparel.def;
-using BestApparel.thing_tab_renderer;
+using System.Diagnostics.CodeAnalysis;
 using BestApparel.ui.utility;
 using Verse;
 
-namespace BestApparel.toolbar_button;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
-// ReSharper disable once UnusedType.Global -- reflective: ThingTab:ctor() -> ToolbarButtonDef 
+[SuppressMessage("ReSharper", "UnusedType.Global")]
 public class ToolbarButtonFitting : AToolbarButton
 {
     public ToolbarButtonFitting(ToolbarButtonDef def, IThingTabRenderer renderer) : base(def, renderer)

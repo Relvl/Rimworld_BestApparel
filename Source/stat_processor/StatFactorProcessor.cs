@@ -3,7 +3,8 @@ using System.Globalization;
 using RimWorld;
 using Verse;
 
-namespace BestApparel.stat_processor;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
 public class StatFactorProcessor : AStatProcessor
 {

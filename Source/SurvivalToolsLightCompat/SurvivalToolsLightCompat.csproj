@@ -73,11 +73,6 @@
         <Compile Include="stat_processor\StlStuffStatProcessor.cs" />
         <Compile Include="stat_processor\StlToolStatProcessor.cs" />
     </ItemGroup>
-    <ItemGroup>
-      <Content Include="..\..\Compat\SurvivalToolsLight\Patches\Patch_BestApparel_SurvivalToolsLight.xml">
-        <Link>Patches\Patch_BestApparel_SurvivalToolsLight.xml</Link>
-      </Content>
-    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.

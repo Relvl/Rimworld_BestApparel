@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Reflection;
-using BestApparel.def;
 using UnityEngine;
 using Verse;
 

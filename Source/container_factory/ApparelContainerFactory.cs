@@ -10,9 +10,9 @@ public class ThingContainerApparel : AThingContainer
 
     public override bool CheckForFilters()
     {
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories, nameof(ThingCategoryDef))) return false;
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.apparel.layers, nameof(ApparelLayerDef))) return false;
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.apparel.bodyPartGroups, nameof(BodyPartGroupDef))) return false;
+        if (!BestApparel.GetTabConfig(TabIdStr).Filters.CheckFilter(Def.thingCategories, nameof(ThingCategoryDef))) return false;
+        if (!BestApparel.GetTabConfig(TabIdStr).Filters.CheckFilter(Def.apparel.layers, nameof(ApparelLayerDef))) return false;
+        if (!BestApparel.GetTabConfig(TabIdStr).Filters.CheckFilter(Def.apparel.bodyPartGroups, nameof(BodyPartGroupDef))) return false;
         return true;
     }
 }

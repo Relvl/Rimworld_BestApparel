@@ -1,10 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Verse;
 
-namespace BestApparel.def;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
-// ReSharper disable once ClassNeverInstantiated.Global
+[SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Global")]
+[SuppressMessage("ReSharper", "ConvertToConstant.Global")]
+[SuppressMessage("ReSharper", "UnassignedField.Global")]
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")] // reflective: IThingTabRenderer:ctor() -> ToolbarButtons.xml
 public class ThingTabDef : Def
 {
     /// <summary>

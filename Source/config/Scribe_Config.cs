@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Xml;
 using Verse;
 
-namespace BestApparel;
+namespace BestApparel.config;
 
-public static class Scribe_Config
+public static class ScribeConfig
 {
     public static void LookDictionary<TV>(ref Dictionary<string, TV> dict, string label)
     {

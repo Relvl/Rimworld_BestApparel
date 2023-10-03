@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BestApparel.def;
 using BestApparel.ui;
 using BestApparel.ui.utility;
 using UnityEngine;
@@ -13,11 +12,12 @@ public class ThingTab
 {
     private readonly IThingTabRenderer _renderer;
     private readonly List<AToolbarButton> _toolbar;
-    protected string SearchString;
+    private string _searchString;
 
     public ThingTab(ThingTabDef def)
     {
         _renderer = Activator.CreateInstance(def.renderClass, def) as IThingTabRenderer;
+        BestApparel.Config.ReloadObservers.Add(_renderer);
 
         if (_renderer is null)
             throw new ArgumentException($"Can't instantiate renderer class ({def.renderClass?.FullName}) - should be `public ctor(ThingTabDef)`");
@@ -27,17 +27,17 @@ public class ThingTab
                 {
                     var buttonDef = DefDatabase<ToolbarButtonDef>.GetNamed(d);
                     if (buttonDef is null)
-                        throw new ArgumentException($"Can't instantiate toolbar button class - BestApparel.def.ToolbarButtonDef[defName='{d}'] not found");
+                        throw new ArgumentException($"Can't instantiate toolbar button class - BestApparel.ToolbarButtonDef[defName='{d}'] not found");
                     return buttonDef;
                 }
             )
-            .OrderBy(d => d.Order)
+            .OrderBy(d => d.order)
             .Select(
                 buttonDef =>
                 {
-                    if (Activator.CreateInstance(buttonDef.Action, buttonDef, _renderer) is not AToolbarButton inst)
+                    if (Activator.CreateInstance(buttonDef.action, buttonDef, _renderer) is not AToolbarButton inst)
                         throw new ArgumentException(
-                            $"Can't instantiate toolbar button class ({buttonDef?.Action?.FullName}) - should be `public ctor(ToolbarButtonDef, IThingTabRenderer)`"
+                            $"Can't instantiate toolbar button class ({buttonDef?.action?.FullName}) - should be `public ctor(ToolbarButtonDef, IThingTabRenderer)`"
                         );
                     return inst;
                 }
@@ -61,8 +61,10 @@ public class ThingTab
         GUI.SetNextControlName($"UI.BestApparel.{GetType().Name}.Search");
         r.x -= searchWidth + 4;
         r.width = searchWidth;
-        var searchString = Widgets.TextField(r, SearchString, 15);
-        SearchString = searchString;
+        var searchString = Widgets.TextField(r, _searchString, 15);
+        _searchString = searchString;
+
+        // presets
 
         // right buttons
         btnRect.x = inRect.xMax - r.width - 28;
@@ -87,6 +89,7 @@ public class ThingTab
         Find.WindowStack.TryRemove(typeof(SortWindow));
         Find.WindowStack.TryRemove(typeof(FittingWindow));
 
+        BestApparel.Config.ReloadObservers.Remove(_renderer);
         _renderer.DisposeContainers();
     }
 }

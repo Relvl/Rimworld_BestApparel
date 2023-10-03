@@ -4,7 +4,7 @@ using Verse;
 
 namespace BestApparel;
 
-public interface IThingTabRenderer
+public interface IThingTabRenderer : IReloadObserver
 {
     string GetTabId();
 

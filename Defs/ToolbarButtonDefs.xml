@@ -1,34 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-    <BestApparel.def.ToolbarButtonDef>
+    <!-- LEFT SIDE -->
+
+    <BestApparel.ToolbarButtonDef>
         <defName>ButtonOpenFilters</defName>
         <label>Filters...</label>
-        <Side>left</Side>
-        <Order>100</Order>
-        <Action>BestApparel.toolbar_button.ToolbarButtonFilters</Action>
-    </BestApparel.def.ToolbarButtonDef>
+        <side>left</side>
+        <order>100</order>
+        <action>BestApparel.ToolbarButtonFilters</action>
+    </BestApparel.ToolbarButtonDef>
 
-    <BestApparel.def.ToolbarButtonDef>
+    <BestApparel.ToolbarButtonDef>
         <defName>ButtonOpenColumns</defName>
         <label>Columns...</label>
-        <Side>left</Side>
-        <Order>200</Order>
-        <Action>BestApparel.toolbar_button.ToolbarButtonColumns</Action>
-    </BestApparel.def.ToolbarButtonDef>
+        <side>left</side>
+        <order>200</order>
+        <action>BestApparel.ToolbarButtonColumns</action>
+    </BestApparel.ToolbarButtonDef>
 
-    <BestApparel.def.ToolbarButtonDef>
+    <BestApparel.ToolbarButtonDef>
         <defName>ButtonOpenSorting</defName>
         <label>Sorting...</label>
-        <Side>left</Side>
-        <Order>300</Order>
-        <Action>BestApparel.toolbar_button.ToolbarButtonSorting</Action>
-    </BestApparel.def.ToolbarButtonDef>
+        <side>left</side>
+        <order>300</order>
+        <action>BestApparel.ToolbarButtonSorting</action>
+    </BestApparel.ToolbarButtonDef>
 
-    <BestApparel.def.ToolbarButtonDef>
+    <BestApparel.ToolbarButtonDef>
+        <defName>ButtonPresets</defName>
+        <label>Presets</label>
+        <side>left</side>
+        <order>400</order>
+        <action>BestApparel.ToolbarButtonPreset</action>
+    </BestApparel.ToolbarButtonDef>
+
+    <!-- RIGHT SIDE -->
+
+    <BestApparel.ToolbarButtonDef>
         <defName>ButtonOpenFitting</defName>
         <label>Fitting room</label>
-        <Side>right</Side>
-        <Order>100</Order>
-        <Action>BestApparel.toolbar_button.ToolbarButtonFitting</Action>
-    </BestApparel.def.ToolbarButtonDef>
+        <side>right</side>
+        <order>100</order>
+        <action>BestApparel.ToolbarButtonFitting</action>
+    </BestApparel.ToolbarButtonDef>
+
 </Defs>

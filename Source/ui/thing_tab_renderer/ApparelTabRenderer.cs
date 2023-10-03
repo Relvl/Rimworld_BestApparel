@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using BestApparel.def;
 using Verse;
 
-namespace BestApparel.thing_tab_renderer;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
 // ReSharper disable once ClassNeverInstantiated.Global -- instantiated by reflection: ThingTabDef.renderClass -> ThingTab:ctor
 public class ApparelTabRenderer : DefaultThnigTabRenderer

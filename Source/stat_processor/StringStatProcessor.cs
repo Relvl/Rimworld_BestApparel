@@ -1,7 +1,8 @@
 using System;
 using Verse;
 
-namespace BestApparel.stat_processor;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
 public class StringStatProcessor : AStatProcessor
 {

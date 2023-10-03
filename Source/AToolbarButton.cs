@@ -1,4 +1,3 @@
-using BestApparel.def;
 using UnityEngine;
 using Verse;
 
@@ -40,7 +39,7 @@ public abstract class AToolbarButton
 
     public abstract void Action();
 
-    public bool IsLeftSide() => Def.Side == "left";
+    public bool IsLeftSide() => Def.side == "left";
 
-    public bool IsRightSide() => Def.Side == "right";
+    public bool IsRightSide() => Def.side == "right";
 }

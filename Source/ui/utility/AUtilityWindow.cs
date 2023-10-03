@@ -120,7 +120,7 @@ public abstract class AUtilityWindow : Window
                     Color.red,
                     () =>
                     {
-                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), category, def.defName, MultiCheckboxState.Off);
+                        foreach (var def in defs) BestApparel.GetTabConfig(Parent.GetTabId()).Filters.SetFilter(category, def.defName, MultiCheckboxState.Off);
                         SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }
@@ -137,7 +137,8 @@ public abstract class AUtilityWindow : Window
                     Color.yellow,
                     () =>
                     {
-                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), category, def.defName, MultiCheckboxState.Partial);
+                        foreach (var def in defs)
+                            BestApparel.GetTabConfig(Parent.GetTabId()).Filters.SetFilter(category, def.defName, MultiCheckboxState.Partial);
                         SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }
@@ -154,7 +155,7 @@ public abstract class AUtilityWindow : Window
                     Color.green,
                     () =>
                     {
-                        foreach (var def in defs) BestApparel.Config.SetFilter(Parent.GetTabId(), category, def.defName, MultiCheckboxState.On);
+                        foreach (var def in defs) BestApparel.GetTabConfig(Parent.GetTabId()).Filters.SetFilter(category, def.defName, MultiCheckboxState.On);
                         SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }
@@ -178,7 +179,12 @@ public abstract class AUtilityWindow : Window
                     Color.red,
                     () =>
                     {
-                        foreach (var def in defs) BestApparel.Config.SetColumn(Parent.GetTabId(), def, false);
+                        foreach (var def in defs)
+                        {
+                            BestApparel.GetTabConfig(Parent.GetTabId()).Columns.SetColumn(def, false);
+                            BestApparel.GetTabConfig(Parent.GetTabId()).Sorting.SetSorting(def, 0);
+                        }
+
                         SoundDefOf.Checkbox_TurnedOff.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }
@@ -195,7 +201,7 @@ public abstract class AUtilityWindow : Window
                     Color.green,
                     () =>
                     {
-                        foreach (var def in defs) BestApparel.Config.SetColumn(Parent.GetTabId(), def, true);
+                        foreach (var def in defs) BestApparel.GetTabConfig(Parent.GetTabId()).Columns.SetColumn(def, true);
                         SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
                         Parent.UpdateFilter();
                     }

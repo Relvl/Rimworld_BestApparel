@@ -1,23 +1,32 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Verse;
 
-namespace BestApparel.def;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
-// ReSharper disable once ClassNeverInstantiated.Global reflective: IThingTabRenderer:ctor() -> ToolbarButtons.xml
+/// <summary>
+/// Defines main tab additional buttons (Filter, Columns, Sorting, ...)
+/// </summary>
+[SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Global")]
+[SuppressMessage("ReSharper", "ConvertToConstant.Global")]
+[SuppressMessage("ReSharper", "UnassignedField.Global")]
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class ToolbarButtonDef : Def
 {
     /// <summary>
-    /// (lesser to the left)
+    /// UI button order (lesser to the left)
     /// </summary>
-    public int Order = 0;
+    public int order = 0;
 
     /// <summary>
-    /// 
+    /// UI position (left/right)
     /// </summary>
-    public string Side = "left";
+    public string side = "left";
 
     /// <summary>
-    /// 
+    /// Reference to action (should extends AToolbarButton)
     /// </summary>
-    public Type Action;
+    public Type action;
 }

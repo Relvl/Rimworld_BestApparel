@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using BestApparel.stat_processor;
 using RimWorld;
 using Verse;
 
-namespace BestApparel.stat_collector;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
 // ReSharper disable once UnusedType.Global -- reflection: DefaultThnigTabRenderer:ctor
 public class BaseStatCollector : IStatCollector

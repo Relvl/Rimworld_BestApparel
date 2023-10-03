@@ -10,8 +10,8 @@ public class ThingContainerRanged : AThingContainer
 
     public override bool CheckForFilters()
     {
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.thingCategories, nameof(ThingCategoryDef))) return false;
-        if (!BestApparel.Config.CheckFilter(TabIdStr, Def.weaponClasses, nameof(WeaponClassDef))) return false;
+        if (!BestApparel.GetTabConfig(TabIdStr).Filters.CheckFilter(Def.thingCategories, nameof(ThingCategoryDef))) return false;
+        if (!BestApparel.GetTabConfig(TabIdStr).Filters.CheckFilter(Def.weaponClasses, nameof(WeaponClassDef))) return false;
         return true;
     }
 }

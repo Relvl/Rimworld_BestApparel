@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BestApparel.container_factory;
-using BestApparel.thing_tab_renderer;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -56,16 +55,22 @@ public class FittingWindow : Window, IReloadObserver
                 .Where(it => it != null)
         );
         DoSomethingChanged();
-        _parent.ReloadObservers.Add(this);
+        BestApparel.Config.ReloadObservers.Add(this);
     }
 
     public override void PreClose()
     {
-        _parent.ReloadObservers.Remove(this);
+        BestApparel.Config.ReloadObservers.Remove(this);
         Config.ModInstance?.WriteSettings();
     }
 
-    public void OnDataProcessorReloaded() => DoSomethingChanged();
+    public void OnDataProcessorReloaded(ReloadPhase phase)
+    {
+        if (phase == ReloadPhase.Sorted)
+        {
+            DoSomethingChanged();
+        }
+    }
 
     private void DoSomethingChanged(bool changed = true)
     {

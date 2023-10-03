@@ -37,7 +37,15 @@
         <Compile Include="AStatProcessor.cs" />
         <Compile Include="AThingContainer.cs" />
         <Compile Include="CellData.cs" />
-        <Compile Include="Config.cs" />
+        <Compile Include="config\Config.cs" />
+        <Compile Include="config\ConfigColumns.cs" />
+        <Compile Include="config\ConfigFilters.cs" />
+        <Compile Include="config\ConfigSorting.cs" />
+        <Compile Include="config\preset\DialogRenameAction.cs" />
+        <Compile Include="config\preset\PresetManager.cs" />
+        <Compile Include="config\preset\PresetOption.cs" />
+        <Compile Include="config\Scribe_Config.cs" />
+        <Compile Include="config\TabConfig.cs" />
         <Compile Include="container_factory\ApparelContainerFactory.cs" />
         <Compile Include="container_factory\MeleeContainerFactory.cs" />
         <Compile Include="container_factory\RangedContainerFactory.cs" />
@@ -54,7 +62,6 @@
         <Compile Include="IThingTabRenderer.cs" />
         <Compile Include="AToolbarButton.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Scribe_Config.cs" />
         <Compile Include="stat_collector\BaseStatCollector.cs" />
         <Compile Include="stat_collector\EquippedStatCollector.cs" />
         <Compile Include="stat_collector\MaterialStatCollector.cs" />
@@ -66,77 +73,22 @@
         <Compile Include="stat_processor\StatFactorProcessor.cs" />
         <Compile Include="stat_processor\StringStatProcessor.cs" />
         <Compile Include="ThingTab.cs" />
-        <Compile Include="thing_tab_renderer\ApparelTabRenderer.cs" />
-        <Compile Include="thing_tab_renderer\DefaultThnigTabRenderer.cs" />
-        <Compile Include="toolbar_button\ToolbarButtonColumns.cs" />
-        <Compile Include="toolbar_button\ToolbarButtonFilters.cs" />
-        <Compile Include="toolbar_button\ToolbarButtonFitting.cs" />
-        <Compile Include="toolbar_button\ToolbarButtonSorting.cs" />
         <Compile Include="TranslationCache.cs" />
         <Compile Include="ui\ColonistFloatMenuOption.cs" />
         <Compile Include="ui\BestApparelMainTabWindow.cs" />
+        <Compile Include="ui\thing_tab_renderer\ApparelTabRenderer.cs" />
+        <Compile Include="ui\thing_tab_renderer\DefaultThnigTabRenderer.cs" />
+        <Compile Include="ui\toolbar_button\ToolbarButtonColumns.cs" />
+        <Compile Include="ui\toolbar_button\ToolbarButtonFilters.cs" />
+        <Compile Include="ui\toolbar_button\ToolbarButtonFitting.cs" />
+        <Compile Include="ui\toolbar_button\ToolbarButtonPreset.cs" />
+        <Compile Include="ui\toolbar_button\ToolbarButtonSorting.cs" />
         <Compile Include="ui\UIUtils.cs" />
         <Compile Include="ui\utility\AUtilityWindow.cs" />
         <Compile Include="ui\utility\ColumnsWindow.cs" />
         <Compile Include="ui\utility\FilterWindow.cs" />
         <Compile Include="ui\utility\FittingWindow.cs" />
         <Compile Include="ui\utility\SortWindow.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include="..\.gitignore">
-        <Link>.gitignore</Link>
-      </Content>
-      <Content Include="..\About\About.xml">
-        <Link>About\About.xml</Link>
-      </Content>
-      <Content Include="..\About\Preview.png">
-        <Link>About\Preview.png</Link>
-      </Content>
-      <Content Include="..\About\steam-description-en.txt">
-        <Link>About\steam-description-en.txt</Link>
-      </Content>
-      <Content Include="..\About\steam-description-ru.txt">
-        <Link>About\steam-description-ru.txt</Link>
-      </Content>
-      <Content Include="..\Defs\ContainerPostprocessDefs.xml">
-        <Link>Defs\ContainerPostprocessDefs.xml</Link>
-      </Content>
-      <Content Include="..\Defs\MainButtonDefs.xml">
-        <Link>Defs\MainButtonDefs.xml</Link>
-      </Content>
-      <Content Include="..\Defs\ThingTabDefs.xml">
-        <Link>Defs\ThingTabDefs.xml</Link>
-      </Content>
-      <Content Include="..\Defs\ToolbarButtonDefs.xml">
-        <Link>Defs\ToolbarButtonDefs.xml</Link>
-      </Content>
-      <Content Include="..\Languages\English\Keyed\LanguageData.xml">
-        <Link>Languages\English\Keyed\LanguageData.xml</Link>
-      </Content>
-      <Content Include="..\Languages\English\Keyed\NonCached.xml">
-        <Link>Languages\English\Keyed\NonCached.xml</Link>
-      </Content>
-      <Content Include="..\Languages\Russian\DefInjected\BestApparel.def.ThingTabDef\LanguageData.xml">
-        <Link>Languages\Russian\DefInjected\BestApparel.def.ThingTabDef\LanguageData.xml</Link>
-      </Content>
-      <Content Include="..\Languages\Russian\DefInjected\BestApparel.def.ToolbarButtonDef\LanguageData.xml">
-        <Link>Languages\Russian\DefInjected\BestApparel.def.ToolbarButtonDef\LanguageData.xml</Link>
-      </Content>
-      <Content Include="..\Languages\Russian\Keyed\LanguageData.xml">
-        <Link>Languages\Russian\Keyed\LanguageData.xml</Link>
-      </Content>
-      <Content Include="..\Languages\Russian\Keyed\NonCached.xml">
-        <Link>Languages\Russian\Keyed\NonCached.xml</Link>
-      </Content>
-      <Content Include="..\LoadFolders.xml">
-        <Link>LoadFolders.xml</Link>
-      </Content>
-      <Content Include="..\README.md">
-        <Link>README.md</Link>
-      </Content>
-      <Content Include="..\Textures\UI\Buttons\MainButtons\IconBetterApparel.png">
-        <Link>Textures\UI\Buttons\MainButtons\IconBetterApparel.png</Link>
-      </Content>
     </ItemGroup>
     <ItemGroup>
       <Reference Include="Assembly-CSharp">

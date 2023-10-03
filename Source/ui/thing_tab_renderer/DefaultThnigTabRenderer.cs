@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BestApparel.def;
 using BestApparel.ui;
 using RimWorld;
 using UnityEngine;
@@ -9,13 +8,12 @@ using Verse;
 
 // ReSharper disable MemberCanBeProtected.Global, MemberCanBePrivate.Global
 
-namespace BestApparel.thing_tab_renderer;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
 // ReSharper disable once ClassNeverInstantiated.Global -- instantiated by reflection: ThingTabDef.renderClass -> ThingTab:ctor
 public class DefaultThnigTabRenderer : IThingTabRenderer
 {
-    public List<IReloadObserver> ReloadObservers { get; } = new();
-
     protected const int CellPadding = 2;
     protected const int NameCellWidth = 200;
     protected const int CellHeight = 24;
@@ -44,10 +42,10 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         Factory = Activator.CreateInstance(def.factoryClass) as IContainerFactory;
         Collectors = def.collectors.Select(c => Activator.CreateInstance(c) as IStatCollector).ToList();
 
-        foreach (var postprocessDef in DefDatabase<ContainerPostprocessDef>.AllDefs.OrderBy(d => d.Order))
+        foreach (var postprocessDef in DefDatabase<ContainerPostprocessDef>.AllDefs.OrderBy(d => d.order))
         {
-            if (!postprocessDef.Tabs.Contains(def.defName)) continue;
-            var postprocessor = Activator.CreateInstance(postprocessDef.Postprocessor) as IContainerPostprocess;
+            if (!postprocessDef.tabs.Contains(def.defName)) continue;
+            var postprocessor = Activator.CreateInstance(postprocessDef.postprocessor) as IContainerPostprocess;
             Postprocessors.Add(postprocessor);
         }
     }
@@ -342,6 +340,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
     public virtual void UpdateFilter()
     {
         FilteredContainers.ReplaceWith(AllContainers.Where(container => container.CheckForFilters()));
+        foreach (var observer in BestApparel.Config.ReloadObservers) observer.OnDataProcessorReloaded(ReloadPhase.Filtered);
         UpdateSort();
     }
 
@@ -349,7 +348,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
     {
         var filtered = FilteredContainers.ToList();
 
-        var columns = BestApparel.Config.GetColumns(GetTabId());
+        var columns = BestApparel.GetTabConfig(TabId).Columns.GetColumns();
         var statMinmax = new Dictionary<AStatProcessor, ( /*min*/float, /*max*/float)>();
         foreach (var processor in StatProcessors.Where(s => columns.Contains(s.GetDefName())))
         {
@@ -371,7 +370,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
                 .ThenBy(c => c.Def.label)
         );
 
-        foreach (var observer in ReloadObservers) observer.OnDataProcessorReloaded();
+        foreach (var observer in BestApparel.Config.ReloadObservers) observer.OnDataProcessorReloaded(ReloadPhase.Sorted);
     }
 
     public virtual void DisposeContainers()
@@ -395,4 +394,12 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
     public virtual IEnumerable<AStatProcessor> GetColumnData() => StatProcessors;
 
     public virtual HashSet<AThingContainer> GetAllContainers() => AllContainers;
+
+    public void OnDataProcessorReloaded(ReloadPhase phase)
+    {
+        if (phase == ReloadPhase.Changed)
+        {
+            UpdateFilter();
+        }
+    }
 }

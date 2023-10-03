@@ -42,7 +42,7 @@ public class ColumnsWindow : AUtilityWindow
 
                 cellRect.xMin += 4;
 
-                var chkState = BestApparel.Config.GetColumn(Parent.GetTabId(), defName);
+                var chkState = BestApparel.GetTabConfig(Parent.GetTabId()).Columns.GetColumn(defName);
                 if (Widgets.ButtonInvisible(cellRect))
                 {
                     if (chkState)
@@ -52,11 +52,13 @@ public class ColumnsWindow : AUtilityWindow
                     else
                     {
                         foreach (var dependant in processor.ActivateWith)
-                            BestApparel.Config.SetColumn(Parent.GetTabId(), dependant, true);
+                            BestApparel.GetTabConfig(Parent.GetTabId()).Columns.SetColumn(dependant, true);
                         SoundDefOf.Checkbox_TurnedOn.PlayOneShotOnCamera();
                     }
 
-                    BestApparel.Config.SetColumn(Parent.GetTabId(), defName, !chkState);
+                    BestApparel.GetTabConfig(Parent.GetTabId()).Columns.SetColumn(defName, !chkState);
+                    if (chkState) BestApparel.GetTabConfig(Parent.GetTabId()).Sorting.SetSorting(defName, 0);
+
                     Parent.UpdateSort();
                 }
 
@@ -89,5 +91,5 @@ public class ColumnsWindow : AUtilityWindow
         return heightCounter;
     }
 
-    protected override void OnResetClick() => BestApparel.Config.ClearColumns(Parent.GetTabId());
+    protected override void OnResetClick() => BestApparel.GetTabConfig(Parent.GetTabId()).Columns.Clear();
 }

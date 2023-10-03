@@ -43,10 +43,10 @@ public class FilterWindow : AUtilityWindow
 
         cellRect.xMin += 4;
 
-        var chkState = BestApparel.Config.GetFilter(Parent.GetTabId(), category, defName);
+        var chkState = BestApparel.GetTabConfig(Parent.GetTabId()).Filters.GetFilter(category, defName);
         if (Widgets.ButtonInvisible(cellRect))
         {
-            chkState = BestApparel.Config.ToggleFilter(Parent.GetTabId(), category, defName);
+            chkState = BestApparel.GetTabConfig(Parent.GetTabId()).Filters.ToggleFilter(category, defName);
             Parent.UpdateFilter();
         }
 
@@ -73,5 +73,5 @@ public class FilterWindow : AUtilityWindow
         Widgets.Label(cellRect, defLabel);
     }
 
-    protected override void OnResetClick() => BestApparel.Config.ClearFilters(Parent.GetTabId());
+    protected override void OnResetClick() => BestApparel.GetTabConfig(Parent.GetTabId()).Filters.Clear();
 }

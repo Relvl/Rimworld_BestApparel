@@ -1,4 +1,3 @@
-using BestApparel.def;
 using CombatExtended;
 using RimWorld;
 using Verse.Sound;

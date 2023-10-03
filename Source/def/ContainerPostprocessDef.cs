@@ -1,18 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Verse;
 
-namespace BestApparel.def;
+// ReSharper disable once CheckNamespace
+namespace BestApparel;
 
-// ReSharper disable once UnusedType.Global
+/// <summary>
+/// Defines each container postprocess after calculating
+/// </summary>
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+[SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Global")]
+[SuppressMessage("ReSharper", "ConvertToConstant.Global")]
+[SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
+[SuppressMessage("ReSharper", "UnassignedField.Global")]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class ContainerPostprocessDef : Def
 {
     /// <summary>
-    /// (lesser first)
+    /// Postprocess apply order (lesser first)
     /// </summary>
-    public int Order = 0;
-    
-    public List<string> Tabs = new();
+    public int order = 0;
 
-    public Type Postprocessor;
+    /// <summary>
+    /// Affected tab defs
+    /// </summary>
+    public List<string> tabs = new();
+
+    /// <summary>
+    /// Postprocessor class reference
+    /// </summary>
+    public Type postprocessor;
 }

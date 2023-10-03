@@ -75,7 +75,7 @@ public abstract class AThingContainer
                 }
                 else
                 {
-                    cell.WeightFactor = BestApparel.Config.GetSorting(renderer.GetTabId(), pair.Key.GetDefName()) + Config.MaxSortingWeight;
+                    cell.WeightFactor = BestApparel.GetTabConfig(TabIdStr).Sorting.GetSorting(pair.Key.GetDefName()) + Config.MaxSortingWeight;
                 }
 
                 cell.NormalizedWeight = normal;

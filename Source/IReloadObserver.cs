@@ -2,5 +2,13 @@ namespace BestApparel;
 
 public interface IReloadObserver
 {
-    void OnDataProcessorReloaded();
+    void OnDataProcessorReloaded(ReloadPhase phase);
+}
+
+public enum ReloadPhase
+{
+    Changed,
+    Filtered,
+    Sorted,
+    Rendered
 }

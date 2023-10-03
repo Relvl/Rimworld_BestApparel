@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using BestApparel.stat_processor;
 using SurvivalToolsLightCompat.stat_processor;
 using SurvivalToolsLite;
 using Verse;
