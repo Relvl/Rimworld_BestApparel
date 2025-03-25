@@ -286,7 +286,7 @@ public class FittingWindow : Window, IReloadObserver
                     Widgets.Label(labelRect, apparel.def.label);
                     TooltipHandler.TipRegion(
                         labelRect,
-                        $"{apparel.LabelNoParenthesisCap.AsTipTitle()}{GenLabel.LabelExtras(apparel, 1, true, true)}\n\n{apparel.DescriptionDetailed}"
+                        $"{apparel.LabelNoParenthesisCap.AsTipTitle()}{GenLabel.LabelExtras(apparel, true, true)}\n\n{apparel.DescriptionDetailed}"
                     );
 
                     var removeRect = new Rect(cellRect.xMax - CellPadding + cellRightOffset - ScrollSize - IconSize, cellRect.y + CellPadding + offset, IconSize, IconSize);

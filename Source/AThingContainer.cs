@@ -20,7 +20,7 @@ public abstract class AThingContainer
             if (_defaultTooltip is null)
             {
                 var label = GenLabel.ThingLabel(Def, DefaultThing.Stuff).CapitalizeFirst().Colorize(ColoredText.TipSectionTitleColor);
-                var extras = GenLabel.LabelExtras(DefaultThing, 1, true, true);
+                var extras = GenLabel.LabelExtras(DefaultThing, true, true);
                 var description = DefaultThing.DescriptionDetailed;
                 _defaultTooltip = $"{label}{extras}\n\n{description}";
             }

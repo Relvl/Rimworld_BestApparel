@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using RimWorld;
 using Verse;
+using BestApparel;
 
 // ReSharper disable once CheckNamespace
 namespace BestApparel;
@@ -14,7 +15,7 @@ public class MeleeStatCollector : IStatCollector
 
     public IEnumerable<AStatProcessor> Collect(Thing thing)
     {
-        yield return new EquippedOffsetStatProcessor(StatDefOf.MeleeWeapon_AverageArmorPenetration, this);
+        yield return new EquippedOffsetStatProcessor(BestApparelStatDefOf.MeleeWeapon_AverageArmorPenetration, this);
         yield return new EquippedOffsetStatProcessor(StatDefOf.MeleeWeapon_DamageMultiplier, this);
         yield return new EquippedOffsetStatProcessor(StatDefOf.MeleeWeapon_CooldownMultiplier, this);
         yield return new EquippedOffsetStatProcessor(StatDefOf.MeleeWeapon_AverageDPS, this);
