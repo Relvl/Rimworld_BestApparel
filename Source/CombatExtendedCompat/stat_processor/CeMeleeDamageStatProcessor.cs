@@ -4,12 +4,8 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel.CombatExtendedCompat;
 
-public class CeMeleeDamageStatProcessor : AStatProcessor
+public class CeMeleeDamageStatProcessor(IStatCollector collector) : AStatProcessor(DefaultStat, collector)
 {
-    public CeMeleeDamageStatProcessor(IStatCollector collector) : base(DefaultStat, collector)
-    {
-    }
-
     public override string GetDefLabel() => TranslationCache.StatMeleeAvgDamage.Text;
 
     public override string GetDefName() => "Stat_Melee_Avg_Damage";

@@ -6,13 +6,9 @@ using Verse.Sound;
 
 namespace BestApparel.ui.utility;
 
-public class ColumnsWindow : AUtilityWindow
+public class ColumnsWindow(IThingTabRenderer parent) : AUtilityWindow(parent)
 {
     protected override bool UseSearch => true;
-
-    public ColumnsWindow(IThingTabRenderer parent) : base(parent)
-    {
-    }
 
     protected override float DoWindowContentsInner(ref Rect inRect)
     {

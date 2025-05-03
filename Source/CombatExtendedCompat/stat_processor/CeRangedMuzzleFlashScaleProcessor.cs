@@ -5,12 +5,8 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel.CombatExtendedCompat;
 
-public class CeRangedMuzzleFlashScaleProcessor : AStatProcessor
+public class CeRangedMuzzleFlashScaleProcessor(IStatCollector collector) : AStatProcessor(DefaultStat, collector)
 {
-    public CeRangedMuzzleFlashScaleProcessor(IStatCollector collector) : base(DefaultStat, collector)
-    {
-    }
-
     public override string GetDefName() => "CeRangedMuzzleFlashScale";
     public override string GetDefLabel() => TranslationCache.StatCeRangedMuzzleFlashScale.Text;
     public override bool IsValueDefault(Thing thing) => GetStatValue(thing) < Config.DefaultTolerance;

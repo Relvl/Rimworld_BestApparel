@@ -5,12 +5,8 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel.CombatExtendedCompat;
 
-public class CeRangedWarmupTimeProcessor : AStatProcessor
+public class CeRangedWarmupTimeProcessor(IStatCollector collector) : AStatProcessor(DefaultStat, collector)
 {
-    public CeRangedWarmupTimeProcessor(IStatCollector collector) : base(DefaultStat, collector)
-    {
-    }
-
     public override string GetDefName() => "CeRangedWarmupTime";
     public override string GetDefLabel() => TranslationCache.StatCeRangedWarmupTime.Text;
     public override bool IsValueDefault(Thing thing) => false;

@@ -6,12 +6,8 @@ using Verse;
 
 namespace SurvivalToolsLightCompat.stat_processor;
 
-public class StlStuffStatProcessor : AStatProcessor
+public class StlStuffStatProcessor(StatDef statDef, IStatCollector collector) : AStatProcessor(statDef, collector)
 {
-    public StlStuffStatProcessor(StatDef statDef, IStatCollector collector) : base(statDef, collector)
-    {
-    }
-
     public override string GetDefName() => $"stl.{base.GetDefName()}";
     public override string GetDefLabel() => $"Tool: {base.GetDefLabel()}";
 

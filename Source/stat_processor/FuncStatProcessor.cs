@@ -5,21 +5,12 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel;
 
-public class FuncStatProcessor : AStatProcessor
+public class FuncStatProcessor(Func<Thing, float> func, string name, IStatCollector collector) : AStatProcessor(DefaultStat, collector)
 {
-    private readonly Func<Thing, float> _func;
-    private readonly string _name;
-
-    public FuncStatProcessor(Func<Thing, float> func, string name, IStatCollector collector) : base(DefaultStat, collector)
-    {
-        _func = func;
-        _name = name;
-    }
-
-    public override string GetDefName() => _name;
-    public override string GetDefLabel() => _name.Translate();
-    public override float GetStatValue(Thing thing) => _func(thing);
+    public override string GetDefName() => name;
+    public override string GetDefLabel() => name.Translate();
+    public override float GetStatValue(Thing thing) => func(thing);
     public override string GetStatValueFormatted(Thing thing) => GetStatValue(thing).ToString(CultureInfo.CurrentCulture);
 
-    public override int GetHashCode() => _name.GetHashCode();
+    public override int GetHashCode() => name.GetHashCode();
 }

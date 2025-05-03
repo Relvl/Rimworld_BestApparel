@@ -7,12 +7,8 @@ using Verse;
 namespace BestApparel.CombatExtendedCompat;
 
 // ReSharper disable once UnusedType.Global -- reflective: ThingTab:ctor() -> ToolbarButtonDef 
-public class ToolbarButtonResetAmmo : AToolbarButton
+public class ToolbarButtonResetAmmo(ToolbarButtonDef def, IThingTabRenderer renderer) : AToolbarButton(def, renderer)
 {
-    public ToolbarButtonResetAmmo(ToolbarButtonDef def, IThingTabRenderer renderer) : base(def, renderer)
-    {
-    }
-
     public override void Action()
     {
         SoundDefOf.Tick_High.PlayOneShotOnCamera();

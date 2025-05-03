@@ -7,12 +7,8 @@ using Verse;
 namespace BestApparel;
 
 [SuppressMessage("ReSharper", "UnusedType.Global")]
-public class ToolbarButtonPreset : AToolbarButton
+public class ToolbarButtonPreset(ToolbarButtonDef def, IThingTabRenderer renderer) : AToolbarButton(def, renderer)
 {
-    public ToolbarButtonPreset(ToolbarButtonDef def, IThingTabRenderer renderer) : base(def, renderer)
-    {
-    }
-
     public override void Action()
     {
         var options = new List<FloatMenuOption> { new("Save current...", () => BestApparel.Config.PresetManager.MakeNewPreset(Renderer.GetTabId()), MenuOptionPriority.Low) };

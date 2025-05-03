@@ -2,12 +2,8 @@ using Verse;
 
 namespace BestApparel.container_factory;
 
-public class ThingContainerMelee : AThingContainer
+public class ThingContainerMelee(ThingDef thingDef, string tabId) : AThingContainer(thingDef, tabId)
 {
-    public ThingContainerMelee(ThingDef thingDef, string tabId) : base(thingDef, tabId)
-    {
-    }
-
     public override bool CheckForFilters()
     {
         if (!BestApparel.GetTabConfig(TabIdStr).Filters.CheckFilter(Def.thingCategories, nameof(ThingCategoryDef))) return false;

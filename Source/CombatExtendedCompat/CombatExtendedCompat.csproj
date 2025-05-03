@@ -18,7 +18,7 @@
         <DebugSymbols>true</DebugSymbols>
         <DebugType>portable</DebugType>
         <Optimize>false</Optimize>
-        <OutputPath>../../1.4/Compat/CombatExtended/Assemblies/</OutputPath>
+        <OutputPath>../../1.5/Compat/CombatExtended/Assemblies/</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugType>portable</DebugType>
         <Optimize>true</Optimize>
-        <OutputPath>../../1.4/Compat/CombatExtended/Assemblies/</OutputPath>
+        <OutputPath>../../1.5/Compat/CombatExtended/Assemblies/</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -58,11 +58,11 @@
         <Private>False</Private>
       </Reference>
       <Reference Include="BestApparel">
-        <HintPath>..\..\1.4\Assemblies\BestApparel.dll</HintPath>
+        <HintPath>..\..\1.5\Assemblies\BestApparel.dll</HintPath>
         <Private>False</Private>
       </Reference>
       <Reference Include="CombatExtended">
-        <HintPath>..\..\..\CombatExtended\Assemblies\CombatExtended.dll</HintPath>
+        <HintPath>..\__LIB\CombatExtended.dll</HintPath>
         <Private>False</Private>
       </Reference>
       <Reference Include="UnityEngine">

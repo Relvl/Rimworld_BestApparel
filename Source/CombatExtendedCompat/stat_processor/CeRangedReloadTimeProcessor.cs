@@ -7,12 +7,8 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel.CombatExtendedCompat;
 
-public class CeRangedReloadTimeProcessor : AStatProcessor
+public class CeRangedReloadTimeProcessor(IStatCollector collector) : AStatProcessor(DefaultStat, collector)
 {
-    public CeRangedReloadTimeProcessor(IStatCollector collector) : base(DefaultStat, collector)
-    {
-    }
-
     public override string GetDefName() => "CeRangedReloadTime";
     public override string GetDefLabel() => TranslationCache.StatCeRangedReloadTime.Text;
     public override bool IsValueDefault(Thing thing) => GetStatValue(thing) < Config.DefaultTolerance;

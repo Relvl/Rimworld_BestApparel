@@ -5,12 +5,8 @@ using Verse;
 namespace BestApparel;
 
 // ReSharper disable once UnusedType.Global -- reflective: ThingTab:ctor() -> ToolbarButtonDef 
-public class ToolbarButtonSorting : AToolbarButton
+public class ToolbarButtonSorting(ToolbarButtonDef def, IThingTabRenderer renderer) : AToolbarButton(def, renderer)
 {
-    public ToolbarButtonSorting(ToolbarButtonDef def, IThingTabRenderer renderer) : base(def, renderer)
-    {
-    }
-
     public override void Action()
     {
         Find.WindowStack.TryRemove(typeof(SortWindow));

@@ -5,12 +5,8 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel;
 
-public class EquippedOffsetStatProcessor : AStatProcessor
+public class EquippedOffsetStatProcessor(StatDef statDef, IStatCollector collector) : AStatProcessor(statDef, collector)
 {
-    public EquippedOffsetStatProcessor(StatDef statDef, IStatCollector collector) : base(statDef, collector)
-    {
-    }
-
     public override bool IsValueDefault(Thing thing) => GetStatValue(thing) == 0f;
 
     public override float GetStatValue(Thing thing)

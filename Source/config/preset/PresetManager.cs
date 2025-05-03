@@ -8,7 +8,7 @@ namespace BestApparel.config.preset;
 
 public class PresetManager
 {
-    public HashSet<PresetOption> Presets = new();
+    public HashSet<PresetOption> Presets = [];
 
     public void MakeNewPreset(string tabId)
     {

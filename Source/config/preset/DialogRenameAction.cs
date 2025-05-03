@@ -3,15 +3,14 @@ using Verse;
 
 namespace BestApparel.config.preset;
 
-public class DialogRenameAction : Dialog_Rename
+public class DialogRenameAction(string initialName, Action<string> onRenamed) : Dialog_Rename<DialogRenameAction.RenameActionProxy>(new RenameActionProxy(initialName))
 {
-    private readonly Action<string> _action;
+    protected override void OnRenamed(string name) => onRenamed(name);
 
-    public DialogRenameAction(string name, Action<string> action)
+    public class RenameActionProxy(string name) : IRenameable
     {
-        curName = name;
-        _action = action;
+        public string RenamableLabel { get; set; } = name;
+        public string BaseLabel => RenamableLabel;
+        public string InspectLabel => RenamableLabel;
     }
-
-    protected override void SetName(string name) => _action(name);
 }

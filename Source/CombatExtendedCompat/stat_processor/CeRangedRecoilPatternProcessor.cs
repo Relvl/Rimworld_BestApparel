@@ -4,12 +4,8 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel.CombatExtendedCompat;
 
-public class CeRangedRecoilPatternProcessor : AStatProcessor
+public class CeRangedRecoilPatternProcessor(IStatCollector collector) : AStatProcessor(DefaultStat, collector)
 {
-    public CeRangedRecoilPatternProcessor(IStatCollector collector) : base(DefaultStat, collector)
-    {
-    }
-
     public override string GetDefName() => "CeRangedRecoilPattern";
     public override string GetDefLabel() => TranslationCache.StatCeRangedRecoilPattern.Text;
     public override bool IsValueDefault(Thing thing) => GetStatValue(thing) < 0;

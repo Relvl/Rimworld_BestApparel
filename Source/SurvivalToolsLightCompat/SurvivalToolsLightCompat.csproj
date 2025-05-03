@@ -18,7 +18,7 @@
         <DebugSymbols>true</DebugSymbols>
         <DebugType>portable</DebugType>
         <Optimize>false</Optimize>
-        <OutputPath>../../1.4/Compat/SurvivalToolsLight/Assemblies/</OutputPath>
+        <OutputPath>../../1.5/Compat/SurvivalToolsLight/Assemblies/</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
-        <OutputPath>../../1.4/Compat/SurvivalToolsLight/Assemblies/</OutputPath>
+        <OutputPath>../../1.5/Compat/SurvivalToolsLight/Assemblies/</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>

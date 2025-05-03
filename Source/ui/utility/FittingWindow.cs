@@ -12,25 +12,23 @@ namespace BestApparel.ui.utility;
 
 public class FittingWindow : Window, IReloadObserver
 {
-    public override Vector2 InitialSize => new(650, 500);
-
-    private readonly ApparelTabRenderer _parent;
-    private Vector2 _scrollLeft = Vector2.zero;
-    private Vector2 _scrollRight = Vector2.zero;
-
-    private readonly List<Apparel> _worn = new();
-    private readonly List<ThingContainerApparel> _apparelsFiltered = new();
-    private readonly List<string> _pawnInitialWorn = new();
-    private float _lastFrameListHeight;
-    private string _search = "";
-    private BodyPartGroupDef _selectedBodyPart;
-    private string _pawnInitialName = "";
-
     private const int CellPadding = 3;
     private const int BpCellHeight = 20;
     private const int IconSize = 24;
     private const int APCellHeight = IconSize + CellPadding * 2;
     private const float ScrollSize = 16;
+    private readonly List<ThingContainerApparel> _apparelsFiltered = new();
+
+    private readonly ApparelTabRenderer _parent;
+    private readonly List<string> _pawnInitialWorn = new();
+
+    private readonly List<Apparel> _worn = new();
+    private float _lastFrameListHeight;
+    private string _pawnInitialName = "";
+    private Vector2 _scrollLeft = Vector2.zero;
+    private Vector2 _scrollRight = Vector2.zero;
+    private string _search = "";
+    private BodyPartGroupDef _selectedBodyPart;
 
     public FittingWindow(ApparelTabRenderer parent)
     {
@@ -38,6 +36,13 @@ public class FittingWindow : Window, IReloadObserver
         draggable = true;
         doCloseX = true;
         _parent = parent;
+    }
+
+    public override Vector2 InitialSize => new(650, 500);
+
+    public void OnDataProcessorReloaded(ReloadPhase phase)
+    {
+        if (phase == ReloadPhase.Sorted) DoSomethingChanged();
     }
 
     public override void PreOpen()
@@ -62,14 +67,6 @@ public class FittingWindow : Window, IReloadObserver
     {
         BestApparel.Config.ReloadObservers.Remove(this);
         Config.ModInstance?.WriteSettings();
-    }
-
-    public void OnDataProcessorReloaded(ReloadPhase phase)
-    {
-        if (phase == ReloadPhase.Sorted)
-        {
-            DoSomethingChanged();
-        }
     }
 
     private void DoSomethingChanged(bool changed = true)
@@ -162,7 +159,6 @@ public class FittingWindow : Window, IReloadObserver
         );
 
         if (_worn.Any())
-        {
             AddBottomButton(
                 ref btnRect,
                 TranslationCache.FittingBtnPin,
@@ -209,7 +205,6 @@ public class FittingWindow : Window, IReloadObserver
                     Find.LetterStack.ReceiveLetter(title, sb.ToString().TrimEndNewlines(), LetterDefOf.PositiveEvent);
                 }
             );
-        }
 
         // =================================================
     }
@@ -286,7 +281,7 @@ public class FittingWindow : Window, IReloadObserver
                     Widgets.Label(labelRect, apparel.def.label);
                     TooltipHandler.TipRegion(
                         labelRect,
-                        $"{apparel.LabelNoParenthesisCap.AsTipTitle()}{GenLabel.LabelExtras(apparel, 1, true, true)}\n\n{apparel.DescriptionDetailed}"
+                        $"{apparel.LabelNoParenthesisCap.AsTipTitle()}{GenLabel.LabelExtras(apparel, true, true)}\n\n{apparel.DescriptionDetailed}"
                     );
 
                     var removeRect = new Rect(cellRect.xMax - CellPadding + cellRightOffset - ScrollSize - IconSize, cellRect.y + CellPadding + offset, IconSize, IconSize);

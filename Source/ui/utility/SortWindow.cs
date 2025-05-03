@@ -5,13 +5,9 @@ using Verse;
 
 namespace BestApparel.ui.utility;
 
-public class SortWindow : AUtilityWindow
+public class SortWindow(IThingTabRenderer parent) : AUtilityWindow(parent)
 {
     protected override float RowHeight => 30;
-
-    public SortWindow(IThingTabRenderer parent) : base(parent)
-    {
-    }
 
     protected override float DoWindowContentsInner(ref Rect inRect)
     {

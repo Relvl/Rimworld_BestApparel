@@ -7,22 +7,16 @@ using Verse;
 
 namespace BestApparel;
 
-public abstract class AStatProcessor
+public abstract class AStatProcessor(StatDef statDef, IStatCollector collector)
 {
     protected static readonly StatDef DefaultStat = new();
 
-    public readonly IStatCollector Collector;
-    public readonly StatDef StatDef;
+    public readonly IStatCollector Collector = collector;
+    public readonly StatDef StatDef = statDef;
 
     public virtual float CellWidth => -1;
 
     public virtual IEnumerable<string> ActivateWith => new string[] { };
-
-    protected AStatProcessor(StatDef statDef, IStatCollector collector)
-    {
-        StatDef = statDef;
-        Collector = collector;
-    }
 
     public virtual string GetDefName() => StatDef?.defName ?? "--unk-def-name--";
     public virtual string GetDefLabel() => StatDef.label;

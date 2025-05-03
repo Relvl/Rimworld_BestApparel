@@ -6,13 +6,9 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel.CombatExtendedCompat;
 
-public class CeRangedAmmoSpeedProcessor : AStatProcessor
+public class CeRangedAmmoSpeedProcessor(IStatCollector collector) : AStatProcessor(DefaultStat, collector)
 {
     public override IEnumerable<string> ActivateWith => new[] { "CE_Ammo" };
-
-    public CeRangedAmmoSpeedProcessor(IStatCollector collector) : base(DefaultStat, collector)
-    {
-    }
 
     public override string GetDefName() => "CeRangedAmmoSpeed";
     public override string GetDefLabel() => TranslationCache.StatCeRangedAmmoSpeed.Text;

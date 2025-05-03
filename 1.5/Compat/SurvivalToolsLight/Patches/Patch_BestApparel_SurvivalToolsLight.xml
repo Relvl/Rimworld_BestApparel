@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/BestApparel.ThingTabDef[defName="Melee"]/collectors</xpath>
+        <value>
+            <li>BestApparel.SurvivalToolsLightCompat.StlToolModCollector</li>
+        </value>
+    </Operation>
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/BestApparel.ThingTabDef[defName="Materials"]/collectors</xpath>
+        <value>
+            <li>BestApparel.SurvivalToolsLightCompat.StlStuffCollector</li>
+        </value>
+    </Operation>
+</Patch>

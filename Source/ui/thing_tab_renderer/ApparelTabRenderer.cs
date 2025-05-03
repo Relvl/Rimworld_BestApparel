@@ -5,14 +5,10 @@ using Verse;
 namespace BestApparel;
 
 // ReSharper disable once ClassNeverInstantiated.Global -- instantiated by reflection: ThingTabDef.renderClass -> ThingTab:ctor
-public class ApparelTabRenderer : DefaultThnigTabRenderer
+public class ApparelTabRenderer(ThingTabDef def) : DefaultThnigTabRenderer(def)
 {
     public readonly HashSet<ApparelLayerDef> Layers = new();
     public readonly HashSet<BodyPartGroupDef> BodyParts = new();
-
-    public ApparelTabRenderer(ThingTabDef def) : base(def)
-    {
-    }
 
     public override void PrepareCriteria()
     {

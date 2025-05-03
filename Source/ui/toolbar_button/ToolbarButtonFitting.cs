@@ -6,12 +6,8 @@ using Verse;
 namespace BestApparel;
 
 [SuppressMessage("ReSharper", "UnusedType.Global")]
-public class ToolbarButtonFitting : AToolbarButton
+public class ToolbarButtonFitting(ToolbarButtonDef def, IThingTabRenderer renderer) : AToolbarButton(def, renderer)
 {
-    public ToolbarButtonFitting(ToolbarButtonDef def, IThingTabRenderer renderer) : base(def, renderer)
-    {
-    }
-
     public override void Action()
     {
         Find.WindowStack.TryRemove(typeof(FittingWindow));
