@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <loadFolders>
     <v1.4>
-        <li>/</li>
-        <li IfModActive="CETeam.CombatExtended">Compat/CombatExtended</li>
-        <li IfModActive="skyarkhangel.SurvivalToolsLite">Compat/SurvivalToolsLight</li>
+		<li>Common</li>
+        <li>1.4</li>
+        <li IfModActive="CETeam.CombatExtended">1.4/Compat/CombatExtended</li>
+        <li IfModActive="skyarkhangel.SurvivalToolsLite">1.4/Compat/SurvivalToolsLight</li>
     </v1.4>
 </loadFolders>
