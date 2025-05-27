@@ -4,7 +4,7 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel;
 
-// ReSharper disable once UnusedType.Global -- reflection: DefaultThnigTabRenderer:ctor
+// ReSharper disable once UnusedType.Global -- reflection: DefaultThingTabRenderer:ctor
 public class EquippedStatCollector : IStatCollector
 {
     public void Prepare(Thing thing)

@@ -5,14 +5,14 @@ namespace BestApparel;
 
 public class CellData
 {
-    public readonly List<string> Tooltips = new();
+    public readonly List<string> Tooltips = [];
+    public bool IsEmpty;
+    public float NormalizedWeight = 0;
 
     public AStatProcessor Processor;
     public Thing Thing;
-    public bool IsEmpty;
     public string Value;
     public float WeightFactor = 1;
-    public float NormalizedWeight = 0;
 
     public CellData(AStatProcessor processor, Thing thing)
     {
@@ -22,9 +22,6 @@ public class CellData
         var valueRaw = processor.GetStatValue(thing);
         Value = processor.GetStatValueFormatted(thing);
 
-        if (Prefs.DevMode)
-        {
-            Tooltips.Add($"Raw value: {valueRaw}, Default: {processor.StatDef.defaultBaseValue}");
-        }
+        if (Prefs.DevMode) Tooltips.Add($"Raw value: {valueRaw}, Default: {processor.StatDef.defaultBaseValue}");
     }
 }

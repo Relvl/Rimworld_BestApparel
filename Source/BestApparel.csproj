@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -34,87 +34,91 @@
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="AStatProcessor.cs" />
-        <Compile Include="AThingContainer.cs" />
-        <Compile Include="CellData.cs" />
-        <Compile Include="config\Config.cs" />
-        <Compile Include="config\ConfigColumns.cs" />
-        <Compile Include="config\ConfigFilters.cs" />
-        <Compile Include="config\ConfigSorting.cs" />
-        <Compile Include="config\preset\DialogRenameAction.cs" />
-        <Compile Include="config\preset\PresetManager.cs" />
-        <Compile Include="config\preset\PresetOption.cs" />
-        <Compile Include="config\Scribe_Config.cs" />
-        <Compile Include="config\TabConfig.cs" />
-        <Compile Include="container_factory\ApparelContainerFactory.cs" />
-        <Compile Include="container_factory\MeleeContainerFactory.cs" />
-        <Compile Include="container_factory\RangedContainerFactory.cs" />
-        <Compile Include="BestApparel.cs" />
-        <Compile Include="container_factory\ThingContainerMaterials.cs" />
-        <Compile Include="def\ContainerPostprocessDef.cs" />
-        <Compile Include="def\ThingTabDef.cs" />
-        <Compile Include="def\ToolbarButtonDef.cs" />
-        <Compile Include="Extensions.cs" />
-        <Compile Include="IContainerFactory.cs" />
-        <Compile Include="IContainerPostprocess.cs" />
-        <Compile Include="IReloadObserver.cs" />
-        <Compile Include="IStatCollector.cs" />
-        <Compile Include="IThingTabRenderer.cs" />
-        <Compile Include="AToolbarButton.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="stat_collector\BaseStatCollector.cs" />
-        <Compile Include="stat_collector\EquippedStatCollector.cs" />
-        <Compile Include="stat_collector\MaterialStatCollector.cs" />
-        <Compile Include="stat_collector\MeleeStatCollector.cs" />
-        <Compile Include="stat_collector\RangedStatCollector.cs" />
-        <Compile Include="stat_processor\BaseStatProcessor.cs" />
-        <Compile Include="stat_processor\EquippedOffsetStatProcessor.cs" />
-        <Compile Include="stat_processor\FuncStatProcessor.cs" />
-        <Compile Include="stat_processor\StatFactorProcessor.cs" />
-        <Compile Include="stat_processor\StringStatProcessor.cs" />
-        <Compile Include="ThingTab.cs" />
-        <Compile Include="TranslationCache.cs" />
-        <Compile Include="ui\ColonistFloatMenuOption.cs" />
-        <Compile Include="ui\BestApparelMainTabWindow.cs" />
-        <Compile Include="ui\thing_tab_renderer\ApparelTabRenderer.cs" />
-        <Compile Include="ui\thing_tab_renderer\DefaultThnigTabRenderer.cs" />
-        <Compile Include="ui\toolbar_button\ToolbarButtonColumns.cs" />
-        <Compile Include="ui\toolbar_button\ToolbarButtonFilters.cs" />
-        <Compile Include="ui\toolbar_button\ToolbarButtonFitting.cs" />
-        <Compile Include="ui\toolbar_button\ToolbarButtonPreset.cs" />
-        <Compile Include="ui\toolbar_button\ToolbarButtonSorting.cs" />
-        <Compile Include="ui\UIUtils.cs" />
-        <Compile Include="ui\utility\AUtilityWindow.cs" />
-        <Compile Include="ui\utility\ColumnsWindow.cs" />
-        <Compile Include="ui\utility\FilterWindow.cs" />
-        <Compile Include="ui\utility\FittingWindow.cs" />
-        <Compile Include="ui\utility\SortWindow.cs" />
+        <Compile Include="AStatProcessor.cs"/>
+        <Compile Include="AThingContainer.cs"/>
+        <Compile Include="CellData.cs"/>
+        <Compile Include="config\Config.cs"/>
+        <Compile Include="config\ConfigColumns.cs"/>
+        <Compile Include="config\ConfigFilters.cs"/>
+        <Compile Include="config\ConfigSorting.cs"/>
+        <Compile Include="config\preset\DialogRenameAction.cs"/>
+        <Compile Include="config\preset\PresetManager.cs"/>
+        <Compile Include="config\preset\PresetOption.cs"/>
+        <Compile Include="config\Scribe_Config.cs"/>
+        <Compile Include="config\TabConfig.cs"/>
+        <Compile Include="container_factory\apparel\ApparelContainerFactory.cs"/>
+        <Compile Include="container_factory\apparel\ThingContainerApparel.cs"/>
+        <Compile Include="container_factory\material\MaterialContainerFactory.cs"/>
+        <Compile Include="container_factory\material\ThingContainerMaterials.cs"/>
+        <Compile Include="container_factory\melee\MeleeContainerFactory.cs"/>
+        <Compile Include="container_factory\melee\ThingContainerMelee.cs"/>
+        <Compile Include="BestApparel.cs"/>
+        <Compile Include="container_factory\ranged\RangedContainerFactory.cs"/>
+        <Compile Include="container_factory\ranged\ThingContainerRanged.cs"/>
+        <Compile Include="def\ContainerPostprocessDef.cs"/>
+        <Compile Include="def\ThingTabDef.cs"/>
+        <Compile Include="def\ToolbarButtonDef.cs"/>
+        <Compile Include="Extensions.cs"/>
+        <Compile Include="IContainerFactory.cs"/>
+        <Compile Include="IContainerPostprocess.cs"/>
+        <Compile Include="IReloadObserver.cs"/>
+        <Compile Include="IStatCollector.cs"/>
+        <Compile Include="IThingTabRenderer.cs"/>
+        <Compile Include="AToolbarButton.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="stat_collector\BaseStatCollector.cs"/>
+        <Compile Include="stat_collector\EquippedStatCollector.cs"/>
+        <Compile Include="stat_collector\MaterialStatCollector.cs"/>
+        <Compile Include="stat_collector\MeleeStatCollector.cs"/>
+        <Compile Include="stat_collector\RangedStatCollector.cs"/>
+        <Compile Include="stat_processor\BaseStatProcessor.cs"/>
+        <Compile Include="stat_processor\EquippedOffsetStatProcessor.cs"/>
+        <Compile Include="stat_processor\FuncStatProcessor.cs"/>
+        <Compile Include="stat_processor\StatFactorProcessor.cs"/>
+        <Compile Include="stat_processor\StringStatProcessor.cs"/>
+        <Compile Include="ThingTab.cs"/>
+        <Compile Include="TranslationCache.cs"/>
+        <Compile Include="ui\ColonistFloatMenuOption.cs"/>
+        <Compile Include="ui\BestApparelMainTabWindow.cs"/>
+        <Compile Include="ui\thing_tab_renderer\ApparelTabRenderer.cs"/>
+        <Compile Include="ui\thing_tab_renderer\DefaultThingTabRenderer.cs"/>
+        <Compile Include="ui\toolbar_button\ToolbarButtonColumns.cs"/>
+        <Compile Include="ui\toolbar_button\ToolbarButtonFilters.cs"/>
+        <Compile Include="ui\toolbar_button\ToolbarButtonFitting.cs"/>
+        <Compile Include="ui\toolbar_button\ToolbarButtonPreset.cs"/>
+        <Compile Include="ui\toolbar_button\ToolbarButtonSorting.cs"/>
+        <Compile Include="ui\UIUtils.cs"/>
+        <Compile Include="ui\utility\AUtilityWindow.cs"/>
+        <Compile Include="ui\utility\ColumnsWindow.cs"/>
+        <Compile Include="ui\utility\FilterWindow.cs"/>
+        <Compile Include="ui\utility\FittingWindow.cs"/>
+        <Compile Include="ui\utility\SortWindow.cs"/>
     </ItemGroup>
     <ItemGroup>
-      <Reference Include="Assembly-CSharp">
-        <HintPath>..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="System" />
-      <Reference Include="System.Xml" />
-      <Reference Include="UnityEngine">
-        <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="UnityEngine.CoreModule">
-        <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="UnityEngine.IMGUIModule">
-        <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="UnityEngine.TextRenderingModule">
-        <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
+        <Reference Include="Assembly-CSharp">
+            <HintPath>..\..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine">
+            <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.IMGUIModule">
+            <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule">
+            <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">

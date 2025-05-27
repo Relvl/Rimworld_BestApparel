@@ -12,31 +12,30 @@ using Verse;
 namespace BestApparel;
 
 // ReSharper disable once ClassNeverInstantiated.Global -- instantiated by reflection: ThingTabDef.renderClass -> ThingTab:ctor
-public class DefaultThnigTabRenderer : IThingTabRenderer
+public class DefaultThingTabRenderer : IThingTabRenderer
 {
     protected const int CellPadding = 2;
     protected const int NameCellWidth = 200;
     protected const int CellHeight = 24;
     protected const int HeaderHeight = 36;
-    protected int[] CellWidthArray;
+
+    public readonly HashSet<AThingContainer> AllContainers = [];
+    protected readonly HashSet<ThingCategoryDef> Categories = [];
+    protected readonly List<IStatCollector> Collectors;
+    protected readonly IContainerFactory Factory;
+    protected readonly List<AThingContainer> FilteredContainers = [];
+    protected readonly List<IContainerPostprocess> Postprocessors = [];
+    protected readonly HashSet<AStatProcessor> StatProcessors = [];
 
     protected readonly string TabId;
-    protected readonly IContainerFactory Factory;
-    protected readonly List<IStatCollector> Collectors;
-    protected readonly List<AThingContainer> FilteredContainers = new();
-    protected readonly List<IContainerPostprocess> Postprocessors = new();
+    protected readonly HashSet<WeaponClassDef> WeaponClasses = [];
+    protected int[] CellWidthArray;
+    protected int LastFrameHighlightRow = -1;
+    protected Vector2 LastFrameTableSize = Vector2.zero;
 
     protected Vector2 Scroll = Vector2.zero;
-    protected Vector2 LastFrameTableSize = Vector2.zero;
-    protected int LastFrameHighlightRow = -1;
 
-    public readonly HashSet<AThingContainer> AllContainers = new();
-    protected readonly HashSet<ThingCategoryDef> Categories = new();
-    protected readonly HashSet<StuffCategoryDef> Stuffs = new();
-    protected readonly HashSet<WeaponClassDef> WeaponClasses = new();
-    protected readonly HashSet<AStatProcessor> StatProcessors = new();
-
-    public DefaultThnigTabRenderer(ThingTabDef def)
+    public DefaultThingTabRenderer(ThingTabDef def)
     {
         TabId = def.defName;
         Factory = Activator.CreateInstance(def.factoryClass) as IContainerFactory;
@@ -50,7 +49,10 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         }
     }
 
-    public string GetTabId() => TabId;
+    public string GetTabId()
+    {
+        return TabId;
+    }
 
     public virtual void DoWindowContents(ref Rect inRect, string searchString)
     {
@@ -61,7 +63,6 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
 
         CellWidthArray = new int[containers.First().CachedCells.Length];
         foreach (var container in containers)
-        {
             for (var cellIdx = 0; cellIdx < container.CachedCells.Length; cellIdx++)
             {
                 var cell = container.CachedCells[cellIdx];
@@ -75,10 +76,128 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
 
                 CellWidthArray[cellIdx] = Math.Max((int)cellWidth, CellWidthArray[cellIdx]);
             }
-        }
 
         RenderTableHeader(ref inRect, containers.First());
         RenderTable(ref inRect, containers);
+    }
+
+    public virtual void PrepareCriteria()
+    {
+        foreach (var def in DefDatabase<ThingDef>.AllDefs)
+        {
+            if (!Factory.CanProduce(def)) continue;
+            PrepareCriteriaEach(def);
+        }
+    }
+
+    public virtual void CollectContainers()
+    {
+        DisposeContainers();
+
+        PrepareCriteria(); // todo! на самом деле надо бы это кешировать на всю сессию
+
+        var tmpStatProcessors = new HashSet<AStatProcessor>();
+        var allContainers = GetAllThingDefs()
+            .Where(def => Factory.CanProduce(def))
+            .SelectMany(def => Factory.Produce(def, GetTabId(), false)) // todo option/button
+            .Where(con => con is not null)
+            .ToList();
+
+        foreach (var collector in Collectors)
+        foreach (var container in allContainers)
+            collector.Prepare(container.DefaultThing);
+
+        foreach (var container in allContainers)
+        {
+            PostProcessContainer(container);
+            AllContainers.Add(container);
+            // only collect stats from available things - just for propper (min,max) value calculation
+            // todo! move up to PrepareCriteria - we have column selection
+            foreach (var collector in Collectors)
+            foreach (var processor in collector.Collect(container.DefaultThing))
+            {
+                if (tmpStatProcessors.Any(p => p.GetDefName() == processor.GetDefName())) continue;
+                if (processor.IsValueDefault(container.DefaultThing)) continue;
+                tmpStatProcessors.Add(processor);
+            }
+        }
+
+        StatProcessors.AddRange(tmpStatProcessors.OrderBy(p => p.GetDefLabel()));
+
+        UpdateFilter();
+    }
+
+    public virtual void PostProcessContainer(AThingContainer container)
+    {
+        foreach (var poroc in Postprocessors) poroc.Postprocess(container, this);
+    }
+
+    public virtual void UpdateFilter()
+    {
+        FilteredContainers.ReplaceWith(AllContainers.Where(container => container.CheckForFilters()));
+        foreach (var observer in BestApparel.Config.ReloadObservers) observer.OnDataProcessorReloaded(ReloadPhase.Filtered);
+        UpdateSort();
+    }
+
+    public virtual void UpdateSort()
+    {
+        var filtered = FilteredContainers.ToList();
+
+        var columns = BestApparel.GetTabConfig(TabId).Columns.GetColumns();
+        var statMinmax = new Dictionary<AStatProcessor, ( /*min*/float, /*max*/float)>();
+        foreach (var processor in StatProcessors.Where(s => columns.Contains(s.GetDefName())))
+        {
+            var minmax = statMinmax.TryGetValue(processor, out var value) ? value : (0, 0);
+            foreach (var statValue in filtered.Select(container => processor.GetStatValue(container.DefaultThing)))
+            {
+                if (statValue > minmax.Item2) minmax.Item2 = statValue;
+                if (statValue < minmax.Item1) minmax.Item1 = statValue;
+            }
+
+            statMinmax[processor] = minmax;
+        }
+
+        filtered.ForEach(container => container.CacheCells(statMinmax));
+
+        FilteredContainers.ReplaceWith(
+            filtered //
+                .OrderByDescending(c => c.CachedSortingWeight)
+                .ThenBy(c => c.Def.label)
+        );
+
+        foreach (var observer in BestApparel.Config.ReloadObservers) observer.OnDataProcessorReloaded(ReloadPhase.Sorted);
+    }
+
+    public virtual void DisposeContainers()
+    {
+        FilteredContainers.Clear();
+        AllContainers.Clear();
+        StatProcessors.Clear();
+        Categories.Clear();
+        WeaponClasses.Clear();
+    }
+
+    public virtual IEnumerable<(IEnumerable<Def>, TranslationCache.E, string)> GetFilterData()
+    {
+        yield return (Categories, TranslationCache.FilterCategory, nameof(ThingCategoryDef));
+
+        if (WeaponClasses.Count > 0)
+            yield return (WeaponClasses, TranslationCache.FilterWeaponClass, nameof(WeaponClassDef));
+    }
+
+    public virtual IEnumerable<AStatProcessor> GetColumnData()
+    {
+        return StatProcessors;
+    }
+
+    public virtual HashSet<AThingContainer> GetAllContainers()
+    {
+        return AllContainers;
+    }
+
+    public void OnDataProcessorReloaded(ReloadPhase phase)
+    {
+        if (phase == ReloadPhase.Changed) UpdateFilter();
     }
 
     protected virtual void RenderTableHeader(ref Rect inRect, AThingContainer firstContainer)
@@ -123,15 +242,10 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
             {
                 var order = BestApparel.Config.SimpleSorting[TabId].Second;
                 if (order < 0)
-                {
                     GUI.color = UIUtils.ColorSortPositive;
-                    // todo! arrow!
-                }
-                else if (order > 0)
-                {
-                    GUI.color = UIUtils.ColorSortNegative;
-                    // todo! arrow!
-                }
+                // todo! arrow!
+                else if (order > 0) GUI.color = UIUtils.ColorSortNegative;
+                // todo! arrow!
             }
 
             if (Mouse.IsOver(headerRect))
@@ -140,10 +254,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
                 if (Widgets.ButtonInvisible(headerRect))
                 {
                     var order = 1;
-                    if (isSortedColumn)
-                    {
-                        order = BestApparel.Config.SimpleSorting[TabId].Second * -1;
-                    }
+                    if (isSortedColumn) order = BestApparel.Config.SimpleSorting[TabId].Second * -1;
 
                     BestApparel.Config.SimpleSorting[TabId] = new Pair<string, int>(cell.Processor.GetDefName() ?? "--unk--", order);
                     UpdateSort();
@@ -154,10 +265,7 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         Widgets.Label(headerRect, cell.Processor.GetDefLabel());
         var tooltip = $"{cell.Processor.GetDefLabel().CapitalizeFirst().Colorize(Color.green)}\n\n{cell.Processor.StatDef.description ?? "-no-description-"}";
 
-        if (Prefs.DevMode)
-        {
-            tooltip += cell.Processor.DebugTooltip();
-        }
+        if (Prefs.DevMode) tooltip += cell.Processor.DebugTooltip();
 
         TooltipHandler.TipRegion(headerRect, tooltip);
         headerRect.x += headerRect.width + CellPadding - 2;
@@ -252,7 +360,10 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         cellRect.x += NameCellWidth + CellPadding;
     }
 
-    protected virtual bool IsRowInViewport(ref Rect inRect, int idx) => Scroll.y < CellHeight * idx + CellHeight * 2 && Scroll.y + inRect.height > CellHeight * idx;
+    protected virtual bool IsRowInViewport(ref Rect inRect, int idx)
+    {
+        return Scroll.y < CellHeight * idx + CellHeight * 2 && Scroll.y + inRect.height > CellHeight * idx;
+    }
 
     protected virtual IEnumerable<ThingDef> GetAllThingDefs()
     {
@@ -277,129 +388,9 @@ public class DefaultThnigTabRenderer : IThingTabRenderer
         }
     }
 
-    public virtual void PrepareCriteria()
-    {
-        foreach (var def in DefDatabase<ThingDef>.AllDefs)
-        {
-            if (!Factory.CanProduce(def)) continue;
-            PrepareCriteriaEach(def);
-        }
-    }
-
     protected virtual void PrepareCriteriaEach(ThingDef def)
     {
         if (def.thingCategories != null) Categories.AddRange(def.thingCategories);
-        if (def.stuffProps?.categories != null) Stuffs.AddRange(def.stuffProps.categories);
         if (def.weaponClasses != null) WeaponClasses.AddRange(def.weaponClasses);
-    }
-
-    public virtual void CollectContainers()
-    {
-        DisposeContainers();
-
-        PrepareCriteria(); // todo! на самом деле надо бы это кешировать на всю сессию
-
-        var tmpStatProcessors = new HashSet<AStatProcessor>();
-        var allContainers = GetAllThingDefs().Select(def => !Factory.CanProduce(def) ? null : Factory.Produce(def, GetTabId())).Where(con => con is not null).ToList();
-
-        foreach (var collector in Collectors)
-        {
-            foreach (var container in allContainers)
-            {
-                collector.Prepare(container.DefaultThing);
-            }
-        }
-
-        foreach (var container in allContainers)
-        {
-            PostProcessContainer(container);
-            AllContainers.Add(container);
-            // only collect stats from available things - just for propper (min,max) value calculation
-            // todo! move up to PrepareCriteria - we have column selection
-            foreach (var collector in Collectors)
-            {
-                foreach (var processor in collector.Collect(container.DefaultThing))
-                {
-                    if (tmpStatProcessors.Any(p => p.GetDefName() == processor.GetDefName())) continue;
-                    if (processor.IsValueDefault(container.DefaultThing)) continue;
-                    tmpStatProcessors.Add(processor);
-                }
-            }
-        }
-
-        StatProcessors.AddRange(tmpStatProcessors.OrderBy(p => p.GetDefLabel()));
-
-        UpdateFilter();
-    }
-
-    public virtual void PostProcessContainer(AThingContainer container)
-    {
-        foreach (var poroc in Postprocessors) poroc.Postprocess(container, this);
-    }
-
-    public virtual void UpdateFilter()
-    {
-        FilteredContainers.ReplaceWith(AllContainers.Where(container => container.CheckForFilters()));
-        foreach (var observer in BestApparel.Config.ReloadObservers) observer.OnDataProcessorReloaded(ReloadPhase.Filtered);
-        UpdateSort();
-    }
-
-    public virtual void UpdateSort()
-    {
-        var filtered = FilteredContainers.ToList();
-
-        var columns = BestApparel.GetTabConfig(TabId).Columns.GetColumns();
-        var statMinmax = new Dictionary<AStatProcessor, ( /*min*/float, /*max*/float)>();
-        foreach (var processor in StatProcessors.Where(s => columns.Contains(s.GetDefName())))
-        {
-            var minmax = statMinmax.ContainsKey(processor) ? statMinmax[processor] : (0, 0);
-            foreach (var statValue in filtered.Select(container => processor.GetStatValue(container.DefaultThing)))
-            {
-                if (statValue > minmax.Item2) minmax.Item2 = statValue;
-                if (statValue < minmax.Item1) minmax.Item1 = statValue;
-            }
-
-            statMinmax[processor] = minmax;
-        }
-
-        filtered.ForEach(container => container.CacheCells(statMinmax, this));
-
-        FilteredContainers.ReplaceWith(
-            filtered //
-                .OrderByDescending(c => c.CachedSortingWeight)
-                .ThenBy(c => c.Def.label)
-        );
-
-        foreach (var observer in BestApparel.Config.ReloadObservers) observer.OnDataProcessorReloaded(ReloadPhase.Sorted);
-    }
-
-    public virtual void DisposeContainers()
-    {
-        FilteredContainers.Clear();
-        AllContainers.Clear();
-        StatProcessors.Clear();
-        Categories.Clear();
-        Stuffs.Clear();
-        WeaponClasses.Clear();
-    }
-
-    public virtual IEnumerable<(IEnumerable<Def>, TranslationCache.E, string)> GetFilterData()
-    {
-        yield return (Categories, TranslationCache.FilterCategory, nameof(ThingCategoryDef));
-
-        if (WeaponClasses.Count > 0)
-            yield return (WeaponClasses, TranslationCache.FilterWeaponClass, nameof(WeaponClassDef));
-    }
-
-    public virtual IEnumerable<AStatProcessor> GetColumnData() => StatProcessors;
-
-    public virtual HashSet<AThingContainer> GetAllContainers() => AllContainers;
-
-    public void OnDataProcessorReloaded(ReloadPhase phase)
-    {
-        if (phase == ReloadPhase.Changed)
-        {
-            UpdateFilter();
-        }
     }
 }

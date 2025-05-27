@@ -17,12 +17,12 @@ public class FittingWindow : Window, IReloadObserver
     private const int IconSize = 24;
     private const int APCellHeight = IconSize + CellPadding * 2;
     private const float ScrollSize = 16;
-    private readonly List<ThingContainerApparel> _apparelsFiltered = new();
+    private readonly List<ThingContainerApparel> _apparelsFiltered = [];
 
     private readonly ApparelTabRenderer _parent;
-    private readonly List<string> _pawnInitialWorn = new();
+    private readonly List<string> _pawnInitialWorn = [];
 
-    private readonly List<Apparel> _worn = new();
+    private readonly List<Apparel> _worn = [];
     private float _lastFrameListHeight;
     private string _pawnInitialName = "";
     private Vector2 _scrollLeft = Vector2.zero;

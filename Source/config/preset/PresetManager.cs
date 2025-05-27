@@ -14,8 +14,10 @@ public class PresetManager
     {
         var rnd = new Random();
         int id;
-        do id = rnd.Next(100000, 1000000);
-        while (Presets.Any(p => p.ID == id));
+        do
+        {
+            id = rnd.Next(100000, 1000000);
+        } while (Presets.Any(p => p.ID == id));
 
         Find.WindowStack.Add(
             new DialogRenameAction(
@@ -38,16 +40,13 @@ public class PresetManager
     public void ExposeData()
     {
         if (Scribe.EnterNode("Presets"))
-        {
             try
             {
                 switch (Scribe.mode)
                 {
                     case LoadSaveMode.Saving:
                         foreach (var preset in Presets)
-                        {
                             if (Scribe.EnterNode("Preset"))
-                            {
                                 try
                                 {
                                     preset.ExposeData();
@@ -56,8 +55,6 @@ public class PresetManager
                                 {
                                     Scribe.ExitNode();
                                 }
-                            }
-                        }
 
                         break;
                     case LoadSaveMode.LoadingVars:
@@ -68,7 +65,7 @@ public class PresetManager
                         {
                             while (enumerator2!.MoveNext())
                             {
-                                var preset = ScribeExtractor.SaveableFromNode<PresetOption>((XmlNode)enumerator2.Current, new object[] { });
+                                var preset = ScribeExtractor.SaveableFromNode<PresetOption>((XmlNode)enumerator2.Current, []);
                                 Presets.Add(preset);
                             }
                         }
@@ -94,7 +91,6 @@ public class PresetManager
                                 }
                             }
                         }*/
-
                         break;
                 }
             }
@@ -102,8 +98,7 @@ public class PresetManager
             {
                 Scribe.ExitNode();
             }
-        }
 
-        Presets ??= new HashSet<PresetOption>();
+        Presets ??= [];
     }
 }

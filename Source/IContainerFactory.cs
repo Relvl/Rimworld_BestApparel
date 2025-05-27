@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Verse;
 
 namespace BestApparel;
@@ -5,6 +6,6 @@ namespace BestApparel;
 public interface IContainerFactory
 {
     bool CanProduce(ThingDef def);
-    
-    AThingContainer Produce(ThingDef def, string tabId);
+
+    IEnumerable<AThingContainer> Produce(ThingDef def, string tabId, bool destructuringStuff);
 }

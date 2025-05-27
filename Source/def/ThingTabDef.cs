@@ -15,27 +15,26 @@ namespace BestApparel;
 public class ThingTabDef : Def
 {
     /// <summary>
-    /// UI tab order (lesser to the left)
+    ///     List of collectors def names of StatCollectorDef
     /// </summary>
-    public int order = 0;
+    public List<Type> collectors = [];
 
     /// <summary>
-    /// Type of IThingTabRenderer - ctor must be `protected ctor(MainTabWindow)`
-    /// </summary>
-    public Type renderClass;
-
-    /// <summary>
-    /// 
     /// </summary>
     public Type factoryClass;
 
     /// <summary>
-    /// List of collectors def names of StatCollectorDef
+    ///     UI tab order (lesser to the left)
     /// </summary>
-    public List<Type> collectors = new();
+    public int order = 0;
 
     /// <summary>
-    /// ref to ToolbarButtonDef
+    ///     Type of IThingTabRenderer - ctor must be `protected ctor(MainTabWindow)`
     /// </summary>
-    public List<string> toolbar = new();
+    public Type renderClass;
+
+    /// <summary>
+    ///     ref to ToolbarButtonDef
+    /// </summary>
+    public List<string> toolbar = [];
 }

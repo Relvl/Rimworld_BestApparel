@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <BestApparel.ThingTabDef>
+        <defName>Apparel</defName>
+        <label>Apparel</label>
+        <order>100</order>
+        <renderClass>BestApparel.ApparelTabRenderer</renderClass>
+        <factoryClass>BestApparel.container_factory.ApparelContainerFactory</factoryClass>
+        <collectors>
+            <!-- Literally every registered StatDef (excludes stat that equal on every thing) -->
+            <li>BestApparel.BaseStatCollector</li>
+            <!-- Every stat that contained in the <equippedStatOffsets> -->
+            <li>BestApparel.EquippedStatCollector</li>
+        </collectors>
+        <toolbar>
+            <li>ButtonOpenFilters</li>
+            <li>ButtonOpenColumns</li>
+            <li>ButtonOpenSorting</li>
+            <li>ButtonOpenFitting</li>
+            <li>ButtonPresets</li>
+        </toolbar>
+    </BestApparel.ThingTabDef>
+
+    <BestApparel.ThingTabDef>
+        <defName>Ranged</defName>
+        <label>Ranged</label>
+        <order>200</order>
+        <renderClass>BestApparel.DefaultThingTabRenderer</renderClass>
+        <factoryClass>BestApparel.container_factory.RangedContainerFactory</factoryClass>
+        <collectors>
+            <!-- Literally every registered StatDef (excludes stat that equal on every thing) -->
+            <li>BestApparel.BaseStatCollector</li>
+            <!-- Every stat that contained in the <equippedStatOffsets> -->
+            <li>BestApparel.EquippedStatCollector</li>
+            <li>BestApparel.RangedStatCollector</li>
+        </collectors>
+        <toolbar>
+            <li>ButtonOpenFilters</li>
+            <li>ButtonOpenColumns</li>
+            <li>ButtonOpenSorting</li>
+            <li>ButtonPresets</li>
+        </toolbar>
+    </BestApparel.ThingTabDef>
+
+    <BestApparel.ThingTabDef>
+        <defName>Melee</defName>
+        <label>Melee</label>
+        <order>300</order>
+        <renderClass>BestApparel.DefaultThingTabRenderer</renderClass>
+        <factoryClass>BestApparel.container_factory.MeleeContainerFactory</factoryClass>
+        <collectors>
+            <!-- Literally every registered StatDef (excludes stat that equal on every thing) -->
+            <li>BestApparel.BaseStatCollector</li>
+            <!-- Every stat that contained in the <equippedStatOffsets> -->
+            <li>BestApparel.EquippedStatCollector</li>
+            <li>BestApparel.MeleeStatCollector</li>
+        </collectors>
+        <toolbar>
+            <li>ButtonOpenFilters</li>
+            <li>ButtonOpenColumns</li>
+            <li>ButtonOpenSorting</li>
+            <li>ButtonPresets</li>
+        </toolbar>
+    </BestApparel.ThingTabDef>
+
+    <BestApparel.ThingTabDef>
+        <defName>Materials</defName>
+        <label>Materials</label>
+        <order>400</order>
+        <renderClass>BestApparel.DefaultThingTabRenderer</renderClass>
+        <factoryClass>BestApparel.container_factory.MaterialContainerFactory</factoryClass>
+        <collectors>
+            <!-- Literally every registered StatDef (excludes stat that equal on every thing) -->
+            <li>BestApparel.BaseStatCollector</li>
+            <li>BestApparel.MaterialStatCollector</li>
+        </collectors>
+        <toolbar>
+            <li>ButtonOpenFilters</li>
+            <li>ButtonOpenColumns</li>
+            <li>ButtonOpenSorting</li>
+            <li>ButtonPresets</li>
+        </toolbar>
+    </BestApparel.ThingTabDef>
+
+</Defs>

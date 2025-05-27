@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -14,31 +13,31 @@ public class Config : ModSettings
 {
     // Please up this version only when breaking changes in the configs
     private const int Version = 6;
-    public static readonly bool IsCeLoaded = ModsConfig.ActiveModsInLoadOrder.Any(m => "Combat Extended".Equals(m.Name));
 
     public const float MaxSortingWeight = 10f;
     public const float DefaultTolerance = 0.0001f;
+    public static readonly bool IsCeLoaded = ModsConfig.ActiveModsInLoadOrder.Any(m => "Combat Extended".Equals(m.Name));
     public static BestApparel ModInstance;
     public static string SelectedTab;
+
+    public readonly PresetManager PresetManager = new();
+
+    private readonly Dictionary<string, TabConfig> _tabConfig = new();
+    public bool CePenetrationShortValue;
+    public bool DoNotSortColumns;
+
+    public List<string> FittingWorn = [];
 
     // ========================== Storable
 
     public float MainWindowWidth;
-    public bool CePenetrationShortValue;
-    public bool UseAllThings;
-    public bool DoNotSortColumns;
-    public bool UseSimpleDataSorting;
-
-    public List<string> FittingWorn = new();
     public Dictionary<string, string> RangedAmmo = new();
 
     public Dictionary<string, Pair<string, int>> SimpleSorting = new();
+    public bool UseAllThings;
+    public bool UseSimpleDataSorting;
 
-    public readonly PresetManager PresetManager = new();
-
-    public List<IReloadObserver> ReloadObservers { get; } = new();
-
-    private Dictionary<string, TabConfig> _tabConfig = new();
+    public List<IReloadObserver> ReloadObservers { get; } = [];
 
     public TabConfig GetTabConfig(string tabId)
     {
@@ -55,16 +54,13 @@ public class Config : ModSettings
     private void ScribeTabConfig()
     {
         if (Scribe.EnterNode("TabConfig"))
-        {
             try
             {
                 switch (Scribe.mode)
                 {
                     case LoadSaveMode.Saving:
                         foreach (var (tabId, tabConfig) in _tabConfig)
-                        {
                             if (Scribe.EnterNode(tabId))
-                            {
                                 try
                                 {
                                     tabConfig.ExposeData();
@@ -73,16 +69,12 @@ public class Config : ModSettings
                                 {
                                     Scribe.ExitNode();
                                 }
-                            }
-                        }
 
                         break;
                     case LoadSaveMode.LoadingVars:
                         _tabConfig.Clear();
                         foreach (XmlElement child in Scribe.loader.curXmlParent)
-                        {
                             if (Scribe.EnterNode(child.Name))
-                            {
                                 try
                                 {
                                     _tabConfig[child.Name] = new TabConfig();
@@ -92,8 +84,6 @@ public class Config : ModSettings
                                 {
                                     Scribe.ExitNode();
                                 }
-                            }
-                        }
 
                         break;
                 }
@@ -102,7 +92,6 @@ public class Config : ModSettings
             {
                 Scribe.ExitNode();
             }
-        }
     }
 
     public override void ExposeData()

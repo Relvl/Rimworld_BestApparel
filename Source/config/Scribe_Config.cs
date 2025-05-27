@@ -10,7 +10,6 @@ public static class ScribeConfig
     {
         dict ??= new Dictionary<string, TV>();
         if (Scribe.EnterNode(label))
-        {
             try
             {
                 switch (Scribe.mode)
@@ -32,14 +31,12 @@ public static class ScribeConfig
             {
                 Scribe.ExitNode();
             }
-        }
     }
 
     public static void LookListString(ref List<string> list, string label)
     {
-        list ??= new List<string>();
+        list ??= [];
         if (Scribe.EnterNode(label))
-        {
             try
             {
                 switch (Scribe.mode)
@@ -58,14 +55,12 @@ public static class ScribeConfig
             {
                 Scribe.ExitNode();
             }
-        }
     }
 
     public static void LookHashSetString(ref HashSet<string> list, string label)
     {
-        list ??= new HashSet<string>();
+        list ??= [];
         if (Scribe.EnterNode(label))
-        {
             try
             {
                 switch (Scribe.mode)
@@ -84,14 +79,12 @@ public static class ScribeConfig
             {
                 Scribe.ExitNode();
             }
-        }
     }
 
     public static void LookDictionaryList(ref Dictionary<string, List<string>> dict, string label)
     {
         dict ??= new Dictionary<string, List<string>>();
         if (Scribe.EnterNode(label))
-        {
             try
             {
                 switch (Scribe.mode)
@@ -99,7 +92,7 @@ public static class ScribeConfig
                     case LoadSaveMode.Saving:
                         foreach (var (key, list) in dict)
                         {
-                            var innerlist = list ?? new List<string>();
+                            var innerlist = list ?? [];
                             LookListString(ref innerlist, key);
                         }
 
@@ -121,14 +114,12 @@ public static class ScribeConfig
             {
                 Scribe.ExitNode();
             }
-        }
     }
 
     public static void LookDictionaryHashSet(ref Dictionary<string, HashSet<string>> dict, string label)
     {
         dict ??= new Dictionary<string, HashSet<string>>();
         if (Scribe.EnterNode(label))
-        {
             try
             {
                 switch (Scribe.mode)
@@ -136,7 +127,7 @@ public static class ScribeConfig
                     case LoadSaveMode.Saving:
                         foreach (var (key, list) in dict)
                         {
-                            var innerlist = list ?? new HashSet<string>();
+                            var innerlist = list ?? [];
                             LookHashSetString(ref innerlist, key);
                         }
 
@@ -158,14 +149,12 @@ public static class ScribeConfig
             {
                 Scribe.ExitNode();
             }
-        }
     }
 
     public static void LookDictionaryDeep2<TV>(ref Dictionary<string, Dictionary<string, TV>> dict, string label)
     {
         dict ??= new Dictionary<string, Dictionary<string, TV>>();
         if (Scribe.EnterNode(label))
-        {
             try
             {
                 switch (Scribe.mode)
@@ -195,7 +184,6 @@ public static class ScribeConfig
             {
                 Scribe.ExitNode();
             }
-        }
     }
 
     // todo! чёт оно слишком дико выглядит
@@ -203,7 +191,6 @@ public static class ScribeConfig
     {
         dict ??= new Dictionary<string, Dictionary<string, Dictionary<string, TV>>>();
         if (Scribe.EnterNode(label))
-        {
             try
             {
                 switch (Scribe.mode)
@@ -233,6 +220,5 @@ public static class ScribeConfig
             {
                 Scribe.ExitNode();
             }
-        }
     }
 }

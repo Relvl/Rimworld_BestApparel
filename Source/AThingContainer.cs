@@ -7,11 +7,22 @@ namespace BestApparel;
 
 public abstract class AThingContainer
 {
-    protected readonly string TabIdStr;
-
     public readonly ThingDef Def;
     public readonly Thing DefaultThing;
+    protected readonly string TabIdStr;
     private string _defaultTooltip;
+
+    protected AThingContainer(ThingDef thingDef, string tabId)
+    {
+        Def = thingDef;
+        TabIdStr = tabId;
+        if (thingDef.MadeFromStuff)
+            // todo! деструктуризация по материалу
+            // todo! вычислить лучший материал по выбранным параметрам сортировки
+            DefaultThing = ThingMaker.MakeThing(thingDef, GenStuff.DefaultStuffFor(thingDef));
+        else
+            DefaultThing = ThingMaker.MakeThing(thingDef);
+    }
 
     public string DefaultTooltip
     {
@@ -29,29 +40,13 @@ public abstract class AThingContainer
         }
     }
 
-    public CellData[] CachedCells { get; private set; } = { };
+    public CellData[] CachedCells { get; private set; } = [];
 
     public float CachedSortingWeight { get; private set; }
 
-    protected AThingContainer(ThingDef thingDef, string tabId)
-    {
-        Def = thingDef;
-        TabIdStr = tabId;
-        if (thingDef.MadeFromStuff)
-        {
-            // todo! деструктуризация по материалу
-            // todo! вычислить лучший материал по выбранным параметрам сортировки
-            DefaultThing = ThingMaker.MakeThing(thingDef, GenStuff.DefaultStuffFor(thingDef));
-        }
-        else
-        {
-            DefaultThing = ThingMaker.MakeThing(thingDef);
-        }
-    }
-
     public abstract bool CheckForFilters();
 
-    public void CacheCells(Dictionary<AStatProcessor, (float, float)> calculated, IThingTabRenderer renderer)
+    public void CacheCells(Dictionary<AStatProcessor, (float, float)> calculated)
     {
         var list = calculated.Select(
             pair =>
@@ -67,11 +62,7 @@ public abstract class AThingContainer
 
                 if (BestApparel.Config.UseSimpleDataSorting)
                 {
-                    if (BestApparel.Config.SimpleSorting.ContainsKey(TabIdStr))
-                    {
-                        var sorting = BestApparel.Config.SimpleSorting[TabIdStr];
-                        cell.WeightFactor = cell.Processor.GetDefName() == sorting.First ? sorting.Second : 0;
-                    }
+                    if (BestApparel.Config.SimpleSorting.TryGetValue(TabIdStr, out var sorting)) cell.WeightFactor = cell.Processor.GetDefName() == sorting.First ? sorting.Second : 0;
                 }
                 else
                 {
@@ -83,16 +74,16 @@ public abstract class AThingContainer
                 return cell;
             }
         );
-        if (!BestApparel.Config.DoNotSortColumns)
-        {
-            list = list.OrderByDescending(cellData => cellData.WeightFactor).ThenBy(cellData => cellData.Processor.GetDefLabel());
-        }
+        if (!BestApparel.Config.DoNotSortColumns) list = list.OrderByDescending(cellData => cellData.WeightFactor).ThenBy(cellData => cellData.Processor.GetDefLabel());
 
         CachedCells = list.ToArray();
         CachedSortingWeight = CachedCells.Sum(c => c.NormalizedWeight * c.WeightFactor);
     }
 
-    public override int GetHashCode() => Def.GetHashCode();
+    public override int GetHashCode()
+    {
+        return Def.GetHashCode();
+    }
 
     public bool IsSearchAccept(string search)
     {

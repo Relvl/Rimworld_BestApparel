@@ -5,7 +5,7 @@ namespace BestApparel.config;
 
 public class ConfigColumns : IExposable
 {
-    private HashSet<string> _columns = new();
+    private HashSet<string> _columns = [];
 
     public ConfigColumns()
     {
@@ -19,12 +19,18 @@ public class ConfigColumns : IExposable
     public void ExposeData()
     {
         ScribeConfig.LookHashSetString(ref _columns, "Columns");
-        _columns ??= new HashSet<string>();
+        _columns ??= [];
     }
 
-    public HashSet<string> GetColumns() => _columns;
+    public HashSet<string> GetColumns()
+    {
+        return _columns;
+    }
 
-    public bool GetColumn(string def) => _columns.Contains(def);
+    public bool GetColumn(string def)
+    {
+        return _columns.Contains(def);
+    }
 
     public void SetColumn(string def, bool value)
     {
@@ -32,5 +38,8 @@ public class ConfigColumns : IExposable
         else _columns.Remove(def);
     }
 
-    public void Clear() => _columns.Clear();
+    public void Clear()
+    {
+        _columns.Clear();
+    }
 }

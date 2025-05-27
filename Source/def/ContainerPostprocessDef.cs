@@ -7,7 +7,7 @@ using Verse;
 namespace BestApparel;
 
 /// <summary>
-/// Defines each container postprocess after calculating
+///     Defines each container postprocess after calculating
 /// </summary>
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 [SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Global")]
@@ -18,17 +18,17 @@ namespace BestApparel;
 public class ContainerPostprocessDef : Def
 {
     /// <summary>
-    /// Postprocess apply order (lesser first)
+    ///     Postprocess apply order (lesser first)
     /// </summary>
     public int order = 0;
 
     /// <summary>
-    /// Affected tab defs
-    /// </summary>
-    public List<string> tabs = new();
-
-    /// <summary>
-    /// Postprocessor class reference
+    ///     Postprocessor class reference
     /// </summary>
     public Type postprocessor;
+
+    /// <summary>
+    ///     Affected tab defs
+    /// </summary>
+    public List<string> tabs = [];
 }

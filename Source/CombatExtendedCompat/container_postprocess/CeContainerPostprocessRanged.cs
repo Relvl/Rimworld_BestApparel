@@ -4,7 +4,7 @@ using Verse;
 // ReSharper disable once CheckNamespace
 namespace BestApparel.CombatExtendedCompat;
 
-// ReSharper disable once UnusedType.Global -- reflective: DefaultThnigTabRenderer:ctor() -> ContainerPostprocessDef
+// ReSharper disable once UnusedType.Global -- reflective: DefaultThingTabRenderer:ctor() -> ContainerPostprocessDef
 public class CeContainerPostprocessRanged : IContainerPostprocess
 {
     public void Postprocess(AThingContainer container, IThingTabRenderer renderer)
