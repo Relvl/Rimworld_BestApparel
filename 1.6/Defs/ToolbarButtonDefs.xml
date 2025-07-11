@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- LEFT SIDE -->
+
+    <BestApparel.ToolbarButtonDef>
+        <defName>ButtonOpenFilters</defName>
+        <label>Filters...</label>
+        <side>left</side>
+        <order>100</order>
+        <action>BestApparel.ToolbarButtonFilters</action>
+    </BestApparel.ToolbarButtonDef>
+
+    <BestApparel.ToolbarButtonDef>
+        <defName>ButtonOpenColumns</defName>
+        <label>Columns...</label>
+        <side>left</side>
+        <order>200</order>
+        <action>BestApparel.ToolbarButtonColumns</action>
+    </BestApparel.ToolbarButtonDef>
+
+    <BestApparel.ToolbarButtonDef>
+        <defName>ButtonOpenSorting</defName>
+        <label>Sorting...</label>
+        <side>left</side>
+        <order>300</order>
+        <action>BestApparel.ToolbarButtonSorting</action>
+    </BestApparel.ToolbarButtonDef>
+
+    <BestApparel.ToolbarButtonDef>
+        <defName>ButtonPresets</defName>
+        <label>Presets</label>
+        <side>left</side>
+        <order>400</order>
+        <action>BestApparel.ToolbarButtonPreset</action>
+    </BestApparel.ToolbarButtonDef>
+
+    <!-- RIGHT SIDE -->
+
+    <BestApparel.ToolbarButtonDef>
+        <defName>ButtonOpenFitting</defName>
+        <label>Fitting room</label>
+        <side>right</side>
+        <order>100</order>
+        <action>BestApparel.ToolbarButtonFitting</action>
+    </BestApparel.ToolbarButtonDef>
+
+</Defs>

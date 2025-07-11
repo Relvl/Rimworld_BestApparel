@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <MainButtonDef>
+        <defName>BestApparel</defName>
+        <label>Best Apparel</label>
+        <description>Open things comparsion tools</description>
+        <tabWindowClass>BestApparel.ui.BestApparelMainTabWindow</tabWindowClass>
+        <order>480</order>
+        <minimized>True</minimized>
+        <iconPath>UI/Buttons/MainButtons/IconBetterApparel</iconPath>
+    </MainButtonDef>
+</Defs>

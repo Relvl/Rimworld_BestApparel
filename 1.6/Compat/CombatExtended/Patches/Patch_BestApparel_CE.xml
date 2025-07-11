@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <Operation Class="PatchOperationReplace">
+        <xpath>Defs/BestApparel.ThingTabDef[defName="Ranged"]/collectors/li[text()="BestApparel.RangedStatCollector"]</xpath>
+        <value>
+            <li>BestApparel.CombatExtendedCompat.CeRangedStatCollector</li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationReplace">
+        <xpath>Defs/BestApparel.ThingTabDef[defName="Melee"]/collectors/li[text()="BestApparel.MeleeStatCollector"]</xpath>
+        <value>
+            <li>BestApparel.CombatExtendedCompat.CeMeleeStatCollector</li>
+        </value>
+    </Operation>
+    
+    <Operation Class="PatchOperationAdd">
+        <xpath>Defs/BestApparel.ThingTabDef[defName="Ranged"]/toolbar</xpath>
+        <value>
+            <li>ButtonRestoreAmmo</li>
+        </value>
+    </Operation>
+</Patch>

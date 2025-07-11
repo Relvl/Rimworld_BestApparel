@@ -12,4 +12,10 @@
         <li IfModActive="CETeam.CombatExtended">1.5/Compat/CombatExtended</li>
         <li IfModActive="skyarkhangel.SurvivalToolsLite">1.5/Compat/SurvivalToolsLight</li>
     </v1.5>
+    <v1.6>
+        <li>Common</li>
+        <li>1.6</li>
+        <li IfModActive="CETeam.CombatExtended">1.6/Compat/CombatExtended</li>
+        <li IfModActive="skyarkhangel.SurvivalToolsLite">1.6/Compat/SurvivalToolsLight</li>
+    </v1.6>
 </loadFolders>
